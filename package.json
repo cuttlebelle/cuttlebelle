@@ -1,7 +1,7 @@
 {
 	"name": "cuttlebelle",
 	"description": "The react static site generator that separates editing and code concerns",
-	"version": "1.0.0-alpha.1",
+	"version": "1.0.0-alpha.6",
 	"homepage": "https://github.com/dominikwilkowski/cuttlebelle",
 	"author": {
 		"name": "Dominik Wilkowski",
@@ -30,19 +30,49 @@
 		"node": ">=6"
 	},
 	"scripts": {
-		"test:sites": "cd tests/site1 && cuttlebelle"
+		"prepublish": "npm run build && npm run test",
+
+		"test": "jest",
+		"test:detail": "jest --coverage",
+
+		"build": "npm run build:js",
+		"build:js": "babel src --out-dir dist --presets=es2015 --plugins=transform-runtime,transform-es2015-modules-commonjs",
+
+		"watch": "npm run build && npm run test:detail && onchange 'src/*.js' '__tests__/*.js' -- npm run build:js && npm run test:detail"
 	},
 	"dependencies": {
 		"babel-preset-es2015": "^6.24.1",
 		"babel-preset-react": "^6.24.1",
 		"babel-preset-stage-0": "^6.24.1",
 		"babel-register": "^6.24.1",
+		"babel-runtime": "^6.23.0",
 		"chokidar": "^1.7.0",
 		"del": "^2.2.2",
 		"marked": "^0.3.6",
 		"react": "^15.5.4",
 		"react-dom": "^15.5.4",
 		"yamljs": "^0.2.10"
+	},
+	"devDependencies": {
+		"babel-cli": "^6.22.2",
+		"babel-plugin-transform-runtime": "^6.22.0",
+		"jest-cli": "^20.0.4",
+		"onchange": "^3.2.1"
+	},
+	"jest": {
+		"testEnvironment": "node",
+		"testRegex": "\\.spec.js$",
+		"collectCoverageFrom": [
+			"src/*.js"
+		],
+		"coverageThreshold": {
+			"global": {
+				"branches": 0,
+				"functions": 0,
+				"lines": 0,
+				"statements": 0
+			}
+		}
 	},
 	"keywords": [
 		"static site generator",
@@ -53,11 +83,12 @@
 		"pretty"
 	],
 	"files": [
-		"magic/*"
+		"dist/*",
+		".babelrc"
 	],
-	"main": "magic/index.js",
+	"main": "dist/index.js",
 	"bin": {
-		"cuttlebelle": "./magic/index.js"
+		"cuttlebelle": "./dist/index.js"
 	},
 	"license": "GPL-3.0"
 }

@@ -25,21 +25,14 @@ require('babel-register')({
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-const Render = require('./render.js');
-const RenderAllPages = Render.RenderAllPages;
-
-const Watch = require('./watch.js').Watch;
+import { RenderAllPages } from './render.js';
+import { Watch } from './watch.js';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Helper
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-const Helper = require('./helper.js');
-const ConvertHrtime = Helper.ConvertHrtime;
-const ExitHandler = Helper.ExitHandler;
-const SETTINGS = Helper.SETTINGS;
-const Style = Helper.Style;
-const Log = Helper.Log;
+import { ConvertHrtime, ExitHandler, SETTINGS, Style, Log } from './helper.js';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
