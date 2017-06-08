@@ -1,0 +1,63 @@
+{
+	"name": "cuttlebelle",
+	"description": "The react static site generator that separates editing and code concerns",
+	"version": "1.0.0-alpha.1",
+	"homepage": "https://github.com/dominikwilkowski/cuttlebelle",
+	"author": {
+		"name": "Dominik Wilkowski",
+		"email": "Hi@Dominik-Wilkowski.com",
+		"url": "http://dominik-wilkowski.com/"
+	},
+	"contributors": {
+		"name": "Dominik Wilkowski",
+		"email": "Hi@Dominik-Wilkowski.com",
+		"url": "http://dominik-wilkowski.com/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/dominikwilkowski/cuttlebelle.git"
+	},
+	"bugs": {
+		"url": "https://github.com/dominikwilkowski/cuttlebelle/issues"
+	},
+	"licenses": [
+		{
+			"type": "GPL-3.0",
+			"url": "https://github.com/dominikwilkowski/cuttlebelle/blob/master/LICENSE"
+		}
+	],
+	"engines": {
+		"node": ">=6"
+	},
+	"scripts": {
+		"test:sites": "cd tests/site1 && cuttlebelle"
+	},
+	"dependencies": {
+		"babel-preset-es2015": "^6.24.1",
+		"babel-preset-react": "^6.24.1",
+		"babel-preset-stage-0": "^6.24.1",
+		"babel-register": "^6.24.1",
+		"chokidar": "^1.7.0",
+		"del": "^2.2.2",
+		"marked": "^0.3.6",
+		"react": "^15.5.4",
+		"react-dom": "^15.5.4",
+		"yamljs": "^0.2.10"
+	},
+	"keywords": [
+		"static site generator",
+		"react.js",
+		"editing",
+		"CLI",
+		"rapid prototying",
+		"pretty"
+	],
+	"files": [
+		"magic/*"
+	],
+	"main": "magic/index.js",
+	"bin": {
+		"cuttlebelle": "./magic/index.js"
+	},
+	"license": "GPL-3.0"
+}

@@ -1,0 +1,14 @@
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+codekit-config.json
+*.codekit
+node_modules
+.sass-cache
+.idea
+validation-report.json
+validation-status.json
+npm-debug.log
+lerna-debug.log
+
+tests/*/site/*
