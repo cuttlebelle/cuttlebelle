@@ -1,0 +1,20 @@
+{
+	"name": "test1",
+	"private": true,
+	"cuttlebelle": {
+		"folder": {
+			"cwd": "ignore me!",
+			"content": "content2/",
+			"src": "src2/",
+			"site": "site2/",
+			"index": "index2.yml",
+			"homepage": "homepage"
+		},
+		"layouts": {
+			"page": "layout/page2",
+			"partial": "layout/partial2"
+		},
+		"root": "https://somedomain.tld/",
+		"doctype": "<!DOCTYPE html><!--[if lt IE 8]><html class=\"no-js lt-ie8 lt-ie9\" lang=\"en\"><![endif]--><!--[if IE 8]><html class=\"no-js lt-ie9 ie8\" lang=\"en\"><![endif]--><!--[if IE 9 ]><html class=\"no-js ie9\" lang=\"en\"><![endif]--><!--[if !(IE)]><!--><html class=\"no-js\" lang=\"en\"><!--<![endif]-->"
+	}
+}

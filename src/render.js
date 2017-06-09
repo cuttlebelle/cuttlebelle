@@ -25,7 +25,8 @@ import Path from 'path';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Helper
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { SETTINGS, Log, Style } from './helper';
+import { SETTINGS } from './settings.js';
+import { Log, Style } from './helper';
 
 
 /**
@@ -37,7 +38,7 @@ import { SETTINGS, Log, Style } from './helper';
  * @return {string}               - The static markup of the component
  */
 export const RenderReact = ( componentPath, props ) => {
-	Log.verbose(`Rendering react component ${ Style.yellow( componentPath.replace( SETTINGS.folder.src, '' ) ) }`);
+	Log.verbose(`Rendering react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.src, '' ) ) }`);
 
 	const component = require( componentPath ).default;
 
@@ -45,7 +46,7 @@ export const RenderReact = ( componentPath, props ) => {
 		return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
 	}
 	catch( error ) {
-		Log.error(`The react component ${ Style.yellow( componentPath.replace( SETTINGS.folder.src, '' ) ) } had trouble rendering:`);
+		Log.error(`The react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.src, '' ) ) } had trouble rendering:`);
 		Log.error( error );
 
 		return '';
@@ -64,7 +65,7 @@ export const RenderPage = ( page ) => {
 	Log.verbose(`Rendering page ${ Style.yellow( page ) }`);
 
 	return new Promise( ( resolve, reject ) => {
-		const content = Path.normalize(`${ SETTINGS.folder.content }/${ page }/${ SETTINGS.folder.index }`);
+		const content = Path.normalize(`${ SETTINGS.get().folder.content }/${ page }/${ SETTINGS.get().folder.index }`);
 
 		ReadFile( content )                                               // reading index.yml
 			.catch( error => reject( error ) )
@@ -76,7 +77,7 @@ export const RenderPage = ( page ) => {
 				body.partials.map( partial => {
 					let cwd = Path.dirname( content );                          // we assume relative links
 					if( partial.startsWith('/') ) {                             // unless the layout starts with a slash
-						cwd = SETTINGS.folder.content;
+						cwd = SETTINGS.get().folder.content;
 					}
 
 					allPartials.push( RenderPartial( cwd, partial, page ) );    // render this partial and catch the content in the array
@@ -89,16 +90,16 @@ export const RenderPage = ( page ) => {
 					})
 					.then( partials => {
 						delete body.partials;
-						body.layout = body.layout || SETTINGS.layouts.page;                            // set the default layout
+						body.layout = body.layout || SETTINGS.get().layouts.page;            // set the default layout
 
-						KeepTrack( page, body.layout );                                                // keeping track of all pages per layout will make the watch better
+						KeepTrack( page, body.layout );                                      // keeping track of all pages per layout will make the watch better
 
 						const parents = page.split('/').map( ( item, i ) => {
-							return SETTINGS.root + page.split('/').splice( 0, page.split('/').length - i ).join('/');
+							return SETTINGS.get().site.root + page.split('/').splice( 0, page.split('/').length - i ).join('/');
 						});
 
-						const pageHTML = SETTINGS.doctype + RenderReact(                               // and off we go into the react render machine while prefixing
-							Path.normalize(`${ SETTINGS.folder.src }/${ body.layout }`),                 // our HTML with an optional doctype
+						const pageHTML = SETTINGS.get().site.doctype + RenderReact(          // and off we go into the react render machine while prefixing
+							Path.normalize(`${ SETTINGS.get().folder.src }/${ body.layout }`), // our HTML with an optional doctype
 							{
 								_myself: page,
 								_parents: parents,
@@ -108,7 +109,7 @@ export const RenderPage = ( page ) => {
 							}
 						);
 
-						const newPath = Path.normalize(`${ SETTINGS.folder.site }/${ page === 'index' ? '' : page }/index.html`);
+						const newPath = Path.normalize(`${ SETTINGS.get().folder.site }/${ page === SETTINGS.get().folder.homepage ? '' : page }/index.html`);
 
 						CreateFile( newPath, pageHTML )
 							.catch( error => reject( error ) )
@@ -133,21 +134,26 @@ export const RenderAllPages = () => {
 	const layout = GetLayout();
 	Log.verbose(`Found following layout:\n${ Style.yellow( JSON.stringify( layout ) ) }`);
 
-	RemoveDir([ SETTINGS.folder.site ]);
+	if( content ) {
+		RemoveDir([ SETTINGS.get().folder.site ]);
 
-	return new Promise( ( resolve, reject ) => {
-		const allPages = [];
+		return new Promise( ( resolve, reject ) => {
+			const allPages = [];
 
-		content.forEach(page => {
-			allPages.push( RenderPage( page ) );
+			content.forEach(page => {
+				allPages.push( RenderPage( page ) );
+			});
+
+			Promise.all( allPages )
+				.catch( error => {
+					reject( JSON.stringify( error ) );
+				})
+				.then( pages => resolve( pages ) );
 		});
-
-		Promise.all( allPages )
-			.catch( error => {
-				reject( JSON.stringify( error ) );
-			})
-			.then( pages => resolve( pages ) );
-	});
+	}
+	else {
+		return Promise.resolve([]);
+	}
 };
 
 
@@ -161,7 +167,7 @@ export const RenderAllPages = () => {
  * @return {promise object} - The HTML string of the rendered partial
  */
 export const RenderPartial = ( cwd, partial, parent ) => {
-	Log.verbose(`Rendering partial ${ Style.yellow( partial ) }`);
+	Log.verbose(`Rendering partial ${ Style.yellow( Path.normalize(`${ cwd }/${ partial }.md`).replace( SETTINGS.get().folder.content, '' ) ) }`);
 
 	return new Promise( ( resolve, reject ) => {
 		const content = Path.normalize(`${ cwd }/${ partial }.md`); // @TODO make markdown optional
@@ -176,16 +182,16 @@ export const RenderPartial = ( cwd, partial, parent ) => {
 					partialContent.frontmatter = {};
 				}
 
-				partialContent.frontmatter.layout = partialContent.frontmatter.layout || SETTINGS.layouts.partial; // set the default layout
+				partialContent.frontmatter.layout = partialContent.frontmatter.layout || SETTINGS.get().layouts.partial; // set the default layout
 
 				KeepTrack( parent, partialContent.frontmatter.layout );                                            // keeping track of all pages
 
 				const parents = parent.split('/').map( ( item, i ) => {
-					return SETTINGS.root + parent.split('/').splice( 0, parent.split('/').length - i ).join('/');
+					return SETTINGS.get().site.root + parent.split('/').splice( 0, parent.split('/').length - i ).join('/');
 				});
 
 				const component = RenderReact(
-					Path.normalize(`${ SETTINGS.folder.src }/${ partialContent.frontmatter.layout }`),               // parse the react component with it’s props
+					Path.normalize(`${ SETTINGS.get().folder.src }/${ partialContent.frontmatter.layout }`),               // parse the react component with it’s props
 					{
 						_myself: parent,
 						_parents: parents,

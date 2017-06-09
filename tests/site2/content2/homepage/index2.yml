@@ -1,0 +1,9 @@
+layout: layout/page
+title: Wow! titles are awesome!
+partials:
+  - /shared/component1
+  - partial1
+  - partial2
+  - partial3
+  - partial4
+  - /shared/component2

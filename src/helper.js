@@ -2,11 +2,11 @@
  *
  * Export shared helper code
  *
- * SETTINGS    - Settings object
- * LAYOUTS     - A shared object to keep track of all pages and their layouts
- * Style       - Returning ansi escape color codes
- * Log         - A logging method
- * ExitHandler - Handle exiting of program
+ * LAYOUTS       - A shared object to keep track of all pages and their layouts
+ * ConvertHrtime - Convert hrtime to ms
+ * Style         - Returning ansi escape color codes
+ * Log           - A logging method
+ * ExitHandler   - Handle exiting of program
  *
  **************************************************************************************************************************************************************/
 
@@ -17,28 +17,6 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import Path from 'path';
-
-
-/**
- * Default settings object
- *
- * @type {Object}
- */
-export const SETTINGS = {
-	folder: {
-		cwd: Path.normalize(`${ process.cwd() }/`),
-		content: Path.normalize(`${ process.cwd() }/content/`),
-		src: Path.normalize(`${ process.cwd() }/src/`),
-		site: Path.normalize(`${ process.cwd() }/site/`),
-		index: 'index.yml',
-	},
-	layouts: {
-		page: 'layout/page',
-		partial: 'layout/partial',
-	},
-	root: '/',
-	doctype: '<!DOCTYPE html>', // https://github.com/facebook/react/issues/1035
-};
 
 
 /**

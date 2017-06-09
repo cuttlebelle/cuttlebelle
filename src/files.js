@@ -25,7 +25,8 @@ import Fs from 'fs';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Helper
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { SETTINGS, Log, Style } from './helper';
+import { SETTINGS } from './settings.js';
+import { Log, Style } from './helper';
 
 
 /**
@@ -36,26 +37,31 @@ import { SETTINGS, Log, Style } from './helper';
  *
  * @return {array}            - An array of all relative paths that should be pages we need to generate
  */
-export const GetContent = ( folder = SETTINGS.folder.content, structure = [] ) => {
-	Fs.readdirSync( folder )                                                       // starting from this level
-		.map(
-			file => {                                                                  // iterate over all files
-				if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {           // if this is a directory we just call ourself again
-					structure = [ ...GetContent( Path.join( folder, file ), structure ) ]; // and spread the result into our array
-				}
-				else {
-					if( file === SETTINGS.folder.index ) {                                 // we only want the index.yml files and ignore (shared) folder without pages
-						Log.verbose(`Found content in ${ Style.yellow( folder ) }`);
+export const GetContent = ( folder = SETTINGS.get().folder.content, structure = [] ) => {
+	if( Fs.existsSync( folder ) ) {
+		Fs.readdirSync( folder )                                                       // starting from this level
+			.map(
+				file => {                                                                  // iterate over all files
+					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {           // if this is a directory we just call ourself again
+						structure = [ ...GetContent( Path.join( folder, file ), structure ) ]; // and spread the result into our array
+					}
+					else {
+						if( file === SETTINGS.get().folder.index ) {                                 // we only want the index.yml files and ignore (shared) folder without pages
+							Log.verbose(`Found content in ${ Style.yellow( folder ) }`);
 
-						const replaceString = SETTINGS.folder.cwd + SETTINGS.folder.content.replace( SETTINGS.folder.cwd, '' );
+							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.content.replace( SETTINGS.get().folder.cwd, '' );
 
-						structure.push( folder.replace( replaceString, '' ) );
+							structure.push( folder.replace( replaceString, '' ) );
+						}
 					}
 				}
-			}
-		);
+			);
 
-	return structure;
+		return structure;
+	}
+	else {
+		Log.info(`No content found in ${ Style.yellow( folder ) }`)
+	}
 };
 
 
@@ -67,26 +73,31 @@ export const GetContent = ( folder = SETTINGS.folder.content, structure = [] ) =
  *
  * @return {array}            - An array of all relative paths that should be pages we need to generate
  */
-export const GetLayout = ( folder = SETTINGS.folder.src, structure = [] ) => {
-	Fs.readdirSync( folder )                                                          // starting from this level
-		.map(
-			file => {                                                                     // iterate over all files
-				if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {              // if this is a directory we just call ourself again
-					structure = [ ...GetLayout( Path.join( folder, file ), structure ) ];     // and spread the result into our array
-				}
-				else {
-					if( Path.extname( file ) === '.js' ) {                                    // we only want js files and ignore invisible files
-						Log.verbose(`Found layout in ${ Style.yellow( Path.join( folder, file ) ) }`);
+export const GetLayout = ( folder = SETTINGS.get().folder.src, structure = [] ) => {
+	if( Fs.existsSync( folder ) ) {
+		Fs.readdirSync( folder )                                                          // starting from this level
+			.map(
+				file => {                                                                     // iterate over all files
+					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {              // if this is a directory we just call ourself again
+						structure = [ ...GetLayout( Path.join( folder, file ), structure ) ];     // and spread the result into our array
+					}
+					else {
+						if( Path.extname( file ) === '.js' ) {                                    // we only want js files and ignore invisible files
+							Log.verbose(`Found layout in ${ Style.yellow( Path.join( folder, file ) ) }`);
 
-						const replaceString = SETTINGS.folder.cwd + SETTINGS.folder.src.replace( SETTINGS.folder.cwd, '' );
+							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.src.replace( SETTINGS.get().folder.cwd, '' );
 
-						structure.push( Path.join( folder, file ).replace( replaceString, '' ) );
+							structure.push( Path.join( folder, file ).replace( replaceString, '' ) );
+						}
 					}
 				}
-			}
-		);
+			);
 
-	return structure;
+		return structure;
+	}
+	else {
+		Log.info(`No react source found in ${ Style.yellow( folder ) }`)
+	}
 };
 
 
@@ -171,13 +182,13 @@ export const CreateDir = ( dir ) => {
 		if( subPath != '.' ) {
 			currentPath = Path.normalize(`${ path }/${ subPath }`);
 
-			Log.verbose(`Checking if ${ Style.yellow( currentPath ) } exists`)
+			// Log.verbose(`Checking if ${ Style.yellow( currentPath ) } exists`)
 
 			if( !Fs.existsSync( currentPath ) ){
 				try {
 					Fs.mkdirSync( currentPath );
 
-					Log.verbose(`Successfully ${ Style.yellow( currentPath ) } created`)
+					Log.verbose(`Successfully created ${ Style.yellow( currentPath ) }`)
 				}
 				catch( error ) {
 					Log.error(`Error when creating the folder ${ Style.yellow( currentPath ) } for path ${ Style.yellow( dir ) }`);

@@ -1,7 +1,4 @@
 {
 	"name": "test1",
-	"private": true,
-	"cuttlebelle": {
-		"setting": ""
-	}
+	"private": true
 }
