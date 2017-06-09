@@ -38,6 +38,7 @@ import { SETTINGS } from './settings.js';
  */
 export const Watch = {
 	watcher: {},
+	lastChange: new Date(),
 
 	/**
 	 * Starting the watch
@@ -55,7 +56,18 @@ export const Watch = {
 
 		Watch.watcher.on('change', path => {
 			Log.info(`File has changed ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
-			UpdateChange( path );
+
+			const thisChange = new Date(); // double save detection
+			if( ( thisChange - Watch.lastChange ) < 400 ) {
+				Log.info(`${ Style.bold('Double save detected') }; regenerating all files`);
+
+				UpdateChange( path, true );
+			}
+			else {
+				UpdateChange( path );
+			}
+
+			Watch.lastChange = thisChange;
 		});
 
 		Watch.watcher.on('add', path => {
@@ -81,16 +93,16 @@ export const Watch = {
 /**
  * React to changes depending on what happened in our watch
  *
- * @param  {array}   path        - All changes that have happened
- * @param  {boolean} _isDeletion - Is this a deletion event?
+ * @param  {array}   path          - All changes that have happened
+ * @param  {boolean} _doEverything - Shall we just do all pages?
  */
-export const UpdateChange = ( path, _isDeletion = false ) => {
+export const UpdateChange = ( path, _doEverything = false ) => {
 	const startTime = process.hrtime();
 
 	let _isReact = path.startsWith( SETTINGS.get().folder.src );
 
 	// A page is being changed
-	if( !_isDeletion ) {
+	if( !_doEverything ) {
 		if( !_isReact ) {
 			const page = Path.dirname( path ).replace( SETTINGS.get().folder.content, '' );
 
