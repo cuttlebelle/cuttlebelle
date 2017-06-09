@@ -12,5 +12,6 @@ npm-debug.log
 lerna-debug.log
 
 tests/*/site/*
+tests/*/site2/*
 dist/*
 coverage/*
