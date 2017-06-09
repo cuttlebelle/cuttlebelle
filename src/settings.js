@@ -4,7 +4,7 @@
  *
  * SETTINGS     - Keeping our settings across multiple imports
  * SETTINGS.get - Getting our settings
- * SETTINGS.set -
+ * SETTINGS.set - Merge with default settings
  *
  **************************************************************************************************************************************************************/
 
@@ -54,6 +54,7 @@ export const SETTINGS = {
 		}
 	},
 
+
 	/**
 	 * Getting our settings
 	 *
@@ -62,6 +63,7 @@ export const SETTINGS = {
 	get: () => {
 		return SETTINGS.defaults;
 	},
+
 
 	/**
 	 * Merge with default settings

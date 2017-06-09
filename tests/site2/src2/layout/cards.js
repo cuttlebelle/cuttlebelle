@@ -3,7 +3,7 @@ import React from "react";
 export default ( page ) => (
 	<div>
 		<h2>{ page.title }</h2>
-		<p>testing!</p>
+		<p>testing page frontmatter { JSON.stringify( page._sites[ page._myself ] ) }</p>
 		<ul>
 			{ page.cards.map( ( card, i ) =>
 				<li key={ i }>

@@ -26,10 +26,12 @@ require('babel-register')({
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { RenderAllPages } from './render.js';
+import { GetContent, GetLayout, Pages } from './site';
 import { SETTINGS } from './settings.js';
 import { Watch } from './watch.js';
 import Size from 'window-size';
 import Path from 'path';
+import Fs from 'fs';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -77,11 +79,11 @@ ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --ve
 }
 
 
-Log.welcome(`Cuttlebelle v${ pkg.version }`);
-
-
 // keep track of execution time
 const startTime = process.hrtime();
+
+
+Log.welcome(`Cuttlebelle v${ pkg.version }`);
 
 
 // verbose flag
@@ -91,38 +93,66 @@ if( process.argv.includes('-v') || process.argv.includes('--verbose') ) {
 
 
 // merging default settings with package.json
-const loacalPkg = require( Path.normalize(`${ process.cwd() }/package.json`) );
-SETTINGS.set( loacalPkg.cuttlebelle );
-
-
-// generate all pages unless it’s disabled
-if( !process.argv.includes('-n') && !process.argv.includes('--no-generate') ) {
-	Log.info(`Generating pages`);
-
-	RenderAllPages()
-		.catch( error => {
-			Log.error(`Generating pages failed :(`);
-			Log.error( error );
-
-			process.exit( 1 );
-		})
-		.then( pages => {
-			const elapsedTime = process.hrtime( startTime );
-
-			Log.done(
-				`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages.length ) } pages ` : `No pages have been build ` }` +
-				`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
-				`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
-			);
-	});
+const pkgLocation = Path.normalize(`${ process.cwd() }/package.json`);
+if( Fs.existsSync( pkgLocation ) ) {
+	const loacalPkg = require( pkgLocation );
+	SETTINGS.set( loacalPkg.cuttlebelle );
 }
 
 
-// run watch on flag
-if( process.argv.includes('-w') || process.argv.includes('--watch') ) {
-	Watch.start();
-}
+// Getting all pages
+const content = GetContent();
+Log.verbose(`Found following content: ${ Style.yellow( JSON.stringify( content ) ) }`);
 
+// Getting all layout components
+const layout = GetLayout();
+Log.verbose(`Found following layout:\n${ Style.yellow( JSON.stringify( layout ) ) }`);
+
+
+// Get all front matter from all pages and put them into a global var
+Pages
+	.setAll( content )
+	.catch( error => {
+		Log.error(`Trying to initilize the pages failed.`);
+		Log.error( error );
+
+		process.exit( 1 );
+	})
+	.then( () => {
+
+		// generate all pages unless it’s disabled
+		if( !process.argv.includes('-n') && !process.argv.includes('--no-generate') ) {
+			Log.info(`Generating pages`);
+
+			RenderAllPages( content, layout )
+				.catch( error => {
+					Log.error(`Generating pages failed :(`);
+					Log.error( error );
+
+					process.exit( 1 );
+				})
+				.then( pages => {
+					const elapsedTime = process.hrtime( startTime );
+
+					Log.done(
+						`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages.length ) } pages ` : `No pages have been build ` }` +
+						`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+						`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+					);
+
+					// run watch on flag
+					if( process.argv.includes('-w') || process.argv.includes('--watch') ) {
+						Watch.start();
+					}
+			});
+		}
+		else {
+			// run watch on flag
+			if( process.argv.includes('-w') || process.argv.includes('--watch') ) {
+				Watch.start();
+			}
+		}
+});
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Exit handler

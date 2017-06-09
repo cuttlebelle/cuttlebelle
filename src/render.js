@@ -15,12 +15,16 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { GetContent, GetLayout, ReadFile, CreateFile, RemoveDir } from './files';
+import { ReadFile, CreateFile, RemoveDir } from './files';
+import { GetContent, GetLayout } from './site';
 import { ParseYaml, ParseFM } from './parse';
 import ReactDOMServer from 'react-dom/server';
-import { KeepTrack } from './watch';
+import { Layouts } from './watch';
+import { Pages } from './site';
 import React from 'react';
 import Path from 'path';
+import Fs from 'fs';
+
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Helper
@@ -40,6 +44,7 @@ import { Log, Style } from './helper';
 export const RenderReact = ( componentPath, props ) => {
 	Log.verbose(`Rendering react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.src, '' ) ) }`);
 
+	delete require.cache[ require.resolve( componentPath ) ]; //cache busting
 	const component = require( componentPath ).default;
 
 	try {
@@ -74,13 +79,20 @@ export const RenderPage = ( page ) => {
 
 				body = ParseYaml( body );                                     // parse the body of this page
 
+				Pages.all[ page ] = body;                                     // updated the frontmatter of this page
+
 				body.partials.map( partial => {
 					let cwd = Path.dirname( content );                          // we assume relative links
 					if( partial.startsWith('/') ) {                             // unless the layout starts with a slash
 						cwd = SETTINGS.get().folder.content;
 					}
 
-					allPartials.push( RenderPartial( cwd, partial, page ) );    // render this partial and catch the content in the array
+					if( Fs.existsSync( Path.normalize(`${ cwd }/${ partial }.md`) ) ) {
+						allPartials.push( RenderPartial( cwd, partial, page ) );  // render this partial and catch the content in the array
+					}
+					else {
+						Log.info(`Partial not found ${ Style.yellow(`${ cwd }/${ partial }.md`) }`);
+					}
 				});
 
 				Promise.all( allPartials )                                    // now that all partials have been compiled
@@ -92,7 +104,7 @@ export const RenderPage = ( page ) => {
 						delete body.partials;
 						body.layout = body.layout || SETTINGS.get().layouts.page;            // set the default layout
 
-						KeepTrack( page, body.layout );                                      // keeping track of all pages per layout will make the watch better
+						Layouts.set( page, body.layout );                                      // keeping track of all pages per layout will make the watch better
 
 						const parents = page.split('/').map( ( item, i ) => {
 							return SETTINGS.get().site.root + page.split('/').splice( 0, page.split('/').length - i ).join('/');
@@ -103,6 +115,7 @@ export const RenderPage = ( page ) => {
 							{
 								_myself: page,
 								_parents: parents,
+								_sites: Pages.get(),
 								_body: body.body,
 								_partials: <div dangerouslySetInnerHTML={ { __html: partials.join('') } } />,
 								...body
@@ -123,24 +136,21 @@ export const RenderPage = ( page ) => {
 /**
  * Render all pages in the content folder
  *
+ * @param  {array}  content - An array of all pages
+ * @param  {array}  content - An array of all layout components
+ *
  * @return {promise object} - The array of all pages
  */
-export const RenderAllPages = () => {
-	Log.verbose(`Rendering all pages`);
-
-	const content = GetContent();
-	Log.verbose(`Found following content:\n${ Style.yellow( JSON.stringify( content ) ) }`);
-
-	const layout = GetLayout();
-	Log.verbose(`Found following layout:\n${ Style.yellow( JSON.stringify( layout ) ) }`);
+export const RenderAllPages = ( content = [], layout = [] ) => {
+	Log.verbose(`Rendering all pages:\n${ Style.yellow( JSON.stringify( content ) ) }`);
 
 	if( content ) {
-		RemoveDir([ SETTINGS.get().folder.site ]);
+		RemoveDir([ ...content ]);
 
 		return new Promise( ( resolve, reject ) => {
 			const allPages = [];
 
-			content.forEach(page => {
+			content.forEach( page => {
 				allPages.push( RenderPage( page ) );
 			});
 
@@ -184,7 +194,7 @@ export const RenderPartial = ( cwd, partial, parent ) => {
 
 				partialContent.frontmatter.layout = partialContent.frontmatter.layout || SETTINGS.get().layouts.partial; // set the default layout
 
-				KeepTrack( parent, partialContent.frontmatter.layout );                                            // keeping track of all pages
+				Layouts.set( parent, partialContent.frontmatter.layout );                                            // keeping track of all pages
 
 				const parents = parent.split('/').map( ( item, i ) => {
 					return SETTINGS.get().site.root + parent.split('/').splice( 0, parent.split('/').length - i ).join('/');
@@ -195,6 +205,7 @@ export const RenderPartial = ( cwd, partial, parent ) => {
 					{
 						_myself: parent,
 						_parents: parents,
+						_sites: Pages.get(),
 						_body: partialContent.body,
 						...partialContent.frontmatter
 					}

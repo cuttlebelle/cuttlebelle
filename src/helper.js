@@ -2,8 +2,7 @@
  *
  * Export shared helper code
  *
- * LAYOUTS       - A shared object to keep track of all pages and their layouts
- * ConvertHrtime - Convert hrtime to ms
+ * ConvertHrtime - Convert hrtime to seconds
  * Style         - Returning ansi escape color codes
  * Log           - A logging method
  * ExitHandler   - Handle exiting of program
@@ -20,15 +19,7 @@ import Path from 'path';
 
 
 /**
- * A shared object to keep track of all pages and their layouts
- *
- * @type {Object}
- */
-export const LAYOUTS = {};
-
-
-/**
- * Convert hrtime to ms
+ * Convert hrtime to seconds
  *
  * @param {array} elapsedTime - The elapsed time started and stopped with process.hrtime
  */

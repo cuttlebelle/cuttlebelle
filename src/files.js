@@ -2,8 +2,6 @@
  *
  * Interact with the file system
  *
- * GetContent - Get all content folders recursively
- * GetLayout  - Get all layout files recursively
  * ReadFile   - Promisified reading a file
  * CreateFile - Promisified writing a file
  * CreateDir  - Create a path if it doesn’t exist
@@ -25,84 +23,7 @@ import Fs from 'fs';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Helper
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { SETTINGS } from './settings.js';
 import { Log, Style } from './helper';
-
-
-/**
- * Get all folders recursively that have the index.yml (or whatever SETTINGS.folder.index says)
- *
- * @param  {string} folder    - The start folder we search in
- * @param  {array}  structure - We keep track of what we found so far to recursively find all folders
- *
- * @return {array}            - An array of all relative paths that should be pages we need to generate
- */
-export const GetContent = ( folder = SETTINGS.get().folder.content, structure = [] ) => {
-	if( Fs.existsSync( folder ) ) {
-		Fs.readdirSync( folder )                                                       // starting from this level
-			.map(
-				file => {                                                                  // iterate over all files
-					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {           // if this is a directory we just call ourself again
-						structure = [ ...GetContent( Path.join( folder, file ), structure ) ]; // and spread the result into our array
-					}
-					else {
-						if( file === SETTINGS.get().folder.index ) {                                 // we only want the index.yml files and ignore (shared) folder without pages
-							Log.verbose(`Found content in ${ Style.yellow( folder ) }`);
-
-							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.content.replace( SETTINGS.get().folder.cwd, '' );
-
-							structure.push( folder.replace( replaceString, '' ) );
-						}
-					}
-				}
-			);
-
-		return structure;
-	}
-	else {
-		Log.info(`No content found in ${ Style.yellow( folder ) }`)
-	}
-};
-
-
-/**
- * Get all layout files recursively
- *
- * @param  {string} folder    - The start folder we search in
- * @param  {array}  structure - We keep track of what we found so far to recursively find all folders
- *
- * @return {array}            - An array of all relative paths that should be pages we need to generate
- */
-export const GetLayout = ( folder = SETTINGS.get().folder.src, structure = [] ) => {
-	if( Fs.existsSync( folder ) ) {
-		Fs.readdirSync( folder )                                                          // starting from this level
-			.map(
-				file => {                                                                     // iterate over all files
-					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {              // if this is a directory we just call ourself again
-						structure = [ ...GetLayout( Path.join( folder, file ), structure ) ];     // and spread the result into our array
-					}
-					else {
-						if( Path.extname( file ) === '.js' ) {                                    // we only want js files and ignore invisible files
-							Log.verbose(`Found layout in ${ Style.yellow( Path.join( folder, file ) ) }`);
-
-							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.src.replace( SETTINGS.get().folder.cwd, '' );
-
-							structure.push( Path.join( folder, file ).replace( replaceString, '' ) );
-						}
-					}
-				}
-			);
-
-		return structure;
-	}
-	else {
-		Log.info(`No react source found in ${ Style.yellow( folder ) }`)
-	}
-};
-
-
-// export const GetSites = ( content = [] ) => {
-// };
 
 
 /**
