@@ -1,0 +1,7 @@
+layout: layout/page
+title: page2
+partials:
+  - partial1
+  - partial2
+  - partial3
+  - /shared/component1

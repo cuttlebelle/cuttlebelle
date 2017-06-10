@@ -1,0 +1,96 @@
+{
+	"name": "cuttlebelle",
+	"description": "The react static site generator that separates editing and code concerns",
+	"version": "1.0.0-alpha.8",
+	"homepage": "https://github.com/dominikwilkowski/cuttlebelle",
+	"author": {
+		"name": "Dominik Wilkowski",
+		"email": "Hi@Dominik-Wilkowski.com",
+		"url": "http://dominik-wilkowski.com/"
+	},
+	"contributors": {
+		"name": "Dominik Wilkowski",
+		"email": "Hi@Dominik-Wilkowski.com",
+		"url": "http://dominik-wilkowski.com/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/dominikwilkowski/cuttlebelle.git"
+	},
+	"bugs": {
+		"url": "https://github.com/dominikwilkowski/cuttlebelle/issues"
+	},
+	"licenses": [
+		{
+			"type": "GPL-3.0",
+			"url": "https://github.com/dominikwilkowski/cuttlebelle/blob/master/LICENSE"
+		}
+	],
+	"engines": {
+		"node": ">=6"
+	},
+	"scripts": {
+		"prepublish": "npm run build && npm run test",
+
+		"test": "jest",
+		"test:detail": "jest --coverage",
+
+		"build": "npm run build:js",
+		"build:js": "babel src --out-dir dist --presets=es2015 --plugins=transform-runtime,transform-es2015-modules-commonjs",
+
+		"watch": "npm run build && npm run test:detail && onchange 'src/*.js' '__tests__/*.js' -- npm run build:js && npm run test:detail"
+	},
+	"dependencies": {
+		"babel-plugin-import-redirect": "^1.1.0",
+		"babel-preset-es2015": "^6.24.1",
+		"babel-preset-react": "^6.24.1",
+		"babel-preset-stage-0": "^6.24.1",
+		"babel-register": "^6.24.1",
+		"babel-runtime": "^6.23.0",
+		"chokidar": "^1.7.0",
+		"del": "^2.2.2",
+		"marked": "^0.3.6",
+		"react": "^15.5.4",
+		"react-dom": "^15.5.4",
+		"window-size": "^1.0.0",
+		"yamljs": "^0.2.10"
+	},
+	"devDependencies": {
+		"babel-cli": "^6.22.2",
+		"babel-plugin-transform-runtime": "^6.22.0",
+		"jest-cli": "^20.0.4",
+		"onchange": "^3.2.1"
+	},
+	"jest": {
+		"testEnvironment": "node",
+		"testRegex": "\\.spec.js$",
+		"collectCoverageFrom": [
+			"src/*.js"
+		],
+		"coverageThreshold": {
+			"global": {
+				"branches": 0,
+				"functions": 0,
+				"lines": 0,
+				"statements": 0
+			}
+		}
+	},
+	"keywords": [
+		"static site generator",
+		"react.js",
+		"editing",
+		"CLI",
+		"rapid prototying",
+		"pretty"
+	],
+	"files": [
+		"dist/*",
+		".babelrc"
+	],
+	"main": "dist/index.js",
+	"bin": {
+		"cuttlebelle": "./dist/index.js"
+	},
+	"license": "GPL-3.0"
+}

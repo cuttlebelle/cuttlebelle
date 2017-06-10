@@ -1,0 +1,5 @@
+layout: layout/page
+title: page1
+partials:
+  - partial1
+  - partial2
