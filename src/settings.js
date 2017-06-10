@@ -52,7 +52,7 @@ export const SETTINGS = {
 			root: '/',
 			doctype: '<!DOCTYPE html>', // https://github.com/facebook/react/issues/1035
 			redirectReact: true,
-		}
+		},
 	},
 
 
