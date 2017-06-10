@@ -46,23 +46,33 @@ export const RenderReact = ( componentPath, props ) => {
 
 	try {
 		// babelfy components
-		require('babel-register')({
+		// we have to keep the presets and plugins close as we want to support and even encourage global installs
+		const registerObj = {
 			presets: [
 				Path.normalize(`${ __dirname }/../node_modules/babel-preset-es2015`),
 				Path.normalize(`${ __dirname }/../node_modules/babel-preset-stage-0`),
 				Path.normalize(`${ __dirname }/../node_modules/babel-preset-react`),
 			],
-			plugins: [
+		};
+
+		// optional we redirect import statements for react to our local node_module folder
+		// so react doesn’t have to be installed separately on globally installed cuttlebelle
+		if( SETTINGS.get().site.redirectReact ) {
+			registerObj.plugins = [
+				Path.normalize(`${ __dirname }/../node_modules/babel-plugin-syntax-dynamic-import`),
 				[
 					Path.normalize(`${ __dirname }/../node_modules/babel-plugin-import-redirect`),
 					{
 						redirect: {
 							react: Path.normalize(`${ __dirname }/../node_modules/react`),
 						},
+						suppressResolveWarning: true,
 					},
 				],
-			],
-		});
+			];
+		}
+
+		require('babel-register')( registerObj );
 
 		delete require.cache[ require.resolve( componentPath ) ]; //cache busting
 		const component = require( componentPath ).default;

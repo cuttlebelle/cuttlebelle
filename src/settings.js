@@ -51,6 +51,7 @@ export const SETTINGS = {
 		site: {
 			root: '/',
 			doctype: '<!DOCTYPE html>', // https://github.com/facebook/react/issues/1035
+			redirectReact: true,
 		}
 	},
 
@@ -77,6 +78,16 @@ export const SETTINGS = {
 		Log.verbose( Style.yellow( JSON.stringify( localSettings ) ) );
 
 		if( localSettings ) {
+			if( !localSettings.folder ) {
+				localSettings.folder = {};
+			}
+			if( !localSettings.layouts ) {
+				localSettings.folder = {};
+			}
+			if( !localSettings.site ) {
+				localSettings.folder = {};
+			}
+
 			delete localSettings.folder.cwd; // ignore the cwd key
 
 			// let’s make them absolute
