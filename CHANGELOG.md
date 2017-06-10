@@ -1,7 +1,7 @@
-@gov.au/accordion CHANGELOG
-======================
+Cuttlebelle
+===========
 
-> Part of the [gov.au UI-Kit](https://github.com/govau/uikit/) ecosystem.
+> The react static site generator that separates editing and code concerns
 
 
 ## Contents
@@ -15,8 +15,7 @@
 
 ## Versions
 
-* [v0.2.0 - Added react and jQuery component](v020)
-* [v0.1.0 - 💥 Initial version](v010)
+* [v1.0.0-alpha.* - Alpha versions for testing](v100-alpha)
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -24,12 +23,7 @@
 
 ## Release History
 
-### v0.2.0
-
-- Added react and jQuery component
-
-
-### v0.1.0
+### v1.0.0-alpha.*
 
 - 💥 Initial version
 

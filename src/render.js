@@ -44,10 +44,29 @@ import { Log, Style } from './helper';
 export const RenderReact = ( componentPath, props ) => {
 	Log.verbose(`Rendering react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.src, '' ) ) }`);
 
-	delete require.cache[ require.resolve( componentPath ) ]; //cache busting
-	const component = require( componentPath ).default;
-
 	try {
+		// babelfy components
+		require('babel-register')({
+			presets: [
+				Path.normalize(`${ __dirname }/../node_modules/babel-preset-es2015`),
+				Path.normalize(`${ __dirname }/../node_modules/babel-preset-stage-0`),
+				Path.normalize(`${ __dirname }/../node_modules/babel-preset-react`),
+			],
+			plugins: [
+				[
+					Path.normalize(`${ __dirname }/../node_modules/babel-plugin-import-redirect`),
+					{
+						redirect: {
+							react: Path.normalize(`${ __dirname }/../node_modules/react`),
+						},
+					},
+				],
+			],
+		});
+
+		delete require.cache[ require.resolve( componentPath ) ]; //cache busting
+		const component = require( componentPath ).default;
+
 		return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
 	}
 	catch( error ) {
