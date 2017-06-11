@@ -6,6 +6,7 @@
  * CreateFile - Promisified writing a file
  * CreateDir  - Create a path if it doesn’t exist
  * RemoveDir  - Removing folders and all it’s sub folders
+ * CopyFiles  - Copy a folder
  *
  **************************************************************************************************************************************************************/
 
@@ -16,6 +17,7 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import Path from 'path';
+import Ncp from 'ncp';
 import Del from 'del';
 import Fs from 'fs';
 
@@ -105,7 +107,7 @@ export const CreateDir = ( dir ) => {
 
 			// Log.verbose(`Checking if ${ Style.yellow( currentPath ) } exists`)
 
-			if( !Fs.existsSync( currentPath ) ){
+			if( !Fs.existsSync( currentPath ) ) {
 				try {
 					Fs.mkdirSync( currentPath );
 
@@ -143,4 +145,36 @@ export const RemoveDir = ( dir ) => {
 	catch( error ) {
 		Log.error( error );
 	}
+}
+
+
+/**
+ * Copy files or folder
+ *
+ * @param  {string} source      - The absolute path to the source
+ * @param  {string} destination - The absolute path to the destination
+ *
+ * @return {promise object}     - Resolved once completed
+ */
+export const CopyFiles = ( source, destination ) => {
+	Log.verbose(`Copy frolder from ${ Style.yellow( source ) } to ${ Style.yellow( destination ) }`);
+
+	return new Promise( ( resolve, reject ) => {
+		RemoveDir([ destination ]); //remove destination first
+
+		if( Fs.existsSync( source ) ) {
+			Ncp.ncp( source, destination, ( error ) => {
+				if( error ) {
+					reject( error );
+				}
+
+				resolve();
+			});
+		}
+		else {
+			Log.verbose(`No folder found at ${ Style.yellow( source ) }`);
+
+			resolve();
+		}
+	});
 }

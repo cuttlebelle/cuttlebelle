@@ -40,6 +40,7 @@ export const SETTINGS = {
 			cwd: Path.normalize(`${ process.cwd() }/`),
 			content: Path.normalize(`${ process.cwd() }/content/`),
 			src: Path.normalize(`${ process.cwd() }/src/`),
+			assets: Path.normalize(`${ process.cwd() }/assets/`),
 			site: Path.normalize(`${ process.cwd() }/site/`),
 			index: 'index.yml',
 			homepage: 'index',

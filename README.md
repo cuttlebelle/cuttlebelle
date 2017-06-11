@@ -52,7 +52,8 @@ npm install cuttlebelle -g
 
 * [CLI](#cli)
 * [Your content](#your-content)
-* [The layout](#the-layout)
+* [Your assets](#your-assets)
+* [Your layout](#your-layout)
 * [Customizations](#customizations)
 
 
@@ -62,12 +63,36 @@ npm install cuttlebelle -g
 
 I recommend [installing](#install) Cuttlebelle globally as it exposes the `cuttlebelle` command to your system.
 
-Once installed you can run it inside the rot of your project:
+Run it inside the root of your project once installed:
 
 ```shell
 cd /path/to/my/project
 cuttlebelle
 ```
+
+I suggest to add the below two scripts to your `package.json` file if you opt to install it locally:
+
+```diff
+{
+	"name": "your name",
+	"version": "1.0.0",
+	"description": "Your description",
+	"main": "index.js",
+	"scripts": {
++		"build": "cuttlebelle",
++		"watch": "cuttlebelle -w",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"devDependencies": {
+		"cuttlebelle": "^1.0.0"
+	}
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
+}
+```
+
+Then run `yarn build` to run cuttlebelle.
 
 This will generate all pages into the `site` folder _(unless [specified otherwise](#customizations))_.
 
@@ -129,6 +154,7 @@ The default folder structure divides content into the `content/` folder and the 
 │       └── subpage1/  # As long as this folder has an `index.yml` file
 │                      # it will be converted to `page2/subpage1/index.html`
 │
+├── assets/            # The assets folder
 └── src/               # The `src` folder is where your layout lives
 ```
 
@@ -195,7 +221,57 @@ _(_ 💡 _Of course all variables are again available as props to the layout by 
 **[↑ back to Usage](#usage)**
 
 
-### The layout
+### Your assets
+
+All files included inside the `assets/` folder are moved to `site/assets/`. This is where you should keep your CSS, SVGs and images.
+Just create a prop inside your `index.yml` pages to include them into your pages:
+
+`content/index/index.yml`:
+
+```yaml
+layout: layout/homepage
+title: Homepage
+stylesheet: homepage
+partials:
+  - /shared/header
+  - homepage
+  - /shared/footer
+```
+
+`src/layout/homepage.js`
+
+```jsx
+import React from "react";
+
+export default ( page ) => (
+	<html>
+	<head>
+		<title>{ page.title }</title>
+		<link rel="stylesheet" href={ `/assets/${ page.stylesheet }.css` } />
+	</head>
+	<body>
+		<main>
+			<h1>{ page.title }</h1>
+			<div>{ page._partials }</div>
+		</main>
+	</body>
+	</html>
+);
+```
+
+`/assets/homepage.css`
+
+```css
+body {
+	background:  rebeccapurple;
+}
+```
+
+
+**[↑ back to Usage](#usage)**
+
+
+### Your layout
 
 The layout are all [react](https://facebook.github.io/react/) components. You have to assign a layout to each page and partial. Each component will have a
 bunch of props exposed to it.
