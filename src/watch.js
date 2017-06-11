@@ -20,6 +20,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { RenderPage, RenderAllPages } from './render';
 import { GetLayout, GetContent, Pages } from './site';
+import { CopyFiles } from './files.js';
 import Chokidar from 'chokidar';
 import Path from 'path';
 
@@ -48,6 +49,7 @@ export const Watch = {
 			Path.normalize(`${ SETTINGS.get().folder.content }/**/*.yml`),
 			Path.normalize(`${ SETTINGS.get().folder.content }/**/*.md`),
 			Path.normalize(`${ SETTINGS.get().folder.src }/**/*.js`),
+			Path.normalize(`${ SETTINGS.get().folder.assets }/**/*`),
 		], {
 			ignoreInitial: true,
 		});
@@ -64,6 +66,8 @@ export const Watch = {
 				UpdateChange( path, true );
 			}
 			else {
+				Log.verbose(`Time since last change: ${ Style.yellow( ( thisChange - Watch.lastChange ) ) }`);
+
 				UpdateChange( path );
 			}
 
@@ -99,11 +103,30 @@ export const Watch = {
 export const UpdateChange = ( path, _doEverything = false ) => {
 	const startTime = process.hrtime();
 
-	let _isReact = path.startsWith( SETTINGS.get().folder.src );
+	const _isReact = path.startsWith( SETTINGS.get().folder.src );
+	const _isAssets = path.startsWith( SETTINGS.get().folder.assets );
 
 	// A page is being changed
 	if( !_doEverything ) {
-		if( !_isReact ) {
+		if( _isAssets ) {
+			Log.verbose(`Only doing assets changes`);
+			// copy entire assets folder again
+			CopyFiles(
+				SETTINGS.get().folder.assets,
+				Path.normalize(`${ SETTINGS.get().folder.site }/${ SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' ) }`)
+			);
+
+			const elapsedTime = process.hrtime( startTime );
+
+			Log.done(
+				`Successfully built ${ Style.yellow('assets') } folder to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+				`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+			);
+		}
+
+		else if( !_isReact ) {
+			Log.verbose(`Detected content changes`);
+
 			const page = Path.dirname( path ).replace( SETTINGS.get().folder.content, '' );
 
 			RenderPage( page )
@@ -123,6 +146,8 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 		}
 		// A react component is being changed
 		else {
+			Log.verbose(`Detected react changes`);
+
 			const page = path.replace( SETTINGS.get().folder.src, '' ).replace( '.js', '' );
 
 			Log.verbose(`Changes effected ${ Style.yellow( JSON.stringify( Layouts.get()[ page ] ) ) }`);
@@ -145,7 +170,7 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 			);
 		}
 	}
-	// Something has been deleted
+	// re-generating all pages
 	else {
 		// Getting all pages
 		const content = GetContent();

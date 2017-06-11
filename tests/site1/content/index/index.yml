@@ -1,5 +1,6 @@
-layout: layout/page
+layout: layout/homepage
 title: Wow! titles are awesome!
+stylesheet: homepage
 partials:
   - /shared/component1
   - partial1

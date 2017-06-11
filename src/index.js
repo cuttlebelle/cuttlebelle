@@ -16,6 +16,7 @@
 import { RenderAllPages } from './render.js';
 import { GetContent, GetLayout, Pages } from './site';
 import { SETTINGS } from './settings.js';
+import { CopyFiles } from './files.js';
 import { Watch } from './watch.js';
 import Size from 'window-size';
 import Path from 'path';
@@ -108,11 +109,24 @@ Pages
 	})
 	.then( () => {
 
-		// generate all pages unless it’s disabled
+		// generate all files unless it’s disabled
 		if( !process.argv.includes('-n') && !process.argv.includes('--no-generate') ) {
 			Log.info(`Generating pages`);
 
-			RenderAllPages( content, layout )
+			const allPromises = [];
+
+			// copy all asset files to the site/ folder
+			allPromises.push(
+				CopyFiles(
+					SETTINGS.get().folder.assets,
+					Path.normalize(`${ SETTINGS.get().folder.site }/${ SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' ) }`)
+				)
+			);
+
+			// render all pages to site/
+			allPromises.push( RenderAllPages( content, layout ) );
+
+			Promise.all( allPromises )
 				.catch( error => {
 					Log.error(`Generating pages failed :(`);
 					Log.error( error );
