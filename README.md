@@ -5,6 +5,8 @@ Cuttlebelle
 
 [![NPM](https://nodei.co/npm/cuttlebelle.png?downloads=true)](https://nodei.co/npm/cuttlebelle/)
 
+![Cuttlebelle files](https://raw.githubusercontent.com/dominikwilkowski/cuttlebelle/master/assets/files.png)
+
 ## 💡 Why yet another static site generator?
 
 All static site generators I have used restrict you to use one layout per page. Todays webdesign needs have outgrown this and we often find ourself either
