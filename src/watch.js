@@ -2,9 +2,9 @@
  *
  * Watch all relevant files for changes
  *
+ * browsersync  - The global browser sync instance
  * Watch        - Our file watcher
  * Watch.start  - Starting the watch
- * Watch.stop   - Stopping the watch
  * UpdateChange - React to changes depending on what happened in our watch
  * Layouts      - Keep track of all layouts
  * Layouts.get  - Get all layouts we have stored so far
@@ -21,7 +21,7 @@
 import { RenderPage, RenderAllPages } from './render';
 import { GetLayout, GetContent, Pages } from './site';
 import { CopyFiles } from './files.js';
-import Chokidar from 'chokidar';
+import BS from 'browser-sync';
 import Path from 'path';
 
 
@@ -33,30 +33,32 @@ import { SETTINGS } from './settings.js';
 
 
 /**
+ * The global browser sync instance
+ *
+ * @type {function}
+ */
+const browsersync = BS.create('cuttlebelle');
+
+
+/**
  * Our file watcher
  *
  * @type {Object}
  */
 export const Watch = {
-	watcher: {},
 	lastChange: new Date(),
 
 	/**
 	 * Starting the watch
 	 */
 	start: () => {
-		Watch.watcher = Chokidar.watch([ // watch all content and src files
+		browsersync.watch([ // watch all content and src files
 			Path.normalize(`${ SETTINGS.get().folder.content }/**/*.yml`),
 			Path.normalize(`${ SETTINGS.get().folder.content }/**/*.md`),
 			Path.normalize(`${ SETTINGS.get().folder.src }/**/*.js`),
 			Path.normalize(`${ SETTINGS.get().folder.assets }/**/*`),
-		], {
-			ignoreInitial: true,
-		});
-
-		Log.info(`Watching for changes`);
-
-		Watch.watcher.on('change', path => {
+		], { ignoreInitial: true })
+		.on('change', path => {
 			Log.info(`File has changed ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
 
 			const thisChange = new Date(); // double save detection
@@ -72,25 +74,26 @@ export const Watch = {
 			}
 
 			Watch.lastChange = thisChange;
-		});
-
-		Watch.watcher.on('add', path => {
+		})
+		.on('add', path => {
 			Log.info(`File has been added ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
 			UpdateChange( path );
-		});
-
-		Watch.watcher.on('unlink', path => {
+		})
+		.on('unlink', path => {
 			Log.info(`File has ben deleted ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
 			UpdateChange( path, true );
 		});
-	},
 
-	/**
-	 * Stopping the watch
-	 */
-	stop: () => {
-		Watch.watcher.close();
-	}
+		Log.info(`Watching for changes`);
+
+		browsersync.init({
+			server: SETTINGS.get().folder.site,
+			logLevel: 'silent',
+			host: '127.0.0.1',
+			port: 8080,
+		});
+
+	},
 };
 
 
@@ -141,6 +144,8 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 						`Successfully built ${ Style.yellow( page.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
 						`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
 					);
+
+					browsersync.reload();
 				}
 			);
 		}
@@ -166,6 +171,8 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 						`Successfully built ${ Style.yellow( pages.length ) } pages to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
 						`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
 					);
+
+					browsersync.reload();
 				}
 			);
 		}
@@ -206,6 +213,8 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 							`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
 							`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
 						);
+
+						browsersync.reload();
 					}
 				);
 			}
