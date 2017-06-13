@@ -133,7 +133,7 @@ export const RenderPage = ( page ) => {
 						delete body.partials;
 						body.layout = body.layout || SETTINGS.get().layouts.page;            // set the default layout
 
-						Layouts.set( page, body.layout );                                      // keeping track of all pages per layout will make the watch better
+						Layouts.set( page, body.layout );                                    // keeping track of all pages per layout will make the watch better
 
 						const parents = page.split('/').map( ( item, i ) => {
 							return SETTINGS.get().site.root + page.split('/').splice( 0, page.split('/').length - i ).join('/');

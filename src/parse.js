@@ -17,11 +17,13 @@
 import Marked from 'marked';
 import React from 'react';
 import YAML from 'yamljs';
+import Path from 'path';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Helper
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import { SETTINGS } from './settings.js';
 import { Log, Style } from './helper';
 
 
@@ -58,7 +60,21 @@ export const ParseFM = ( content ) => {
  * @return {string}          - HTML rendered from the given markdown
  */
 export const ParseMD = ( markdown ) => {
-	return Marked( markdown );
+	let renderer = new Marked.Renderer();
+
+	if( SETTINGS.get().site.markdownRenderer ) {
+		const filePath = Path.normalize(`${ process.cwd() }/${ SETTINGS.get().site.markdownRenderer }`);
+
+		try {
+			renderer = require( filePath );
+		}
+		catch( error ) {
+			Log.error(`Markdown renderer file caused an error at ${ Style.yellow( filePath ) }`);
+			Log.error( error );
+		}
+	}
+
+	return Marked( markdown, { renderer: renderer } );
 }
 
 

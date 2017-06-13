@@ -137,7 +137,7 @@ Pages
 					const elapsedTime = process.hrtime( startTime );
 
 					Log.done(
-						`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages.length ) } pages ` : `No pages have been build ` }` +
+						`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages[ 1 ].length ) } pages ` : `No pages have been build ` }` +
 						`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
 						`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
 					);

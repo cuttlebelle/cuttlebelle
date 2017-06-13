@@ -53,6 +53,7 @@ export const SETTINGS = {
 			root: '/',
 			doctype: '<!DOCTYPE html>', // https://github.com/facebook/react/issues/1035
 			redirectReact: true,
+			markdownRenderer: '',
 		},
 	},
 
@@ -83,10 +84,10 @@ export const SETTINGS = {
 				localSettings.folder = {};
 			}
 			if( !localSettings.layouts ) {
-				localSettings.folder = {};
+				localSettings.layouts = {};
 			}
 			if( !localSettings.site ) {
-				localSettings.folder = {};
+				localSettings.site = {};
 			}
 
 			delete localSettings.folder.cwd; // ignore the cwd key
