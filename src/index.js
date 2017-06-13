@@ -13,10 +13,9 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { RenderAllPages } from './render.js';
+import { RenderAllPages, RenderAssets } from './render.js';
 import { GetContent, GetLayout, Pages } from './site';
 import { SETTINGS } from './settings.js';
-import { CopyFiles } from './files.js';
 import { Watch } from './watch.js';
 import Size from 'window-size';
 import Path from 'path';
@@ -117,7 +116,7 @@ Pages
 
 			// copy all asset files to the site/ folder
 			allPromises.push(
-				CopyFiles(
+				RenderAssets(
 					SETTINGS.get().folder.assets,
 					Path.normalize(`${ SETTINGS.get().folder.site }/${ SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' ) }`)
 				)
