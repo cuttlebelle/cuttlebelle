@@ -6,6 +6,7 @@
  * Watch        - Our file watcher
  * Watch.start  - Starting the watch
  * UpdateChange - React to changes depending on what happened in our watch
+ * UpdateAll    - Build all pages
  * Layouts      - Keep track of all layouts
  * Layouts.get  - Get all layouts we have stored so far
  * Layouts.set  - Keep track of what pages use what react component
@@ -23,6 +24,7 @@ import { GetLayout, GetContent, Pages } from './site';
 import { CopyFiles } from './files.js';
 import BS from 'browser-sync';
 import Path from 'path';
+import Fs from 'fs';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -132,22 +134,27 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 
 			const page = Path.dirname( path ).replace( SETTINGS.get().folder.content, '' );
 
-			RenderPage( page )
-				.catch( error => {
-					Log.error(`An error occured while trying to generate ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
-					Log.error( error );
-				})
-				.then( page => {
-					const elapsedTime = process.hrtime( startTime );
+			if( !Fs.existsSync( Path.normalize(`${ SETTINGS.get().folder.content }/${ page }/${ SETTINGS.get().folder.index }`) ) ) {
+				UpdateAll( startTime );
+			}
+			else {
+				RenderPage( page )
+					.catch( error => {
+						Log.error(`An error occured while trying to generate ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
+						Log.error( error );
+					})
+					.then( page => {
+						const elapsedTime = process.hrtime( startTime );
 
-					Log.done(
-						`Successfully built ${ Style.yellow( page.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
-						`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
-					);
+						Log.done(
+							`Successfully built ${ Style.yellow( page.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+							`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+						);
 
-					browsersync.reload();
-				}
-			);
+						browsersync.reload();
+					}
+				);
+			}
 		}
 		// A react component is being changed
 		else {
@@ -179,47 +186,57 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 	}
 	// re-generating all pages
 	else {
-		// Getting all pages
-		const content = GetContent();
-		Log.verbose(`Found following content: ${ Style.yellow( JSON.stringify( content ) ) }`);
-
-		// Getting all layout components
-		const layout = GetLayout();
-		Log.verbose(`Found following layout:\n${ Style.yellow( JSON.stringify( layout ) ) }`);
-
-		// Get all front matter from all pages and put them into a global var
-		Pages
-			.setAll( content )
-			.catch( error => {
-				Log.error(`Trying to initilize the pages failed.`);
-				Log.error( error );
-
-				process.exit( 1 );
-			})
-			.then( () => {
-
-				RenderAllPages( content, layout )
-					.catch( error => {
-						Log.error(`Generating pages failed :(`);
-						Log.error( error );
-
-						process.exit( 1 );
-					})
-					.then( pages => {
-						const elapsedTime = process.hrtime( startTime );
-
-						Log.done(
-							`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages.length ) } pages ` : `No pages have been build ` }` +
-							`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
-							`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
-						);
-
-						browsersync.reload();
-					}
-				);
-			}
-		);
+		UpdateAll( startTime );
 	}
+};
+
+
+/**
+ * Build all pages
+ *
+ * @param  {array} startTime - The Hrtime array
+ */
+const UpdateAll = ( startTime ) => {
+	// Getting all pages
+	const content = GetContent();
+	Log.verbose(`Found following content: ${ Style.yellow( JSON.stringify( content ) ) }`);
+
+	// Getting all layout components
+	const layout = GetLayout();
+	Log.verbose(`Found following layout:\n${ Style.yellow( JSON.stringify( layout ) ) }`);
+
+	// Get all front matter from all pages and put them into a global var
+	Pages
+		.setAll( content )
+		.catch( error => {
+			Log.error(`Trying to initilize the pages failed.`);
+			Log.error( error );
+
+			process.exit( 1 );
+		})
+		.then( () => {
+
+			RenderAllPages( content, layout )
+				.catch( error => {
+					Log.error(`Generating pages failed :(`);
+					Log.error( error );
+
+					process.exit( 1 );
+				})
+				.then( pages => {
+					const elapsedTime = process.hrtime( startTime );
+
+					Log.done(
+						`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages.length ) } pages ` : `No pages have been build ` }` +
+						`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+						`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+					);
+
+					browsersync.reload();
+				}
+			);
+		}
+	);
 };
 
 
