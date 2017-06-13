@@ -6,6 +6,7 @@
  * RenderPage     - Render a page to HTML
  * RenderAllPages - Render all pages in the content folder
  * RenderPartial  - Render a partial to HTML
+ * RenderAssets   - Render assets folder
  *
  **************************************************************************************************************************************************************/
 
@@ -15,7 +16,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { ReadFile, CreateFile, RemoveDir } from './files';
+import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
 import { GetContent, GetLayout } from './site';
 import { ParseYaml, ParseFM } from './parse';
 import ReactDOMServer from 'react-dom/server';
@@ -259,5 +260,31 @@ export const RenderPartial = ( cwd, partial, parent ) => {
 
 				resolve( component );
 			});
+	});
+};
+
+
+/**
+ * Render assets folder
+ *
+ * @param  {string} source      - The source path
+ * @param  {string} destination - The destination path
+ *
+ * @return {promise object}     - Resolves when finished
+ */
+export const RenderAssets = ( source, destination ) => {
+	return new Promise( ( resolve, reject ) => {
+		CreateDir( destination );
+
+		CopyFiles( source, destination )
+			.catch( error => {
+				Log.error(`Error encountered while atempting to copy files from ${ Style.yellow( source ) } to ${ Style.yellow( destination ) }`);
+				Log.error( error );
+
+				reject( error );
+			})
+			.then( finished => {
+				resolve( finished );
+		});
 	});
 };

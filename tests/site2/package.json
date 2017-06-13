@@ -6,7 +6,7 @@
 			"cwd": "ignore me!",
 			"content": "content2/",
 			"src": "src2/",
-			"assets": "assets2/",
+			"assets": "content2/_assets/",
 			"site": "site2/",
 			"index": "index2.yml",
 			"homepage": "homepage"

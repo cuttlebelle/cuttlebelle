@@ -19,9 +19,8 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { RenderPage, RenderAllPages } from './render';
+import { RenderPage, RenderAllPages, RenderAssets } from './render';
 import { GetLayout, GetContent, Pages } from './site';
-import { CopyFiles } from './files.js';
 import BS from 'browser-sync';
 import Path from 'path';
 import Fs from 'fs';
@@ -116,17 +115,20 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 		if( _isAssets ) {
 			Log.verbose(`Only doing assets changes`);
 			// copy entire assets folder again
-			CopyFiles(
+			RenderAssets(
 				SETTINGS.get().folder.assets,
 				Path.normalize(`${ SETTINGS.get().folder.site }/${ SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' ) }`)
-			);
+			)
+				.catch( error => Log.error( error ) )
+				.then( () => {
 
-			const elapsedTime = process.hrtime( startTime );
+					const elapsedTime = process.hrtime( startTime );
 
-			Log.done(
-				`Successfully built ${ Style.yellow('assets') } folder to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
-				`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
-			);
+					Log.done(
+						`Successfully built ${ Style.yellow('assets') } folder to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+						`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+					);
+			});
 		}
 
 		else if( !_isReact ) {
