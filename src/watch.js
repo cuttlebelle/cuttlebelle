@@ -128,6 +128,8 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 						`Successfully built ${ Style.yellow('assets') } folder to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
 						`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
 					);
+
+					browsersync.reload();
 			});
 		}
 
