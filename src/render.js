@@ -45,13 +45,30 @@ export const RenderReact = ( componentPath, props ) => {
 	Log.verbose(`Rendering react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.src, '' ) ) }`);
 
 	try {
+		// resolving relative dependencies
+		let presetES2015 = Path.normalize(`${ __dirname }/../node_modules/babel-preset-es2015`);
+		let presetStage0 = Path.normalize(`${ __dirname }/../node_modules/babel-preset-stage-0`);
+		let presetReact = Path.normalize(`${ __dirname }/../node_modules/babel-preset-react`);
+		let pluginSyntax = Path.normalize(`${ __dirname }/../node_modules/babel-plugin-syntax-dynamic-import`);
+		let pluginImport = Path.normalize(`${ __dirname }/../node_modules/babel-plugin-syntax-dynamic-import`);
+		let react = Path.normalize(`${ __dirname }/../node_modules/react`);
+
+		if( !Fs.existsSync( presetES2015 ) ) { // looks like it was installed locally
+			presetES2015 = Path.normalize(`${ __dirname }/../../babel-preset-es2015`);
+			presetStage0 = Path.normalize(`${ __dirname }/../../babel-preset-stage-0`);
+			presetReact = Path.normalize(`${ __dirname }/../../babel-preset-react`);
+			pluginSyntax = Path.normalize(`${ __dirname }/../../babel-plugin-syntax-dynamic-import`);
+			pluginImport = Path.normalize(`${ __dirname }/../../babel-plugin-import-redirect`);
+			react = Path.normalize(`${ __dirname }/../../react`);
+		}
+
 		// babelfy components
 		// we have to keep the presets and plugins close as we want to support and even encourage global installs
 		const registerObj = {
 			presets: [
-				Path.normalize(`${ __dirname }/../node_modules/babel-preset-es2015`),
-				Path.normalize(`${ __dirname }/../node_modules/babel-preset-stage-0`),
-				Path.normalize(`${ __dirname }/../node_modules/babel-preset-react`),
+				presetES2015,
+				presetStage0,
+				presetReact,
 			],
 		};
 
@@ -59,12 +76,12 @@ export const RenderReact = ( componentPath, props ) => {
 		// so react doesn’t have to be installed separately on globally installed cuttlebelle
 		if( SETTINGS.get().site.redirectReact ) {
 			registerObj.plugins = [
-				Path.normalize(`${ __dirname }/../node_modules/babel-plugin-syntax-dynamic-import`),
+				pluginSyntax,
 				[
-					Path.normalize(`${ __dirname }/../node_modules/babel-plugin-import-redirect`),
+					pluginImport,
 					{
 						redirect: {
-							react: Path.normalize(`${ __dirname }/../node_modules/react`),
+							react: react,
 						},
 						suppressResolveWarning: true,
 					},
