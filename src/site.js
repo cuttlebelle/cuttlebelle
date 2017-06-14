@@ -8,6 +8,7 @@
  * Pages.get    - Get the stored frontmatter
  * Pages.setAll - Set all frontmatter to store
  * Pages.set    - Set one pages frontmatter into the store
+ * Pages.inject - Inject the data into our global placeholder
  *
  **************************************************************************************************************************************************************/
 
@@ -47,7 +48,7 @@ export const GetContent = ( folder = SETTINGS.get().folder.content, structure = 
 						structure = [ ...GetContent( Path.join( folder, file ), structure ) ]; // and spread the result into our array
 					}
 					else {
-						if( file === SETTINGS.get().folder.index ) {                                 // we only want the index.yml files and ignore (shared) folder without pages
+						if( file === SETTINGS.get().folder.index ) {                           // we only want the index.yml files and ignore (shared) folder without pages
 							Log.verbose(`Found content in ${ Style.yellow( folder ) }`);
 
 							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.content.replace( SETTINGS.get().folder.cwd, '' );
@@ -174,7 +175,35 @@ export const Pages = {
 		return new Promise( ( resolve, reject ) => {
 			ReadFile( content )
 				.catch( error => reject( JSON.stringify( error ) ) )
-				.then( body => resolve( { name: page, [page]: ParseYaml( body ) } ) );
+				.then( body => resolve({
+					name: page,
+					...Pages.inject( page, ParseYaml( body ) )
+				}));
 		});
 	},
+
+
+	/**
+	 * Inject the data into our global placeholder
+	 *
+	 * @param  {string} page - The name (ID) of the page
+	 * @param  {object} data - The data to be injected
+	 *
+	 * @return {object}      - The data with generated url
+	 */
+	inject: ( page, data ) => {
+		Log.verbose(`Injecting page data for ${ Style.yellow( page ) } to ${ Style.yellow( JSON.stringify( page ) ) }`);
+
+		let url = `${ SETTINGS.get().site.root }${ page }`;
+
+		if( page === SETTINGS.get().folder.homepage ) {
+			url = `${ SETTINGS.get().site.root }`;
+		}
+
+		data = { url: url, ...data };
+
+		Pages.all[ page ] = data;
+
+		return data;
+	}
 };
