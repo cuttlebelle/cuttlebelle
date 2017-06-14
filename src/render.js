@@ -126,7 +126,7 @@ export const RenderPage = ( page ) => {
 
 				body = ParseYaml( body );                                     // parse the body of this page
 
-				Pages.all[ page ] = body;                                     // updated the frontmatter of this page
+				Pages.inject( page, body );                                   // updated the frontmatter of this page
 
 				body.partials.map( partial => {
 					let cwd = Path.dirname( content );                          // we assume relative links
