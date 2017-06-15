@@ -51,7 +51,7 @@ export const RenderReact = ( componentPath, props ) => {
 		let presetStage0 = Path.normalize(`${ __dirname }/../node_modules/babel-preset-stage-0`);
 		let presetReact = Path.normalize(`${ __dirname }/../node_modules/babel-preset-react`);
 		let pluginSyntax = Path.normalize(`${ __dirname }/../node_modules/babel-plugin-syntax-dynamic-import`);
-		let pluginImport = Path.normalize(`${ __dirname }/../node_modules/babel-plugin-syntax-dynamic-import`);
+		let pluginImport = Path.normalize(`${ __dirname }/../node_modules/babel-plugin-import-redirect`);
 		let react = Path.normalize(`${ __dirname }/../node_modules/react`);
 
 		if( !Fs.existsSync( presetES2015 ) ) { // looks like it was installed locally
@@ -71,6 +71,7 @@ export const RenderReact = ( componentPath, props ) => {
 				presetStage0,
 				presetReact,
 			],
+			cache: false,
 		};
 
 		// optional we redirect import statements for react to our local node_module folder
@@ -90,9 +91,11 @@ export const RenderReact = ( componentPath, props ) => {
 			];
 		}
 
+		// delete require.cache[ require.resolve('babel-register') ];
+		process.env.BABEL_DISABLE_CACHE = 1;
 		require('babel-register')( registerObj );
 
-		delete require.cache[ require.resolve( componentPath ) ]; //cache busting
+		delete require.cache[ require.resolve( componentPath ) ]; // cache busting
 		const component = require( componentPath ).default;
 
 		return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
@@ -161,7 +164,7 @@ export const RenderPage = ( page ) => {
 							Path.normalize(`${ SETTINGS.get().folder.src }/${ body.layout }`), // our HTML with an optional doctype
 							{
 								_myself: page,
-								_parents: parents,
+								_parents: parents.reverse(),
 								_sites: Pages.get(),
 								_body: body.body,
 								_partials: <div dangerouslySetInnerHTML={ { __html: partials.join('') } } />,
@@ -251,7 +254,7 @@ export const RenderPartial = ( cwd, partial, parent ) => {
 					Path.normalize(`${ SETTINGS.get().folder.src }/${ partialContent.frontmatter.layout }`),               // parse the react component with it’s props
 					{
 						_myself: parent,
-						_parents: parents,
+						_parents: parents.reverse(),
 						_sites: Pages.get(),
 						_body: partialContent.body,
 						...partialContent.frontmatter

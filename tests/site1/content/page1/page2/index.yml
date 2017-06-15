@@ -1,5 +1,5 @@
 layout: layout/page
-title: page2
+title: Page 2 nested
 partials:
   - partial1
   - partial2

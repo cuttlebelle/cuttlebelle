@@ -7,7 +7,11 @@ export default ( page ) => {
 			<ul>
 				{ page._parents.map( ( parent, i ) =>
 					<li key={ i }>
-						<a href={ page._sites[ parent ].url }>{ page._sites[ parent ].title }</a>
+						{
+							page._sites[ parent ].url === page._sites[ page._myself ].url
+								? <span>{ page._sites[ parent ].title }</span>
+								: <a href={ page._sites[ parent ].url }>{ page._sites[ parent ].title }</a>
+						}
 					</li>
 				)}
 			</ul>
