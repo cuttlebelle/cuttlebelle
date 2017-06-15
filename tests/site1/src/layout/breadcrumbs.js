@@ -7,8 +7,7 @@ export default ( page ) => {
 			<ul>
 				{ page._parents.map( ( parent, i ) =>
 					<li key={ i }>
-						{  }
-						<a href={ parent }>{ parent }</a>
+						<a href={ page._sites[ parent ].url }>{ page._sites[ parent ].title }</a>
 					</li>
 				)}
 			</ul>

@@ -154,7 +154,7 @@ export const RenderPage = ( page ) => {
 						Layouts.set( page, body.layout );                                    // keeping track of all pages per layout will make the watch better
 
 						const parents = page.split('/').map( ( item, i ) => {
-							return SETTINGS.get().site.root + page.split('/').splice( 0, page.split('/').length - i ).join('/');
+							return page.split('/').splice( 0, page.split('/').length - i ).join('/');
 						});
 
 						const pageHTML = SETTINGS.get().site.doctype + RenderReact(          // and off we go into the react render machine while prefixing
@@ -244,7 +244,7 @@ export const RenderPartial = ( cwd, partial, parent ) => {
 				Layouts.set( parent, partialContent.frontmatter.layout );                                            // keeping track of all pages
 
 				const parents = parent.split('/').map( ( item, i ) => {
-					return SETTINGS.get().site.root + parent.split('/').splice( 0, parent.split('/').length - i ).join('/');
+					return parent.split('/').splice( 0, parent.split('/').length - i ).join('/');
 				});
 
 				const component = RenderReact(
