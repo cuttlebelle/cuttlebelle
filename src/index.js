@@ -49,6 +49,10 @@ ${ padding }╚═╝ ╚═╝  ╩   ╩  ╩═╝ ╚═╝ ╚═╝ ╚═
 ${ padding }The react.js static site generator with editing in mind.
 
 ${ padding }Options:
+${ padding }  ${ Style.bold(`version`) }     - Display the version of Cuttlebelle
+${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-v`) ) }
+${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --version`) ) }
+
 ${ padding }  ${ Style.bold(`watch`) }       - Start to watch the content and source folder for changes
 ${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-w`) ) }
 ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --watch`) ) }
@@ -63,6 +67,12 @@ ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --ve
 `);
 	Log.space();
 
+	process.exit( 0 );
+}
+
+
+if( process.argv.includes('-v') || process.argv.includes('--version') ) {
+	console.log(`Cuttlebelle v${ pkg.version }`);
 	process.exit( 0 );
 }
 
