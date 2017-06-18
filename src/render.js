@@ -104,6 +104,10 @@ export const RenderReact = ( componentPath, props ) => {
 		Log.error(`The react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.src, '' ) ) } had trouble rendering:`);
 		Log.error( error );
 
+		if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if the render fails in production
+			process.exit( 1 );
+		}
+
 		return '';
 	}
 }

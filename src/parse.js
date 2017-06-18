@@ -69,12 +69,26 @@ export const ParseMD = ( markdown ) => {
 			renderer = require( filePath );
 		}
 		catch( error ) {
-			Log.error(`Markdown renderer file caused an error at ${ Style.yellow( filePath ) }`);
+			Log.error(`Using the custom renderer for markdown caused an error at ${ Style.yellow( filePath ) }`);
 			Log.error( error );
+
+			if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if something goes wrong in production
+				process.exit( 1 );
+			}
 		}
 	}
 
-	return Marked( markdown, { renderer: renderer } );
+	try {
+		return Marked( markdown, { renderer: renderer } );
+	}
+	catch( error ) {
+		Log.error(`Rendering markdown caused an error`);
+		Log.error( error );
+
+		if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if something goes wrong in production
+			process.exit( 1 );
+		}
+	}
 }
 
 
@@ -86,5 +100,15 @@ export const ParseMD = ( markdown ) => {
  * @return {object}      - The parsed yaml
  */
 export const ParseYaml = ( yaml ) => {
-	return YAML.parse( yaml );
+	try {
+		return YAML.parse( yaml );
+	}
+	catch( error ) {
+		Log.error(`Rendering yaml caused an error`);
+		Log.error( error );
+
+		if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if something goes wrong in production
+			process.exit( 1 );
+		}
+	}
 }
