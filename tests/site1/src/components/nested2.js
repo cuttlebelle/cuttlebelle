@@ -4,6 +4,6 @@ export default ({ page }) => (
 	<div>
 		<h4>Nested</h4>
 		{ JSON.stringify(page) }
-		{ page._sites[ page._myself ].title }
+		{ page._pages[ page._ID ].title }
 	</div>
 );

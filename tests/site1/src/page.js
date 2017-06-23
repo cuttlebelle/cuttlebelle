@@ -3,12 +3,12 @@ import React from "react";
 export default ( page ) => (
 	<html>
 	<head>
-		<title>page { page.title }</title>
+		<title>{ page.title }</title>
 	</head>
 	<body>
 		<main>
 			<h1>{ page.title }</h1>
-			<div>{ page._partials }</div>
+			<div>{ page.partials }</div>
 		</main>
 	</body>
 	</html>

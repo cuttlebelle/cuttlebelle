@@ -2,9 +2,9 @@
  *
  * Parsing different languages
  *
- * ParseFM    - Parsing front matter out of a page if it exists
- * ParseMD    - Parsing markdown into HTML
- * ParseYaml  - Parsing yaml into an object
+ * ParseContent - Parsing the content of a file into an object
+ * ParseMD      - Parsing markdown into HTML
+ * ParseYaml    - Parsing yaml into an object
  *
  **************************************************************************************************************************************************************/
 
@@ -28,27 +28,34 @@ import { Log, Style } from './helper';
 
 
 /**
- * Parsing front matter out of a page if it exists
+ * Parsing the content of a file into an object
  *
- * @param  {string} content - The content of a partial with or without front matter
+ * @param  {string} content  - The content of a partial with or without front matter
+ * @param  {string} _isIndex - The path of the file to determine what extension this is
  *
- * @return {object}         - An object with parsed out front matter and it’s parsed yaml and the body. format: { frontmatter: {}, body: '' }
+ * @return {object}          - An object with parsed out front matter and it’s parsed yaml and the body. format: { frontmatter: {}, body: '' }
  */
-export const ParseFM = ( content ) => {
-	if( content.startsWith('---\n') ) {
+export const ParseContent = ( content, _isIndex ) => {
+	const parsedBody = {};
+	let frontmatter = '';
+	let markdown = '';
+
+	if( _isIndex ) {                         // if this is a yml file
+		parsedBody.frontmatter = ParseYaml( content );
+		parsedBody.body = '';
+	}
+	else if( content.startsWith('---\n') ) { // if this is another file that has frontmatter
 		const bodyParts = content.split('---\n');
 
-		return {
-			frontmatter: ParseYaml( bodyParts[1] ),
-			body: ParseMD( bodyParts.slice( 2 ).join('---\n') ),
-		}
+		parsedBody.frontmatter = bodyParts[1] ? ParseYaml( bodyParts[1] ) : {};
+		parsedBody.body = ParseMD( bodyParts.slice( 2 ).join('---\n') );
 	}
-	else {
-		return {
-			frontmatter: {},
-			body: content,
-		};
+	else {                                   // in all other cases (markdown without frontmatter)
+		parsedBody.frontmatter = {};
+		parsedBody.body = ParseMD( content );
 	}
+
+	return parsedBody;
 }
 
 

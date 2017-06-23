@@ -22,7 +22,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { RenderPage, RenderAllPages, RenderAssets } from './render';
+import { RenderFile, RenderAllPages, RenderAssets } from './render';
 import { GetLayout, GetContent, Pages } from './site';
 import BS from 'browser-sync';
 import Path from 'path';
@@ -131,7 +131,7 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 
 			const page = Path.dirname( path ).replace( SETTINGS.get().folder.content, '' );
 
-			if( !Fs.existsSync( Path.normalize(`${ SETTINGS.get().folder.content }/${ page }/${ SETTINGS.get().folder.index }`) ) ) {
+			if( !Fs.existsSync( Path.normalize(`${ SETTINGS.get().folder.content }/${ page }/${ SETTINGS.get().folder.index }.yml`) ) ) {
 				UpdateAll( startTime );
 			}
 			else {
@@ -188,7 +188,7 @@ export const UpdateAssets = ( startTime ) => {
 export const UpdateContent = ( startTime, path, page ) => {
 	Log.verbose(`Only doing content changes`);
 
-	RenderPage( page )
+	RenderFile(`${ page }/${ SETTINGS.get().folder.index }.yml`)
 		.catch( error => {
 			Log.error(`An error occured while trying to generate ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
 			Log.error( error );

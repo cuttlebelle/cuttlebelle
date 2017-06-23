@@ -1,0 +1,5 @@
+title: Homepage
+main:
+  - partial1.md
+  - /shared/component2.md
+  - partial2.md

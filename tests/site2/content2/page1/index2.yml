@@ -1,5 +1,5 @@
-layout: layout/page
+layout: page
 title: page1
 partials:
-  - partial1
-  - partial2
+  - partial1.md
+  - partial2.md
