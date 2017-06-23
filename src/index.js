@@ -50,7 +50,7 @@ ${ padding }The react.js static site generator with editing in mind.
 
 ${ padding }Options:
 ${ padding }  ${ Style.bold(`version`) }     - Display the version of Cuttlebelle
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-v`) ) }
+${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-V`) ) }
 ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --version`) ) }
 
 ${ padding }  ${ Style.bold(`watch`) }       - Start to watch the content and source folder for changes
@@ -64,6 +64,8 @@ ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --no
 ${ padding }  ${ Style.bold(`verbose`) }     - Enable silly verbose mode
 ${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-v`) ) }
 ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --verbose`) ) }
+
+${ padding }  ${ Style.gray( pkg.homepage ) }
 `);
 	Log.space();
 
@@ -71,7 +73,7 @@ ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --ve
 }
 
 
-if( process.argv.includes('-v') || process.argv.includes('--version') ) {
+if( process.argv.includes('-V') || process.argv.includes('--version') ) {
 	console.log(`Cuttlebelle v${ pkg.version }`);
 	process.exit( 0 );
 }
