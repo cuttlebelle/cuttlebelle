@@ -42,12 +42,12 @@ export const SETTINGS = {
 			src: Path.normalize(`${ process.cwd() }/src/`),
 			assets: Path.normalize(`${ process.cwd() }/assets/`),
 			site: Path.normalize(`${ process.cwd() }/site/`),
-			index: 'index.yml',
+			index: 'index',
 			homepage: 'index',
 		},
 		layouts: {
-			page: 'layout/page',
-			partial: 'layout/partial',
+			page: 'page',
+			partial: 'partial',
 		},
 		site: {
 			root: '/',
