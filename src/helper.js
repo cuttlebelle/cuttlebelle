@@ -2,6 +2,7 @@
  *
  * Export shared helper code
  *
+ * Slug          - Slugify a string
  * ConvertHrtime - Convert hrtime to seconds
  * Style         - Returning ansi escape color codes
  * Log           - A logging method
@@ -15,7 +16,22 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import Slugify from 'slugify';
 import Path from 'path';
+
+
+/**
+ * Slugify a string
+ *
+ * @param  {string} text - The string to be slugified
+ *
+ * @return {string}      - Slugified string
+ */
+export const Slug = ( text ) => {
+	Slugify.extend({'.': '-'});
+
+	return Slugify( text ).toLowerCase();
+}
 
 
 /**
