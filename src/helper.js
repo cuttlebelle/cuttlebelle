@@ -2,9 +2,12 @@
  *
  * Export shared helper code
  *
+ * Slug          - Slugify a string
  * ConvertHrtime - Convert hrtime to seconds
  * Style         - Returning ansi escape color codes
  * Log           - A logging method
+ * Notify        - The notify object
+ * Notify.info   - Notify the system
  * ExitHandler   - Handle exiting of program
  *
  **************************************************************************************************************************************************************/
@@ -15,7 +18,24 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import Notifier from 'node-notifier';
+import { Watch } from './watch';
+import Slugify from 'slugify';
 import Path from 'path';
+
+
+/**
+ * Slugify a string
+ *
+ * @param  {string} text - The string to be slugified
+ *
+ * @return {string}      - Slugified string
+ */
+export const Slug = ( text ) => {
+	Slugify.extend({'.': '-'});
+
+	return Slugify( text ).toLowerCase();
+}
 
 
 /**
@@ -116,6 +136,7 @@ export const Log = {
 		}
 
 		console.error(` 🔥  ${ Style.red(`ERROR:   ${ text }`) }`);
+		Notify.info( text );
 
 		Log.output = true;   // now we have written something out
 		Log.hasError = true; // and it was an error of all things
@@ -160,6 +181,10 @@ export const Log = {
 		}
 
 		console.info(` 🚀           ${ Style.green( Style.bold( text ) ) }`);
+		if( !Log.hasError ) {
+			Notify.info(`Build done`);
+		}
+		Log.hasError = false;
 
 		Log.output = true;
 	},
@@ -167,8 +192,7 @@ export const Log = {
 	/**
 	 * Log a verbose message
 	 *
-	 * @param  {string}  text    - The text you want to log
-	 * @param  {boolean} verbose - Verbose flag either undefined or true
+	 * @param  {string}  text - The text you want to log
 	 */
 	verbose: ( text ) => {
 		if( Log.verboseMode ) {
@@ -186,6 +210,33 @@ export const Log = {
 	 */
 	space: () => {
 		console.log(`\n`);
+	},
+};
+
+
+/**
+ * The notify object
+ *
+ * @type {Object}
+ */
+export const Notify = {
+	silent: false,
+
+	/**
+	 * Notify the system
+	 *
+	 * @param  {string}  text - The text you want to pop up
+	 */
+	info: ( text ) => {
+		if( !Notify.silent && Watch.running ) {
+			const notifyText = typeof text === 'object' ? JSON.stringify( text ) : text;
+
+			Notifier.notify({
+				icon: Path.normalize(`${ __dirname }/../assets/logo.png`),
+				title: 'Cuttlebelle',
+				message: notifyText,
+			});
+		}
 	},
 };
 

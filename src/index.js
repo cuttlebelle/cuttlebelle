@@ -25,7 +25,7 @@ import Fs from 'fs';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Helper
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { ConvertHrtime, ExitHandler, Style, Log } from './helper.js';
+import { ConvertHrtime, ExitHandler, Style, Log, Notify } from './helper.js';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -49,6 +49,10 @@ ${ padding }╚═╝ ╚═╝  ╩   ╩  ╩═╝ ╚═╝ ╚═╝ ╚═
 ${ padding }The react.js static site generator with editing in mind.
 
 ${ padding }Options:
+${ padding }  ${ Style.bold(`version`) }     - Display the version of Cuttlebelle
+${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-V`) ) }
+${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --version`) ) }
+
 ${ padding }  ${ Style.bold(`watch`) }       - Start to watch the content and source folder for changes
 ${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-w`) ) }
 ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --watch`) ) }
@@ -57,12 +61,24 @@ ${ padding }  ${ Style.bold(`no-generate`) } - Disable generation of all pages, 
 ${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-n`) ) }
 ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --no-generate --watch`) ) }
 
+${ padding }  ${ Style.bold(`silent`) }      - Disable all notifications the watch might throw
+${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-s`) ) }
+${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --silent --watch`) ) }
+
 ${ padding }  ${ Style.bold(`verbose`) }     - Enable silly verbose mode
 ${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-v`) ) }
 ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --verbose`) ) }
+
+${ padding }  ${ Style.gray( pkg.homepage ) }
 `);
 	Log.space();
 
+	process.exit( 0 );
+}
+
+
+if( process.argv.includes('-V') || process.argv.includes('--version') ) {
+	console.log(`Cuttlebelle v${ pkg.version }`);
 	process.exit( 0 );
 }
 
@@ -77,6 +93,12 @@ Log.welcome(`Cuttlebelle v${ pkg.version }`);
 // verbose flag
 if( process.argv.includes('-v') || process.argv.includes('--verbose') ) {
 	Log.verboseMode = true;
+}
+
+
+// silent flag
+if( process.argv.includes('-s') || process.argv.includes('--silent') ) {
+	Notify.silent = true;
 }
 
 

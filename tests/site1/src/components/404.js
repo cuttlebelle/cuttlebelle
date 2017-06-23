@@ -5,9 +5,9 @@ export default ( page ) => (
 		<div>{ page._body }</div>
 		<ul>
 			{
-				Object.keys( page._sites ).map( ( site, i ) => (
+				Object.keys( page._pages ).map( ( site, i ) => (
 					<li key={ i }>
-						<a href={ `${ page._sites[ site ].url }` }>{ page._sites[ site ].title }</a>
+						<a href={ `${ page._pages[ site ].url }` }>{ page._pages[ site ].title }</a>
 					</li>
 				))
 			}

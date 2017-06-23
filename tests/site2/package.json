@@ -8,7 +8,7 @@
 			"src": "src2/",
 			"assets": "content2/_assets/",
 			"site": "site2/",
-			"index": "index2.yml",
+			"index": "index2",
 			"homepage": "homepage"
 		},
 		"layouts": {

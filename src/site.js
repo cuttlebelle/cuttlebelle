@@ -48,7 +48,7 @@ export const GetContent = ( folder = SETTINGS.get().folder.content, structure = 
 						structure = [ ...GetContent( Path.join( folder, file ), structure ) ]; // and spread the result into our array
 					}
 					else {
-						if( file === SETTINGS.get().folder.index ) {                           // we only want the index.yml files and ignore (shared) folder without pages
+						if( file === `${ SETTINGS.get().folder.index }.yml` ) {                // we only want the index.yml files and ignore (shared) folder without pages
 							Log.verbose(`Found content in ${ Style.yellow( folder ) }`);
 
 							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.content.replace( SETTINGS.get().folder.cwd, '' );
@@ -170,14 +170,14 @@ export const Pages = {
 	set: ( page ) => {
 		Log.verbose(`Setting page frontmatter for ${ Style.yellow( page ) }`);
 
-		const content = Path.normalize(`${ SETTINGS.get().folder.content }/${ page }/${ SETTINGS.get().folder.index }`);
+		const content = Path.normalize(`${ SETTINGS.get().folder.content }/${ page }/${ SETTINGS.get().folder.index }.yml`);
 
 		return new Promise( ( resolve, reject ) => {
 			ReadFile( content )
 				.catch( error => reject( JSON.stringify( error ) ) )
 				.then( body => resolve({
 					name: page,
-					...Pages.inject( page, ParseYaml( body ) )
+					...Pages.inject( page, ParseYaml( body, page ) )
 				}));
 		});
 	},

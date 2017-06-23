@@ -8,8 +8,11 @@ export default ( page ) => (
 	<body>
 		<main>
 			<h1>{ page.title }</h1>
-			<div>{ page.partials }</div>
+			<div>
+				{ page.main }
+			</div>
 		</main>
+		<aside>{ page.aside }</aside>
 	</body>
 	</html>
 );

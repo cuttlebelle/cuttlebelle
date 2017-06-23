@@ -1,6 +1,6 @@
 ---
 title: partial2
-layout: layout/partial
+layout: partial
 var1: value1
 var2: value2
 ---

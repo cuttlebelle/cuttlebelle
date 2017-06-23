@@ -2,4 +2,4 @@
 layout: components/component1
 ---
 
-[component1](sadsad/sadsad.com)
+[component1 text link](sadsad/sadsad.com)

@@ -1,7 +1,7 @@
 {
 	"name": "cuttlebelle",
 	"description": "The react static site generator that separates editing and code concerns",
-	"version": "1.0.0-alpha.14",
+	"version": "1.0.0-alpha.17",
 	"homepage": "https://github.com/dominikwilkowski/cuttlebelle",
 	"author": {
 		"name": "Dominik Wilkowski",
@@ -51,8 +51,11 @@
 		"del": "^2.2.2",
 		"marked": "^0.3.6",
 		"ncp": "^2.0.0",
+		"node-notifier": "^5.1.2",
 		"react": "^15.5.4",
 		"react-dom": "^15.5.4",
+		"slugify": "^1.1.0",
+		"traverse": "^0.6.6",
 		"window-size": "^1.0.0",
 		"yamljs": "^0.2.10"
 	},

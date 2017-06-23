@@ -2,11 +2,12 @@
  *
  * Render partials or even whole pages
  *
- * RenderReact    - Render a react component to string
- * RenderPage     - Render a page to HTML
- * RenderAllPages - Render all pages in the content folder
- * RenderPartial  - Render a partial to HTML
- * RenderAssets   - Render assets folder
+ * RenderReact     - Render a react component to string
+ * RenderFile      - Render a file to HTML
+ * IteratePartials - Iterate frontmatter and look for partials to render
+ * RenderPartial   - Render a partial to HTML from the string inside frontmatter
+ * RenderAllPages  - Render all pages in the content folder
+ * RenderAssets    - Render assets folder
  *
  **************************************************************************************************************************************************************/
 
@@ -18,9 +19,11 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
 import { GetContent, GetLayout } from './site';
-import { ParseYaml, ParseFM } from './parse';
 import ReactDOMServer from 'react-dom/server';
+import { ParseContent } from './parse';
+import { Slug } from './helper.js';
 import { Layouts } from './watch';
+import Traverse from 'traverse';
 import { Pages } from './site';
 import React from 'react';
 import Path from 'path';
@@ -51,7 +54,7 @@ export const RenderReact = ( componentPath, props ) => {
 		let presetStage0 = Path.normalize(`${ __dirname }/../node_modules/babel-preset-stage-0`);
 		let presetReact = Path.normalize(`${ __dirname }/../node_modules/babel-preset-react`);
 		let pluginSyntax = Path.normalize(`${ __dirname }/../node_modules/babel-plugin-syntax-dynamic-import`);
-		let pluginImport = Path.normalize(`${ __dirname }/../node_modules/babel-plugin-syntax-dynamic-import`);
+		let pluginImport = Path.normalize(`${ __dirname }/../node_modules/babel-plugin-import-redirect`);
 		let react = Path.normalize(`${ __dirname }/../node_modules/react`);
 
 		if( !Fs.existsSync( presetES2015 ) ) { // looks like it was installed locally
@@ -71,6 +74,7 @@ export const RenderReact = ( componentPath, props ) => {
 				presetStage0,
 				presetReact,
 			],
+			cache: false,
 		};
 
 		// optional we redirect import statements for react to our local node_module folder
@@ -90,9 +94,11 @@ export const RenderReact = ( componentPath, props ) => {
 			];
 		}
 
+		// delete require.cache[ require.resolve('babel-register') ];
+		process.env.BABEL_DISABLE_CACHE = 1;
 		require('babel-register')( registerObj );
 
-		delete require.cache[ require.resolve( componentPath ) ]; //cache busting
+		delete require.cache[ require.resolve( componentPath ) ]; // cache busting
 		const component = require( componentPath ).default;
 
 		return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
@@ -101,81 +107,207 @@ export const RenderReact = ( componentPath, props ) => {
 		Log.error(`The react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.src, '' ) ) } had trouble rendering:`);
 		Log.error( error );
 
+		if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if the render fails in production
+			process.exit( 1 );
+		}
+
 		return '';
 	}
 }
 
 
 /**
- * Render a page to HTML
+ * Render a file to HTML
  *
- * @param  {string} page    - The relative URL of the page and where it sits in the content folder
+ * @param  {string} file     - The path to the file to be rendered
+ * @param  {string} parent   - The path to the parent file, optional, default: ''
+ * @param  {number} iterator - An iterator so we can generate unique IDs, default 0
  *
- * @return {promise object} - The string of the new path inside the site folder
+ * @return {promise object}  - The HTML content of the page
  */
-export const RenderPage = ( page ) => {
-	Log.verbose(`Rendering page ${ Style.yellow( page ) }`);
+export const RenderFile = ( file, parent = '', iterator = 0 ) => {
+	Log.verbose(`Rendering file ${ Style.yellow( file ) }`);
+
+	const _isIndex = Path.extname( file ) === '.yml';
+	iterator ++;
 
 	return new Promise( ( resolve, reject ) => {
-		const content = Path.normalize(`${ SETTINGS.get().folder.content }/${ page }/${ SETTINGS.get().folder.index }`);
+		const content = Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`);
 
-		ReadFile( content )                                               // reading index.yml
+		ReadFile( content )
 			.catch( error => reject( error ) )
 			.then( body => {
+				let parsedBody = ParseContent( body, file );
+				const ID = parent.length > 0 ? Path.dirname( parent ) : Path.dirname( file ); // the ID of this page is the folder in which parent exists
 				const allPartials = [];
 
-				body = ParseYaml( body );                                     // parse the body of this page
+				if( _isIndex ) {
+					Pages.inject( ID, parsedBody.frontmatter ); // we inject the frontmatter early so partials have access to it
+				}
 
-				Pages.inject( page, body );                                   // updated the frontmatter of this page
+				if( _isIndex ) {
+					allPartials.push(
+						IteratePartials( parsedBody.frontmatter, Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`), iterator )
+							.catch( error => {
+								Log.error(`Generating page failed in ${ Style.yellow( file ) }`)
+								reject( error );
+							})
+					);
+				}
+				else {
+					allPartials.push( Promise.resolve( parsedBody.frontmatter ) );
+				}
 
-				body.partials.map( partial => {
-					let cwd = Path.dirname( content );                          // we assume relative links
-					if( partial.startsWith('/') ) {                             // unless the layout starts with a slash
-						cwd = SETTINGS.get().folder.content;
-					}
+				Promise.all( allPartials )
+					.catch( error => reject( error ) )
+					.then( frontmatter => {
+						parsedBody.frontmatter = frontmatter[ 0 ] ? frontmatter[ 0 ] : {}; // we only got one promise to resolve
 
-					if( Fs.existsSync( Path.normalize(`${ cwd }/${ partial }.md`) ) ) {
-						allPartials.push( RenderPartial( cwd, partial, page ) );  // render this partial and catch the content in the array
-					}
-					else {
-						Log.info(`Partial not found ${ Style.yellow(`${ cwd }/${ partial }.md`) }`);
-					}
-				});
+						// set the default layout
+						if( _isIndex ) {
+							parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.page;
+						}
+						else {
+							parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.partial;
+						}
 
-				Promise.all( allPartials )                                    // now that all partials have been compiled
-					.catch( error => {
-						Log.error(`Rendering partials failed`);
-						Log.error( JSON.stringify( error ) );
-					})
-					.then( partials => {
-						delete body.partials;
-						body.layout = body.layout || SETTINGS.get().layouts.page;            // set the default layout
+						// keeping track of all pages per layout will make the watch better
+						Layouts.set( ID, parsedBody.frontmatter.layout );
 
-						Layouts.set( page, body.layout );                                    // keeping track of all pages per layout will make the watch better
+						// to get the parents we just look at the path
+						const parents = ID.split('/').map( ( item, i ) => {
+							return ID.split('/').splice( 0, ID.split('/').length - i ).join('/');
+						}).reverse();
 
-						const parents = page.split('/').map( ( item, i ) => {
-							return SETTINGS.get().site.root + page.split('/').splice( 0, page.split('/').length - i ).join('/');
-						});
-
-						const pageHTML = SETTINGS.get().site.doctype + RenderReact(          // and off we go into the react render machine while prefixing
-							Path.normalize(`${ SETTINGS.get().folder.src }/${ body.layout }`), // our HTML with an optional doctype
+						// and off we go into the react render machine
+						let pageHTML = RenderReact(
+							Path.normalize(`${ SETTINGS.get().folder.src }/${ parsedBody.frontmatter.layout }`),
 							{
-								_myself: page,
+								_ID: ID,
 								_parents: parents,
-								_sites: Pages.get(),
-								_body: body.body,
-								_partials: <div dangerouslySetInnerHTML={ { __html: partials.join('') } } />,
-								...body
+								_pages: Pages.get(),
+								_body: <div key={`${ ID }-${ iterator }`} dangerouslySetInnerHTML={ { __html: parsedBody.body } } />,
+								...parsedBody.frontmatter
 							}
 						);
 
-						const newPath = Path.normalize(`${ SETTINGS.get().folder.site }/${ page === SETTINGS.get().folder.homepage ? '' : page }/index.html`);
+						// An index file will be written to disk
+						if( _isIndex ) {
+							// prefix our content with a doctype
+							pageHTML = SETTINGS.get().site.doctype + pageHTML;
 
-						CreateFile( newPath, pageHTML )
-							.catch( error => reject( error ) )
-							.then( () => resolve( newPath ) );
+							const newPath = Path.normalize(`${ SETTINGS.get().folder.site }/${ ID === SETTINGS.get().folder.homepage ? '' : ID }/index.html`);
+							CreateFile( newPath, pageHTML )
+								.catch( error => reject( error ) )
+								.then( () => resolve( newPath ) );
+						}
+						// but a partial will be returned as HTML string
+						else {
+							resolve( pageHTML );
+						}
 				});
+		});
+	});
+};
+
+
+/**
+ * Iterate frontmatter and look for partials to render
+ *
+ * @param  {object}  object   - The frontmatter object
+ * @param  {string}  file     - The file path we got the frontmatter from
+ * @param  {integer} iterator - An iterator so we can generate unique ID keys
+ *
+ * @return {promise object}   - The converted frontmatter now with partials replaced with their content
+ */
+export const IteratePartials = ( object, file, iterator = 0 ) => {
+	Log.verbose(`Rendering all partials ${ Style.yellow( JSON.stringify( object ) ) }`);
+
+	return new Promise( ( resolve, reject ) => {
+		const allPartials = [];
+		let tree;
+
+		try {
+			tree = Traverse( object );                 // we have to convert the deep object into a tree
+		}
+		catch( error ) {
+			Log.error(`Traversing frontmatter failed in ${ Style.yellow( file ) }`)
+			reject( error );
+		}
+
+		tree.map( function( partial ) {                    // so we can walk through the leaves and check for partial string
+			if( this.isLeaf && typeof partial === 'string' ) {
+				iterator ++;
+
+				allPartials.push(
+					RenderPartial( partial, file, this.path, iterator )
+						.catch( error => {
+							Log.error(`Render partial failed for ${ Style.yellow( partial ) }`)
+							reject( error );
+						})
+				);
+			}
+		});
+
+		Promise.all( allPartials )                         // after all partials have been rendered out
+			.catch( error => reject( error ) )
+			.then( frontmatter => {
+
+				frontmatter.map( ( partial ) => {
+					if( typeof partial === 'object' && partial.path ) {
+						tree.set( partial.path, partial.partial ); // we replace the partial string with the partial content
+					}
+				});
+
+				resolve( object );
+		});
+	});
+}
+
+
+/**
+ * Render a partial to HTML from the string inside frontmatter
+ *
+ * @param  {string}  partial  - The partial string
+ * @param  {string}  file     - The file path we got the frontmatter from
+ * @param  {array}   path     - The path to the deep object structure of the frontmatter
+ * @param  {integer} iterator - An iterator so we can generate unique ID keys
+ *
+ * @return {promise object}   - An object with the path and the rendered HTML react object, format: { path, partial }
+ */
+export const RenderPartial = ( partial, file, path, iterator = 0 ) => {
+	Log.verbose(`Testing if we can render ${ Style.yellow( partial ) } as partial`);
+
+	return new Promise( ( resolve, reject ) => {
+
+		let cwd = Path.dirname( file );                                     // we assume relative links
+		if( partial.startsWith('/') ) {                                     // unless the path starts with a slash
+			cwd = SETTINGS.get().folder.content;
+		}
+		const partialPath = Path.normalize(`${ cwd }/${ partial }`);
+
+		if( partial.endsWith('.md') && Fs.existsSync( partialPath ) ) {     // only if the string ends with ".md" and the corresponding file exists
+			Log.verbose(`Partial ${ Style.yellow( partial ) } found`);
+
+			RenderFile( partialPath.replace( SETTINGS.get().folder.content, '' ), file.replace( SETTINGS.get().folder.content, '' ), iterator )
+				.catch( error => {
+					Log.error(`Generating partial failed in ${ Style.yellow( partial ) }`)
+					reject( error );
+				})
+				.then( HTML => {
+					const ID = `cuttlebelleID${ Slug( partial ) }-${ iterator }`; // We generate a unique ID for react
+
+					Log.verbose(`Rendering partial ${ Style.yellow( partial ) } complete with ID ${ Style.yellow( ID ) }`);
+
+					resolve({                                                     // to resolve we need to keep track of the path of where this partial was mentioned
+						path: path,
+						partial: <div key={ ID } dangerouslySetInnerHTML={ { __html: HTML } } />,
+					});
 			});
+		}
+		else {
+			resolve( partial );                                               // looks like the string wasn’t a partial so we just return it unchanged
+		}
 	});
 };
 
@@ -184,7 +316,7 @@ export const RenderPage = ( page ) => {
  * Render all pages in the content folder
  *
  * @param  {array}  content - An array of all pages
- * @param  {array}  content - An array of all layout components
+ * @param  {array}  layout  - An array of all layout components
  *
  * @return {promise object} - The array of all pages
  */
@@ -198,12 +330,12 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 			const allPages = [];
 
 			content.forEach( page => {
-				allPages.push( RenderPage( page ) );
+				allPages.push( RenderFile(`${ page }/${ SETTINGS.get().folder.index }.yml`) );
 			});
 
 			Promise.all( allPages )
 				.catch( error => {
-					reject( JSON.stringify( error ) );
+					reject( error );
 				})
 				.then( pages => resolve( pages ) );
 		});
@@ -211,56 +343,6 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 	else {
 		return Promise.resolve([]);
 	}
-};
-
-
-/**
- * Render a partial to HTML
- *
- * @param  {string} cwd     - The path of the current working directory inside the content folder
- * @param  {string} partial - The partial name
- * @param  {string} parent  - The name of the parent page
- *
- * @return {promise object} - The HTML string of the rendered partial
- */
-export const RenderPartial = ( cwd, partial, parent ) => {
-	Log.verbose(`Rendering partial ${ Style.yellow( Path.normalize(`${ cwd }/${ partial }.md`).replace( SETTINGS.get().folder.content, '' ) ) }`);
-
-	return new Promise( ( resolve, reject ) => {
-		const content = Path.normalize(`${ cwd }/${ partial }.md`); // @TODO make markdown optional
-
-		ReadFile( content )
-			.catch( error => reject( error ) )
-			.then( partialContent => {
-				partialContent = ParseFM( partialContent );                                                        // parse the front matter
-				partialContent.body = <div dangerouslySetInnerHTML={ { __html: partialContent.body } } />          // parse the body
-
-				if( !partialContent.frontmatter ) {
-					partialContent.frontmatter = {};
-				}
-
-				partialContent.frontmatter.layout = partialContent.frontmatter.layout || SETTINGS.get().layouts.partial; // set the default layout
-
-				Layouts.set( parent, partialContent.frontmatter.layout );                                            // keeping track of all pages
-
-				const parents = parent.split('/').map( ( item, i ) => {
-					return SETTINGS.get().site.root + parent.split('/').splice( 0, parent.split('/').length - i ).join('/');
-				});
-
-				const component = RenderReact(
-					Path.normalize(`${ SETTINGS.get().folder.src }/${ partialContent.frontmatter.layout }`),               // parse the react component with it’s props
-					{
-						_myself: parent,
-						_parents: parents,
-						_sites: Pages.get(),
-						_body: partialContent.body,
-						...partialContent.frontmatter
-					}
-				);
-
-				resolve( component );
-			});
-	});
 };
 
 

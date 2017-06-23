@@ -23,3 +23,8 @@ var2: value2
 testing...
 
 [link](http://url)
+
+*partial2*?
+
+__partial3__
+
