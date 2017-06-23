@@ -297,6 +297,15 @@ cuttlebelle --watch --no-generate
 ```
 
 
+#### Silent
+
+The watch notifies you each time it encounters an error so you don’t have to watch the watch. You can disable that behavior via the silent option.
+
+```shell
+cuttlebelle --watch --silent
+```
+
+
 #### Help
 
 ![Cuttlebelle help](https://raw.githubusercontent.com/dominikwilkowski/cuttlebelle/master/assets/help.png)

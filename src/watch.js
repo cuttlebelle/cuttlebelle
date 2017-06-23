@@ -51,6 +51,7 @@ const browsersync = BS.create('cuttlebelle');
  */
 export const Watch = {
 	lastChange: new Date(),
+	running: false,
 
 	/**
 	 * Starting the watch
@@ -87,6 +88,8 @@ export const Watch = {
 			Log.info(`File has ben deleted ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
 			UpdateChange( path, true );
 		});
+
+		Watch.running = true;
 
 		Log.info(`Watching for changes`);
 

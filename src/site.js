@@ -177,7 +177,7 @@ export const Pages = {
 				.catch( error => reject( JSON.stringify( error ) ) )
 				.then( body => resolve({
 					name: page,
-					...Pages.inject( page, ParseYaml( body ) )
+					...Pages.inject( page, ParseYaml( body, page ) )
 				}));
 		});
 	},

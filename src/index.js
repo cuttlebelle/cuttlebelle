@@ -25,7 +25,7 @@ import Fs from 'fs';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Helper
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { ConvertHrtime, ExitHandler, Style, Log } from './helper.js';
+import { ConvertHrtime, ExitHandler, Style, Log, Notify } from './helper.js';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -61,6 +61,10 @@ ${ padding }  ${ Style.bold(`no-generate`) } - Disable generation of all pages, 
 ${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-n`) ) }
 ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --no-generate --watch`) ) }
 
+${ padding }  ${ Style.bold(`silent`) }      - Disable all notifications the watch might throw
+${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-s`) ) }
+${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --silent --watch`) ) }
+
 ${ padding }  ${ Style.bold(`verbose`) }     - Enable silly verbose mode
 ${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-v`) ) }
 ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --verbose`) ) }
@@ -89,6 +93,12 @@ Log.welcome(`Cuttlebelle v${ pkg.version }`);
 // verbose flag
 if( process.argv.includes('-v') || process.argv.includes('--verbose') ) {
 	Log.verboseMode = true;
+}
+
+
+// silent flag
+if( process.argv.includes('-s') || process.argv.includes('--silent') ) {
+	Notify.silent = true;
 }
 
 

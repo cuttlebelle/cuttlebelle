@@ -137,7 +137,7 @@ export const RenderFile = ( file, parent = '', iterator = 0 ) => {
 		ReadFile( content )
 			.catch( error => reject( error ) )
 			.then( body => {
-				let parsedBody = ParseContent( body, _isIndex );
+				let parsedBody = ParseContent( body, file );
 				const ID = parent.length > 0 ? Path.dirname( parent ) : Path.dirname( file ); // the ID of this page is the folder in which parent exists
 				const allPartials = [];
 
@@ -148,7 +148,10 @@ export const RenderFile = ( file, parent = '', iterator = 0 ) => {
 				if( _isIndex ) {
 					allPartials.push(
 						IteratePartials( parsedBody.frontmatter, Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`), iterator )
-							.catch( error => reject( error ) )
+							.catch( error => {
+								Log.error(`Generating page failed in ${ Style.yellow( file ) }`)
+								reject( error );
+							})
 					);
 				}
 				else {
@@ -158,7 +161,7 @@ export const RenderFile = ( file, parent = '', iterator = 0 ) => {
 				Promise.all( allPartials )
 					.catch( error => reject( error ) )
 					.then( frontmatter => {
-						parsedBody.frontmatter = frontmatter[ 0 ]; // we only got one promise to resolve
+						parsedBody.frontmatter = frontmatter[ 0 ] ? frontmatter[ 0 ] : {}; // we only got one promise to resolve
 
 						// set the default layout
 						if( _isIndex ) {
@@ -222,13 +225,27 @@ export const IteratePartials = ( object, file, iterator = 0 ) => {
 
 	return new Promise( ( resolve, reject ) => {
 		const allPartials = [];
-		const tree = Traverse( object );                   // we have to convert the deep object into a tree
+		let tree;
+
+		try {
+			tree = Traverse( object );                 // we have to convert the deep object into a tree
+		}
+		catch( error ) {
+			Log.error(`Traversing frontmatter failed in ${ Style.yellow( file ) }`)
+			reject( error );
+		}
 
 		tree.map( function( partial ) {                    // so we can walk through the leaves and check for partial string
-			if( this.isLeaf ) {
+			if( this.isLeaf && typeof partial === 'string' ) {
 				iterator ++;
 
-				allPartials.push( RenderPartial( partial, file, this.path, iterator ) );
+				allPartials.push(
+					RenderPartial( partial, file, this.path, iterator )
+						.catch( error => {
+							Log.error(`Render partial failed for ${ Style.yellow( partial ) }`)
+							reject( error );
+						})
+				);
 			}
 		});
 
@@ -273,7 +290,10 @@ export const RenderPartial = ( partial, file, path, iterator = 0 ) => {
 			Log.verbose(`Partial ${ Style.yellow( partial ) } found`);
 
 			RenderFile( partialPath.replace( SETTINGS.get().folder.content, '' ), file.replace( SETTINGS.get().folder.content, '' ), iterator )
-				.catch( error => reject( error ) )
+				.catch( error => {
+					Log.error(`Generating partial failed in ${ Style.yellow( partial ) }`)
+					reject( error );
+				})
 				.then( HTML => {
 					const ID = `cuttlebelleID${ Slug( partial ) }-${ iterator }`; // We generate a unique ID for react
 
@@ -315,7 +335,7 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 
 			Promise.all( allPages )
 				.catch( error => {
-					reject( JSON.stringify( error ) );
+					reject( error );
 				})
 				.then( pages => resolve( pages ) );
 		});
