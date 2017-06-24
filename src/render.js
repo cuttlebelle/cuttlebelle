@@ -20,9 +20,10 @@
 import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
 import { GetContent, GetLayout } from './site';
 import ReactDOMServer from 'react-dom/server';
+import { Layouts, Watch } from './watch';
 import { ParseContent } from './parse';
+import { Progress } from './progress';
 import { Slug } from './helper.js';
-import { Layouts } from './watch';
 import Traverse from 'traverse';
 import { Pages } from './site';
 import React from 'react';
@@ -74,7 +75,7 @@ export const RenderReact = ( componentPath, props ) => {
 				presetStage0,
 				presetReact,
 			],
-			cache: false,
+			cache: !Watch.running,
 		};
 
 		// optional we redirect import statements for react to our local node_module folder
@@ -197,6 +198,8 @@ export const RenderFile = ( file, parent = '', iterator = 0 ) => {
 							CreateFile( newPath, pageHTML )
 								.catch( error => reject( error ) )
 								.then( () => resolve( newPath ) );
+
+							Progress.tick();
 						}
 						// but a partial will be returned as HTML string
 						else {
@@ -327,7 +330,9 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 			const allPages = [];
 
 			content.forEach( page => {
-				allPages.push( RenderFile(`${ page }/${ SETTINGS.get().folder.index }.yml`) );
+				allPages.push(
+					RenderFile(`${ page }/${ SETTINGS.get().folder.index }.yml`)
+				);
 			});
 
 			Promise.all( allPages )

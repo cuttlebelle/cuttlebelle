@@ -24,6 +24,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { RenderFile, RenderAllPages, RenderAssets } from './render';
 import { GetLayout, GetContent, Pages } from './site';
+import { Progress } from './progress';
 import BS from 'browser-sync';
 import Path from 'path';
 import Fs from 'fs';
@@ -116,12 +117,7 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 	const _isReact = path.startsWith( SETTINGS.get().folder.src );
 	const _isAssets = path.startsWith( SETTINGS.get().folder.assets );
 
-	// remove babel register components from require cache
-	const allComponents = Object.keys( require.cache ).filter( ( key ) => key.startsWith( SETTINGS.get().folder.src ) );
-
-	allComponents.map( ( component ) => {
-		delete require.cache[ component ]; //cache busting
-	});
+	Progress.set( 1 );
 
 	// A page is being changed
 	if( !_doEverything ) {
@@ -146,6 +142,13 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 			// delete require.cache[ require.resolve('babel-register') ];
 			process.env.BABEL_DISABLE_CACHE = 1;
 			delete require.cache[ require.resolve( path ) ]; // cache busting
+
+			// remove babel register components from require cache
+			// const allComponents = Object.keys( require.cache ).filter( ( key ) => key.startsWith( SETTINGS.get().folder.src ) );
+
+			// allComponents.map( ( component ) => {
+			// 	delete require.cache[ component ]; //cache busting
+			// });
 
 			UpdateReact( startTime, path );
 		}

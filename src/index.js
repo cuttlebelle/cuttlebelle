@@ -16,6 +16,7 @@
 import { RenderAllPages, RenderAssets } from './render.js';
 import { GetContent, GetLayout, Pages } from './site';
 import { SETTINGS } from './settings.js';
+import { Progress } from './progress';
 import { Watch } from './watch.js';
 import Size from 'window-size';
 import Path from 'path';
@@ -102,6 +103,12 @@ if( process.argv.includes('-s') || process.argv.includes('--silent') ) {
 }
 
 
+// set watch flag
+if( process.argv.includes('-w') || process.argv.includes('--watch') ) {
+	Watch.running = true;
+}
+
+
 // merging default settings with package.json
 const pkgLocation = Path.normalize(`${ process.cwd() }/package.json`);
 if( Fs.existsSync( pkgLocation ) ) {
@@ -117,6 +124,10 @@ Log.verbose(`Found following content: ${ Style.yellow( JSON.stringify( content )
 // Getting all layout components
 const layout = GetLayout();
 Log.verbose(`Found following layout:\n${ Style.yellow( JSON.stringify( layout ) ) }`);
+
+
+// Setting how many pages we will have to go through
+Progress.set( content.length );
 
 
 // Get all front matter from all pages and put them into a global var
