@@ -81,7 +81,7 @@ Then run `yarn build` or `npm run build` to run cuttlebelle.
 
 ## Getting started
 
-After [installing](#install) cuttlebelle, create a folder called `content` and star populating it.
+After [installing](#install) cuttlebelle, create a folder called `content` and start populating it.
 
 <table>
 	<tbody>

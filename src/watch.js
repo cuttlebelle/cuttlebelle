@@ -143,6 +143,10 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 		}
 		// A react component is being changed
 		else {
+			// delete require.cache[ require.resolve('babel-register') ];
+			process.env.BABEL_DISABLE_CACHE = 1;
+			delete require.cache[ require.resolve( path ) ]; // cache busting
+
 			UpdateReact( startTime, path );
 		}
 	}

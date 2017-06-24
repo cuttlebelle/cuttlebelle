@@ -94,11 +94,8 @@ export const RenderReact = ( componentPath, props ) => {
 			];
 		}
 
-		// delete require.cache[ require.resolve('babel-register') ];
-		process.env.BABEL_DISABLE_CACHE = 1;
 		require('babel-register')( registerObj );
 
-		delete require.cache[ require.resolve( componentPath ) ]; // cache busting
 		const component = require( componentPath ).default;
 
 		return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
