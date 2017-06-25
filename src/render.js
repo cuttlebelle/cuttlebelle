@@ -141,9 +141,7 @@ export const RenderFile = ( file, parent = '', iterator = 0 ) => {
 
 				if( _isIndex ) {
 					Pages.inject( ID, parsedBody.frontmatter ); // we inject the frontmatter early so partials have access to it
-				}
 
-				if( _isIndex ) {
 					allPartials.push(
 						IteratePartials( parsedBody.frontmatter, Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`), iterator )
 							.catch( error => {

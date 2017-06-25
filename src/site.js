@@ -192,7 +192,7 @@ export const Pages = {
 	 * @return {object}      - The data with generated url
 	 */
 	inject: ( page, data ) => {
-		Log.verbose(`Injecting page data for ${ Style.yellow( page ) } to ${ Style.yellow( JSON.stringify( page ) ) }`);
+		Log.verbose(`Injecting page data for ${ Style.yellow( page ) } to ${ Style.yellow( JSON.stringify( data ) ) }`);
 
 		let url = `${ SETTINGS.get().site.root }${ page }`;
 
@@ -200,6 +200,7 @@ export const Pages = {
 			url = `${ SETTINGS.get().site.root }`;
 		}
 
+		data = JSON.parse( JSON.stringify( data ) ); // cloning
 		data = { url: url, ...data };
 
 		Pages.all[ page ] = data;
