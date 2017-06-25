@@ -272,6 +272,9 @@ export const UpdateAll = ( startTime ) => {
 	const layout = GetLayout();
 	Log.verbose(`Found following layout:\n${ Style.yellow( JSON.stringify( layout ) ) }`);
 
+	// Setting how many pages we will have to go through
+	Progress.set( content.length );
+
 	// Get all front matter from all pages and put them into a global var
 	Pages
 		.setAll( content )
