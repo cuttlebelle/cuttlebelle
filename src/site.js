@@ -151,9 +151,7 @@ export const Pages = {
 				.catch( error => {
 					reject( JSON.stringify( error ) );
 				})
-				.then( pages => {
-					pages.map( page => Pages.all[ page.name ] = page[ page.name ] );
-
+				.then( () => {
 					resolve();
 				});
 		});

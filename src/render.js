@@ -130,12 +130,39 @@ export const RenderFile = ( file, parent = '', iterator = 0 ) => {
 	iterator ++;
 
 	return new Promise( ( resolve, reject ) => {
-		const content = Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`);
+		// So apparently getting the index pages from the cached object is slower than going to disk... mh
+		// const allIndexs = [];
 
+		// // let’s check if we have a cached version of this file
+		// if( _isIndex && typeof Pages.get()[ Path.dirname( file ) ] === 'object' && !Watch.running ) {
+		// 	Log.verbose(`Taking content of ${ Style.yellow( file ) } from cache`);
+
+		// 	allIndexs.push(
+		// 		Promise.resolve({
+		// 			frontmatter: Pages.get()[ Path.dirname( file ) ],
+		// 			body: '',
+		// 		})
+		// 	);
+		// }
+		// else {
+		// 	Log.verbose(`Taking content of ${ Style.yellow( file ) } from file`);
+
+		// 	const content = Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`);
+
+		// 	allIndexs.push(
+		// 		ReadFile( content )
+		// 			.catch( error => reject( error ) )
+		// 			.then( body => ParseContent( body, file ) )
+		// 	);
+		// }
+
+		// Promise.all( allIndexs )
+		const content = Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`);
 		ReadFile( content )
 			.catch( error => reject( error ) )
 			.then( body => {
 				let parsedBody = ParseContent( body, file );
+				// let parsedBody = body[ 0 ];
 				const ID = parent.length > 0 ? Path.dirname( parent ) : Path.dirname( file ); // the ID of this page is the folder in which parent exists
 				const allPartials = [];
 
