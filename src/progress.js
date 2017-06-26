@@ -59,14 +59,14 @@ export const Progress = {
 	 * Display current progress
 	 */
 	display: () => {
-		if( Progress.todo > 10 && Log.verbose ) {
+		if( Progress.todo > 30 && !Log.verboseMode ) { // only if we have at least x pages to render and verbose is off
 			const progress = ( 100 / Progress.todo ) * Progress.done;
 			const padding = 13;
 			const maxWidth = Size.width - ( padding * 2 ) - 2;
-			const currentWidth = Math.floor( maxWidth * ( progress / 100 ) );
+			const currentWidth = Math.ceil( maxWidth * ( progress / 100 ) );
 			const whitespace = maxWidth - currentWidth;
 
-			process.stdout.write('\r\x1b[K');
+			Progress.clear();
 			process.stdout.write(`${ String.repeat( ' ', padding ) }┤${ String.repeat( Style.gray('▓'), currentWidth ) }${ String.repeat( ' ', whitespace ) }├`);
 
 			if( progress === 100 ) {
@@ -80,6 +80,6 @@ export const Progress = {
 	 * Clear progress display
 	 */
 	clear: () => {
-		process.stdout.write('\r\x1b[K');
+		process.stdout.write('\r\x1b[K'); // reset cursor
 	},
 };
