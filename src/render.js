@@ -37,6 +37,7 @@ import { Log, Style } from './helper';
 import { Progress } from './progress';
 import { Slug } from './helper.js';
 import { Pages } from './pages';
+import { Store } from './store';
 import { Nav } from './nav';
 
 /**
@@ -209,6 +210,8 @@ export const RenderFile = ( file, parent = '', iterator = 0 ) => {
 							{
 								_ID: ID,
 								_parents: parents,
+								_store: Store.get(),
+								_storeSet: Store.set,
 								_pages: Pages.get(),
 								_nav: Nav.get(),
 								_relativeURL: ( URL, ID ) => {
