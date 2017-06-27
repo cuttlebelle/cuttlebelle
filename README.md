@@ -136,20 +136,16 @@ After [installing](#install) cuttlebelle, create a folder called `content` and s
 	</tbody>
 </table>
 
-Consider this example to see how pages are constructed from with partials and layouts:
+Consider this example to see how pages are constructed with partials and layouts:
+
+An **index.yaml** page
 
 <table>
 	<tbody>
 		<tr>
-			<th>content/index/index.yml</th>
+			<th>index.yml</th>
 			<th></th>
-			<th>src/page.js</th>
-			<th></th>
-			<th>content/index/body.md</th>
-			<th></th>
-			<th>src/partial.js</th>
-			<th></th>
-			<th>Output</th>
+			<th>page layout</th>
 		</tr>
 		<tr>
 			<td valign="top">
@@ -158,6 +154,7 @@ Consider this example to see how pages are constructed from with partials and la
 layout: page
 title: Homepage
 main:
+  - header.md
   - body.md
 ```
 
@@ -183,8 +180,64 @@ export default ( page ) => (
 ```
 
 </td>
+		</tr>
+	</tbody>
+</table>
+
+A **header.md** partial
+
+<table>
+	<tbody>
+		<tr>
+			<th>partial header.md</th>
+			<th></th>
+			<th>header layout</th>
+		</tr>
+		<tr>
+			<td valign="top">
+
+```markdown
+---
+layout: header
+headline: First post
+sub: Clear content separation
+---
+```
+
+</td>
 <td align="center"> + </td>
 <td valign="top">
+
+```jsx
+import React from "react";
+
+export default ( page ) => (
+  <header>
+    <h1 className="header__headline">{ page.headline }</h1>
+    {
+      page.sub
+        && <p className="header__sub">{ page.sub }</p>
+    }
+  </header>
+);
+```
+
+</td>
+		</tr>
+	</tbody>
+</table>
+
+A **body.md** partial
+
+<table>
+	<tbody>
+		<tr>
+			<th>partial body.md</th>
+			<th></th>
+			<th>body layout</th>
+		</tr>
+		<tr>
+			<td valign="top">
 
 ```markdown
 ---
@@ -204,15 +257,25 @@ import React from "react";
 export default ( page ) => (
   <article>
     <h2>{ page.headline }</h2>
-    <div>{ page._body }</div>
+    <div className="body-text">{ page._body }</div>
   </article>
 );
-
 ```
 
 </td>
-<td align="center"> → </td>
-<td valign="top">
+		</tr>
+	</tbody>
+</table>
+
+Will give us this HTML
+
+<table>
+	<tbody>
+		<tr>
+			<th>resulting static HTML file</th>
+		</tr>
+		<tr>
+			<td valign="top">
 
 ```html
 <!DOCTYPE html>
@@ -223,9 +286,13 @@ export default ( page ) => (
 
 <body>
   <main>
+    <header>
+      <h1 class="header__headline">First post</h1>
+      <p class="header__sub">Clear content separation</p>
+    </header>
     <article>
       <h2>First post</h2>
-      <div><strong>Hello world</strong></div>
+      <div class="body-text"><strong>Hello world</strong></div>
     </article>
   </main>
 </body>
