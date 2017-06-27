@@ -22,18 +22,21 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { RenderFile, RenderAllPages, RenderAssets } from './render';
-import { GetLayout, GetContent, Pages } from './site';
 import BS from 'browser-sync';
 import Path from 'path';
 import Fs from 'fs';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Helper
+// Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import { RenderFile, RenderAllPages, RenderAssets, PreRender } from './render';
 import { ConvertHrtime, Log, Style } from './helper';
+import { GetLayout, GetContent } from './site';
 import { SETTINGS } from './settings.js';
+import { Progress } from './progress';
+import { Pages } from './pages';
+import { Nav } from './nav';
 
 
 /**
@@ -116,12 +119,7 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 	const _isReact = path.startsWith( SETTINGS.get().folder.src );
 	const _isAssets = path.startsWith( SETTINGS.get().folder.assets );
 
-	// remove babel register components from require cache
-	const allComponents = Object.keys( require.cache ).filter( ( key ) => key.startsWith( SETTINGS.get().folder.src ) );
-
-	allComponents.map( ( component ) => {
-		delete require.cache[ component ]; //cache busting
-	});
+	Progress.set( 1 );
 
 	// A page is being changed
 	if( !_doEverything ) {
@@ -143,6 +141,17 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 		}
 		// A react component is being changed
 		else {
+			// delete require.cache[ require.resolve('babel-register') ];
+			process.env.BABEL_DISABLE_CACHE = 1;
+			delete require.cache[ require.resolve( path ) ]; // cache busting
+
+			// remove babel register components from require cache
+			// const allComponents = Object.keys( require.cache ).filter( ( key ) => key.startsWith( SETTINGS.get().folder.src ) );
+
+			// allComponents.map( ( component ) => {
+			// 	delete require.cache[ component ]; //cache busting
+			// });
+
 			UpdateReact( startTime, path );
 		}
 	}
@@ -257,24 +266,15 @@ export const UpdateReact = ( startTime, path ) => {
  * @param  {array} startTime - The Hrtime array
  */
 export const UpdateAll = ( startTime ) => {
-	// Getting all pages
-	const content = GetContent();
-	Log.verbose(`Found following content: ${ Style.yellow( JSON.stringify( content ) ) }`);
 
-	// Getting all layout components
-	const layout = GetLayout();
-	Log.verbose(`Found following layout:\n${ Style.yellow( JSON.stringify( layout ) ) }`);
-
-	// Get all front matter from all pages and put them into a global var
-	Pages
-		.setAll( content )
+	PreRender()
 		.catch( error => {
 			Log.error(`Trying to initilize the pages failed.`);
 			Log.error( error );
 
 			process.exit( 1 );
 		})
-		.then( () => {
+		.then( ({ content, layout }) => {
 
 			RenderAllPages( content, layout )
 				.catch( error => {

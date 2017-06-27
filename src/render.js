@@ -7,6 +7,7 @@
  * IteratePartials - Iterate frontmatter and look for partials to render
  * RenderPartial   - Render a partial to HTML from the string inside frontmatter
  * RenderAllPages  - Render all pages in the content folder
+ * PreRender       - Pre-render all pages to populate all helpers
  * RenderAssets    - Render assets folder
  *
  **************************************************************************************************************************************************************/
@@ -17,25 +18,27 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
-import { GetContent, GetLayout } from './site';
 import ReactDOMServer from 'react-dom/server';
-import { ParseContent } from './parse';
-import { Slug } from './helper.js';
-import { Layouts } from './watch';
 import Traverse from 'traverse';
-import { Pages } from './site';
 import React from 'react';
 import Path from 'path';
 import Fs from 'fs';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Helper
+// Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
+import { GetContent, GetLayout } from './site';
 import { SETTINGS } from './settings.js';
+import { Layouts, Watch } from './watch';
+import { ParseContent } from './parse';
 import { Log, Style } from './helper';
-
+import { Progress } from './progress';
+import { Slug } from './helper.js';
+import { Pages } from './pages';
+import { Store } from './store';
+import { Nav } from './nav';
 
 /**
  * Render a react component to string
@@ -74,7 +77,7 @@ export const RenderReact = ( componentPath, props ) => {
 				presetStage0,
 				presetReact,
 			],
-			cache: false,
+			cache: !Watch.running, // we don’t need to cache in the watch
 		};
 
 		// optional we redirect import statements for react to our local node_module folder
@@ -94,11 +97,8 @@ export const RenderReact = ( componentPath, props ) => {
 			];
 		}
 
-		// delete require.cache[ require.resolve('babel-register') ];
-		process.env.BABEL_DISABLE_CACHE = 1;
 		require('babel-register')( registerObj );
 
-		delete require.cache[ require.resolve( componentPath ) ]; // cache busting
 		const component = require( componentPath ).default;
 
 		return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
@@ -132,20 +132,45 @@ export const RenderFile = ( file, parent = '', iterator = 0 ) => {
 	iterator ++;
 
 	return new Promise( ( resolve, reject ) => {
-		const content = Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`);
+		// So apparently getting the index pages from the cached object is slower than going to disk... mh
+		// const allIndexs = [];
 
+		// // let’s check if we have a cached version of this file
+		// if( _isIndex && typeof Pages.get()[ Path.dirname( file ) ] === 'object' && !Watch.running ) {
+		// 	Log.verbose(`Taking content of ${ Style.yellow( file ) } from cache`);
+
+		// 	allIndexs.push(
+		// 		Promise.resolve({
+		// 			frontmatter: Pages.get()[ Path.dirname( file ) ],
+		// 			body: '',
+		// 		})
+		// 	);
+		// }
+		// else {
+		// 	Log.verbose(`Taking content of ${ Style.yellow( file ) } from file`);
+
+		// 	const content = Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`);
+
+		// 	allIndexs.push(
+		// 		ReadFile( content )
+		// 			.catch( error => reject( error ) )
+		// 			.then( body => ParseContent( body, file ) )
+		// 	);
+		// }
+
+		// Promise.all( allIndexs )
+		const content = Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`);
 		ReadFile( content )
 			.catch( error => reject( error ) )
 			.then( body => {
 				let parsedBody = ParseContent( body, file );
+				// let parsedBody = body[ 0 ];
 				const ID = parent.length > 0 ? Path.dirname( parent ) : Path.dirname( file ); // the ID of this page is the folder in which parent exists
 				const allPartials = [];
 
 				if( _isIndex ) {
 					Pages.inject( ID, parsedBody.frontmatter ); // we inject the frontmatter early so partials have access to it
-				}
 
-				if( _isIndex ) {
 					allPartials.push(
 						IteratePartials( parsedBody.frontmatter, Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`), iterator )
 							.catch( error => {
@@ -185,7 +210,17 @@ export const RenderFile = ( file, parent = '', iterator = 0 ) => {
 							{
 								_ID: ID,
 								_parents: parents,
+								_store: Store.get(),
+								_storeSet: Store.set,
 								_pages: Pages.get(),
+								_nav: Nav.get(),
+								_relativeURL: ( URL, ID ) => {
+									if( ID === SETTINGS.get().folder.homepage ) {
+										ID = '';
+									}
+
+									return Path.relative(`${ SETTINGS.get().site.root }${ ID }`, URL);
+								},
 								_body: <div key={`${ ID }-${ iterator }`} dangerouslySetInnerHTML={ { __html: parsedBody.body } } />,
 								...parsedBody.frontmatter
 							}
@@ -200,6 +235,8 @@ export const RenderFile = ( file, parent = '', iterator = 0 ) => {
 							CreateFile( newPath, pageHTML )
 								.catch( error => reject( error ) )
 								.then( () => resolve( newPath ) );
+
+							Progress.tick();
 						}
 						// but a partial will be returned as HTML string
 						else {
@@ -330,7 +367,9 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 			const allPages = [];
 
 			content.forEach( page => {
-				allPages.push( RenderFile(`${ page }/${ SETTINGS.get().folder.index }.yml`) );
+				allPages.push(
+					RenderFile(`${ page }/${ SETTINGS.get().folder.index }.yml`)
+				);
 			});
 
 			Promise.all( allPages )
@@ -343,6 +382,40 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 	else {
 		return Promise.resolve([]);
 	}
+};
+
+
+/**
+ * Pre-render all pages to populate all helpers
+ *
+ * @return {Promise object} - An object of content and layout arrays, format: { content: [], layout: {} }
+ */
+export const PreRender = () => {
+	// Getting all pages
+	const content = GetContent();
+	Log.verbose(`Found following content: ${ Style.yellow( JSON.stringify( content ) ) }`);
+
+	// Setting nav globally
+	Nav.set( content );
+
+	// Getting all layout components
+	const layout = GetLayout();
+	Log.verbose(`Found following layout:\n${ Style.yellow( JSON.stringify( layout ) ) }`);
+
+	// Setting how many pages we will have to go through
+	Progress.set( content.length );
+
+
+	return new Promise( ( resolve, reject ) => {
+		// Get all front matter from all pages and put them into a global var
+		Pages
+			.setAll( content )
+			.catch( error => reject( error ) )
+			.then( () => resolve({
+				content,
+				layout,
+			}) );
+	})
 };
 
 

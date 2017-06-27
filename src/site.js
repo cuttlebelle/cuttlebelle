@@ -4,11 +4,8 @@
  *
  * GetContent   - Get all content folders recursively
  * GetLayout    - Get all layout files recursively
- * Pages        - Reading all pages frontmatter and keeping them for later lookup
- * Pages.get    - Get the stored frontmatter
- * Pages.setAll - Set all frontmatter to store
- * Pages.set    - Set one pages frontmatter into the store
- * Pages.inject - Inject the data into our global placeholder
+ * ToDepth      - Split a path into a nested object recursively
+ * ToNested     - Nest a bunch of paths into an object
  *
  **************************************************************************************************************************************************************/
 
@@ -23,12 +20,10 @@ import Fs from 'fs';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Helper
+// Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { SETTINGS } from './settings.js';
 import { Log, Style } from './helper';
-import { ParseYaml } from './parse';
-import { ReadFile } from './files';
 
 
 /**
@@ -39,27 +34,28 @@ import { ReadFile } from './files';
  *
  * @return {array}            - An array of all relative paths that should be pages we need to generate
  */
-export const GetContent = ( folder = SETTINGS.get().folder.content, structure = [] ) => {
+export const GetContent = ( folder = SETTINGS.get().folder.content, content = []) => {
 	if( Fs.existsSync( folder ) ) {
-		Fs.readdirSync( folder )                                                       // starting from this level
+		Fs.readdirSync( folder )                                                              // starting from this level
 			.map(
-				file => {                                                                  // iterate over all files
-					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {           // if this is a directory we just call ourself again
-						structure = [ ...GetContent( Path.join( folder, file ), structure ) ]; // and spread the result into our array
+				file => {                                                                         // iterate over all files
+					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {                  // if this is a directory we just call ourself again
+						const result = GetContent( Path.join( folder, file ), content );              // shoot off a recursive call
+						content = [ ...result ];                                              // and spread the result into our content array
 					}
 					else {
-						if( file === `${ SETTINGS.get().folder.index }.yml` ) {                // we only want the index.yml files and ignore (shared) folder without pages
+						if( file === `${ SETTINGS.get().folder.index }.yml` ) {                       // we only want the index.yml files and ignore (shared) folder
 							Log.verbose(`Found content in ${ Style.yellow( folder ) }`);
 
 							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.content.replace( SETTINGS.get().folder.cwd, '' );
 
-							structure.push( folder.replace( replaceString, '' ) );
+							content.push( folder.replace( replaceString, '' ) );
 						}
 					}
 				}
 			);
 
-		return structure;
+		return content;
 	}
 	else {
 		Log.info(`No content found in ${ Style.yellow( folder ) }`)
@@ -99,111 +95,5 @@ export const GetLayout = ( folder = SETTINGS.get().folder.src, structure = [] ) 
 	}
 	else {
 		Log.info(`No react source found in ${ Style.yellow( folder ) }`)
-	}
-};
-
-
-/**
- * Reading all pages frontmatter and keeping them for later lookup
- *
- * @type {Object}
- */
-export const Pages = {
-	/**
-	 * The store of all frontmatter of all pages
-	 *
-	 * @type {Object}
-	 */
-	all: {},
-
-
-	/**
-	 * Get the stored frontmatter
-	 *
-	 * @return {object} - All frontmatter for each page
-	 */
-	get: () => {
-		Log.verbose(`All pages frontmatter:\n${ Style.yellow( JSON.stringify( Pages.all ) ) }`);
-
-		return Pages.all;
-	},
-
-
-	/**
-	 * Set all frontmatter to store
-	 *
-	 * @param  {array}  pages   - All pages that need to be read and stored
-	 *
-	 * @return {promise object} - Resolves once all pages are stored
-	 */
-	setAll: ( pages = [] ) => {
-		Log.verbose(`Setting pages frontmatter for: ${ Style.yellow( JSON.stringify( pages ) ) }`);
-
-		const allPages = [];
-
-		return new Promise( ( resolve, reject ) => {
-
-			pages.forEach( page => {
-				allPages.push( Pages.set( page ) );
-			});
-
-			Promise.all( allPages )
-				.catch( error => {
-					reject( JSON.stringify( error ) );
-				})
-				.then( pages => {
-					pages.map( page => Pages.all[ page.name ] = page[ page.name ] );
-
-					resolve();
-				});
-		});
-	},
-
-
-	/**
-	 * Set one pages frontmatter into the store
-	 *
-	 * @param  {string} page - The name of the page
-	 *
-	 * @return {object}      - An object with all frontmatter inside it's ID key, format: { name: 'ID', [ID]: {} }
-	 */
-	set: ( page ) => {
-		Log.verbose(`Setting page frontmatter for ${ Style.yellow( page ) }`);
-
-		const content = Path.normalize(`${ SETTINGS.get().folder.content }/${ page }/${ SETTINGS.get().folder.index }.yml`);
-
-		return new Promise( ( resolve, reject ) => {
-			ReadFile( content )
-				.catch( error => reject( JSON.stringify( error ) ) )
-				.then( body => resolve({
-					name: page,
-					...Pages.inject( page, ParseYaml( body, page ) )
-				}));
-		});
-	},
-
-
-	/**
-	 * Inject the data into our global placeholder
-	 *
-	 * @param  {string} page - The name (ID) of the page
-	 * @param  {object} data - The data to be injected
-	 *
-	 * @return {object}      - The data with generated url
-	 */
-	inject: ( page, data ) => {
-		Log.verbose(`Injecting page data for ${ Style.yellow( page ) } to ${ Style.yellow( JSON.stringify( page ) ) }`);
-
-		let url = `${ SETTINGS.get().site.root }${ page }`;
-
-		if( page === SETTINGS.get().folder.homepage ) {
-			url = `${ SETTINGS.get().site.root }`;
-		}
-
-		data = { url: url, ...data };
-
-		Pages.all[ page ] = data;
-
-		return data;
 	}
 };

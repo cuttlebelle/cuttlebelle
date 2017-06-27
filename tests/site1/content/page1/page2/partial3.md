@@ -1,8 +1,7 @@
 ---
 title: partial3
-layout: layout/partial
-var1: value1
-var2: value2
+layout: components/changestore
+store: partial 3
 ---
 
 # partial test

@@ -19,9 +19,15 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import Notifier from 'node-notifier';
-import { Watch } from './watch';
 import Slugify from 'slugify';
 import Path from 'path';
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Local
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import { Progress } from './progress';
+import { Watch } from './watch';
 
 
 /**
@@ -120,7 +126,9 @@ export const Log = {
 			Log.space();        // only then we add an empty line on the top
 		}
 
+		Progress.clear();
 		console.error(` 🐙           ${ Style.bold(`${ text }`) }`);
+		Progress.display();
 
 		Log.output = true;   // now we have written something out
 	},
@@ -135,8 +143,10 @@ export const Log = {
 			Log.space();        // only then we add an empty line on the top
 		}
 
+		Progress.clear();
 		console.error(` 🔥  ${ Style.red(`ERROR:   ${ text }`) }`);
 		Notify.info( text );
+		Progress.display();
 
 		Log.output = true;   // now we have written something out
 		Log.hasError = true; // and it was an error of all things
@@ -152,8 +162,10 @@ export const Log = {
 			Log.space();
 		}
 
+		Progress.clear();
 		console.info(` 🔔  INFO:    ${ text }`);
 		Log.output = true;
+		Progress.display();
 	},
 
 	/**
@@ -166,8 +178,10 @@ export const Log = {
 			Log.space();
 		}
 
+		Progress.clear();
 		console.info(` ✔  ${ Style.green(`OK:`) }      ${ Style.green( text ) }`);
 		Log.output = true;
+		Progress.display();
 	},
 
 	/**
@@ -180,6 +194,7 @@ export const Log = {
 			Log.space();
 		}
 
+		Progress.clear();
 		console.info(` 🚀           ${ Style.green( Style.bold( text ) ) }`);
 		if( !Log.hasError ) {
 			Notify.info(`Build done`);
