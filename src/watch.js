@@ -23,7 +23,7 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { RenderFile, RenderAllPages, RenderAssets } from './render';
-import { GetLayout, GetContent, Pages } from './site';
+import { GetLayout, GetContent, Pages, Nav } from './site';
 import { Progress } from './progress';
 import BS from 'browser-sync';
 import Path from 'path';
@@ -267,6 +267,9 @@ export const UpdateAll = ( startTime ) => {
 	// Getting all pages
 	const content = GetContent();
 	Log.verbose(`Found following content: ${ Style.yellow( JSON.stringify( content ) ) }`);
+
+	// Setting nav globally
+	Nav.set( content );
 
 	// Getting all layout components
 	const layout = GetLayout();

@@ -14,7 +14,7 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { RenderAllPages, RenderAssets } from './render.js';
-import { GetContent, GetLayout, Pages } from './site';
+import { GetContent, GetLayout, Pages, Nav } from './site';
 import { SETTINGS } from './settings.js';
 import { Progress } from './progress';
 import { Watch } from './watch.js';
@@ -120,6 +120,9 @@ if( Fs.existsSync( pkgLocation ) ) {
 // Getting all pages
 const content = GetContent();
 Log.verbose(`Found following content: ${ Style.yellow( JSON.stringify( content ) ) }`);
+
+// Setting nav globally
+Nav.set( content );
 
 // Getting all layout components
 const layout = GetLayout();

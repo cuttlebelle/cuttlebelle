@@ -18,14 +18,13 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
-import { GetContent, GetLayout } from './site';
 import ReactDOMServer from 'react-dom/server';
 import { Layouts, Watch } from './watch';
 import { ParseContent } from './parse';
 import { Progress } from './progress';
+import { Pages, Nav } from './site';
 import { Slug } from './helper.js';
 import Traverse from 'traverse';
-import { Pages } from './site';
 import React from 'react';
 import Path from 'path';
 import Fs from 'fs';
@@ -209,6 +208,14 @@ export const RenderFile = ( file, parent = '', iterator = 0 ) => {
 								_ID: ID,
 								_parents: parents,
 								_pages: Pages.get(),
+								_nav: Nav.get(),
+								_relativeURL: ( URL, ID ) => {
+									if( ID === SETTINGS.get().folder.homepage ) {
+										ID = '';
+									}
+
+									return Path.relative(`${ SETTINGS.get().site.root }${ ID }`, URL);
+								},
 								_body: <div key={`${ ID }-${ iterator }`} dangerouslySetInnerHTML={ { __html: parsedBody.body } } />,
 								...parsedBody.frontmatter
 							}
