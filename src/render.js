@@ -7,6 +7,7 @@
  * IteratePartials - Iterate frontmatter and look for partials to render
  * RenderPartial   - Render a partial to HTML from the string inside frontmatter
  * RenderAllPages  - Render all pages in the content folder
+ * PreRender       - Pre-render all pages to populate all helpers
  * RenderAssets    - Render assets folder
  *
  **************************************************************************************************************************************************************/
@@ -17,13 +18,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
 import ReactDOMServer from 'react-dom/server';
-import { Layouts, Watch } from './watch';
-import { ParseContent } from './parse';
-import { Progress } from './progress';
-import { Pages, Nav } from './site';
-import { Slug } from './helper.js';
 import Traverse from 'traverse';
 import React from 'react';
 import Path from 'path';
@@ -31,11 +26,18 @@ import Fs from 'fs';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Helper
+// Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
+import { GetContent, GetLayout } from './site';
 import { SETTINGS } from './settings.js';
+import { Layouts, Watch } from './watch';
+import { ParseContent } from './parse';
 import { Log, Style } from './helper';
-
+import { Progress } from './progress';
+import { Slug } from './helper.js';
+import { Pages } from './pages';
+import { Nav } from './nav';
 
 /**
  * Render a react component to string
@@ -74,7 +76,7 @@ export const RenderReact = ( componentPath, props ) => {
 				presetStage0,
 				presetReact,
 			],
-			cache: !Watch.running,
+			cache: !Watch.running, // we don’t need to cache in the watch
 		};
 
 		// optional we redirect import statements for react to our local node_module folder
@@ -377,6 +379,40 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 	else {
 		return Promise.resolve([]);
 	}
+};
+
+
+/**
+ * Pre-render all pages to populate all helpers
+ *
+ * @return {Promise object} - An object of content and layout arrays, format: { content: [], layout: {} }
+ */
+export const PreRender = () => {
+	// Getting all pages
+	const content = GetContent();
+	Log.verbose(`Found following content: ${ Style.yellow( JSON.stringify( content ) ) }`);
+
+	// Setting nav globally
+	Nav.set( content );
+
+	// Getting all layout components
+	const layout = GetLayout();
+	Log.verbose(`Found following layout:\n${ Style.yellow( JSON.stringify( layout ) ) }`);
+
+	// Setting how many pages we will have to go through
+	Progress.set( content.length );
+
+
+	return new Promise( ( resolve, reject ) => {
+		// Get all front matter from all pages and put them into a global var
+		Pages
+			.setAll( content )
+			.catch( error => reject( error ) )
+			.then( () => resolve({
+				content,
+				layout,
+			}) );
+	})
 };
 
 
