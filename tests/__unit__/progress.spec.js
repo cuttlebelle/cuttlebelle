@@ -10,6 +10,7 @@
 
 
 import { Progress } from '../../src/progress';
+import Size from 'window-size';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -35,8 +36,13 @@ test('Progress.display - Tick increases the amount correctly', () => {
 
 	Progress.display();
 
-	expect( process.stdout.write.mock.calls.length ).toBe( 2 );
-	expect( process.stdout.write.mock.calls[0][0] ).toBe(`\r\x1b[K`);
+	if( Size.width > 18 ) {
+		expect( process.stdout.write.mock.calls.length ).toBe( 2 );
+		expect( process.stdout.write.mock.calls[0][0] ).toBe(`\r\x1b[K`);
+	}
+	else {
+		expect( process.stdout.write.mock.calls.length ).toBe( 0 );
+	}
 });
 
 
