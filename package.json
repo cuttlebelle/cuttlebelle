@@ -1,7 +1,7 @@
 {
 	"name": "cuttlebelle",
 	"description": "The react static site generator that separates editing and code concerns",
-	"version": "1.0.0-alpha.19",
+	"version": "1.0.0-alpha.20",
 	"homepage": "https://github.com/dominikwilkowski/cuttlebelle",
 	"author": {
 		"name": "Dominik Wilkowski",
@@ -34,11 +34,12 @@
 
 		"test": "jest",
 		"test:detail": "jest --coverage",
+		"test:watch": "jest --watch --coverage",
 
 		"build": "npm run build:js",
 		"build:js": "babel src --out-dir dist --presets=es2015 --plugins=transform-runtime,transform-es2015-modules-commonjs",
 
-		"watch": "npm run build && npm run test:detail && onchange 'src/*.js' '__tests__/*.js' -- npm run build:js && npm run test:detail"
+		"watch": "npm run build && npm run test && onchange 'src/*.js' '__tests__/*.js' -- npm run build:js && npm run test:detail"
 	},
 	"dependencies": {
 		"babel-plugin-import-redirect": "^1.1.0",
@@ -89,7 +90,9 @@
 		"pretty"
 	],
 	"files": [
+		".template/*",
 		"dist/*",
+		"assets/*",
 		".babelrc"
 	],
 	"main": "dist/index.js",

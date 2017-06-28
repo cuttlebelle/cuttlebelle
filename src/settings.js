@@ -94,13 +94,16 @@ export const SETTINGS = {
 
 			// let’s make them absolute
 			if( localSettings.folder.content && !Path.isAbsolute( localSettings.folder.content ) ) {
-				localSettings.folder.content = Path.normalize(`${ process.cwd() }/${ localSettings.folder.content }`);
+				localSettings.folder.content = Path.normalize(`${ process.cwd() }/${ localSettings.folder.content }/`);
 			}
 			if( localSettings.folder.src && !Path.isAbsolute( localSettings.folder.src ) ) {
-				localSettings.folder.src = Path.normalize(`${ process.cwd() }/${ localSettings.folder.src }`);
+				localSettings.folder.src = Path.normalize(`${ process.cwd() }/${ localSettings.folder.src }/`);
 			}
 			if( localSettings.folder.site && !Path.isAbsolute( localSettings.folder.site ) ) {
-				localSettings.folder.site = Path.normalize(`${ process.cwd() }/${ localSettings.folder.site }`);
+				localSettings.folder.site = Path.normalize(`${ process.cwd() }/${ localSettings.folder.site }/`);
+			}
+			if( localSettings.folder.assets && !Path.isAbsolute( localSettings.folder.assets ) ) {
+				localSettings.folder.assets = Path.normalize(`${ process.cwd() }/${ localSettings.folder.assets }/`);
 			}
 
 			const newSettings = {};

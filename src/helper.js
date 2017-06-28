@@ -38,9 +38,35 @@ import { Watch } from './watch';
  * @return {string}      - Slugified string
  */
 export const Slug = ( text ) => {
-	Slugify.extend({'.': '-'});
+	if( typeof text === 'string' ) {
+		Slugify.extend({
+			'.': '-',
+			'\\': '-',
+			'"': ' ',
+			"'": ' ',
+			'(': '-',
+			')': '-',
+			'*': '-',
+			'+': '-',
+			'†': '-',
+			'®': '-r-',
+			'©': '-c-',
+			'•': '-',
+			'@': '-',
+			'!': '-',
+			'“': '-',
+			'”': '-',
+			'‘': '-',
+			'’': '-',
+			'…': '-',
+			'~': '-',
+		});
 
-	return Slugify( text ).toLowerCase();
+		return Slugify( text ).toLowerCase();
+	}
+	else {
+		return text;
+	}
 }
 
 
@@ -50,7 +76,12 @@ export const Slug = ( text ) => {
  * @param {array} elapsedTime - The elapsed time started and stopped with process.hrtime
  */
 export const ConvertHrtime = ( elapsedTime ) => {
-	return ( elapsedTime[ 0 ] + ( elapsedTime[ 1 ] / 1e9 ) ).toFixed( 3 );
+	if( Array.isArray( elapsedTime ) ) {
+		return ( elapsedTime[ 0 ] + ( elapsedTime[ 1 ] / 1e9 ) ).toFixed( 3 );
+	}
+	else {
+		return elapsedTime;
+	}
 }
 
 
@@ -127,7 +158,7 @@ export const Log = {
 		}
 
 		Progress.clear();
-		console.error(` 🐙           ${ Style.bold(`${ text }`) }`);
+		console.log(` 🐙           ${ Style.bold(`${ text }`) }`);
 		Progress.display();
 
 		Log.output = true;   // now we have written something out

@@ -33,19 +33,24 @@ import { Log, Style } from './helper';
  * @return {object}        - A nested object representation of the string
  */
 export const ToDepth = ( source, target = {}, prefix = '' ) => {
-	const elements = source.split("/");
-	let element = Path.normalize(`${ prefix }/${ elements.shift() }`);
+	if( typeof source === 'string' ) {
+		const elements = source.split("/");
+		let element = Path.normalize(`${ prefix }/${ elements.shift() }`);
 
-	if( element.startsWith('/') ) {
-		element = element.slice( 1 );
+		if( element.startsWith('/') ) {
+			element = element.slice( 1 );
+		}
+
+		target[ element ] = target[ element ] || element;
+
+		if( elements.length ) {
+			target[ element ] = typeof target[ element ] === "object" ? target[ element ] : {};
+
+			ToDepth( elements.join("/"), target[ element ], element );
+		}
 	}
-
-	target[ element ] = target[ element ] || element;
-
-	if( elements.length ) {
-		target[ element ] = typeof target[ element ] === "object" ? target[ element ] : {};
-
-		ToDepth( elements.join("/"), target[ element ], element );
+	else {
+		return source;
 	}
 }
 
@@ -60,9 +65,14 @@ export const ToDepth = ( source, target = {}, prefix = '' ) => {
 export const ToNested = ( elements ) => {
 	let nested = {};
 
-	elements.forEach( item => ToDepth( item, nested ) );
+	if( Array.isArray( elements ) ) {
+		elements.forEach( item => ToDepth( item, nested ) );
 
-	return nested;
+		return nested;
+	}
+	else {
+		return elements;
+	}
 };
 
 

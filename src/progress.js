@@ -62,15 +62,18 @@ export const Progress = {
 		if( Progress.todo > 30 && !Log.verboseMode ) { // only if we have at least x pages to render and verbose is off
 			const progress = ( 100 / Progress.todo ) * Progress.done;
 			const padding = 13;
-			const maxWidth = Size.width - ( padding * 2 ) - 2;
-			const currentWidth = Math.ceil( maxWidth * ( progress / 100 ) );
-			const whitespace = maxWidth - currentWidth;
 
-			Progress.clear();
-			process.stdout.write(`${ String.repeat( ' ', padding ) }┤${ String.repeat( Style.gray('▓'), currentWidth ) }${ String.repeat( ' ', whitespace ) }├`);
+			if( Size.width > padding ) {
+				const maxWidth = Size.width - ( padding * 2 ) - 2;
+				const currentWidth = Math.ceil( maxWidth * ( progress / 100 ) );
+				const whitespace = maxWidth - currentWidth;
 
-			if( progress === 100 ) {
 				Progress.clear();
+				process.stdout.write(`${ ' '.repeat( padding ) }┤${ Style.gray('▓').repeat( currentWidth ) }${ ' '.repeat( whitespace ) }├`);
+
+				if( progress === 100 ) {
+					Progress.clear();
+				}
 			}
 		}
 	},
