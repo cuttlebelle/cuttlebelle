@@ -3,7 +3,7 @@
  *
  * Generate static files from the content folder with react components
  *
- * Handel cli options in this file
+ * This is where we delegate the program and get it all started
  *
  **************************************************************************************************************************************************************/
 
@@ -13,7 +13,6 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import Size from 'window-size';
 import Path from 'path';
 import Fs from 'fs';
 
@@ -22,6 +21,7 @@ import Fs from 'fs';
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { ConvertHrtime, ExitHandler, Style, Log, Notify } from './helper.js';
+import { DisplayHelp, DisplayVersion, DisplayWelcome } from './cli.js';
 import { RenderAllPages, RenderAssets, PreRender } from './render.js';
 import { SETTINGS } from './settings.js';
 import { Progress } from './progress';
@@ -33,55 +33,15 @@ import { Nav } from './nav';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLI options
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-const pkg = require('../package.json');
-
-
 // help flag
 if( process.argv.includes('-h') || process.argv.includes('--help') ) {
-	const maxLength = 80;
-	const paddingSize = Math.max( 0, Math.floor( ( Size.width - maxLength ) / 2 ) );
-	const padding = String.repeat(` `, paddingSize );
-
-	Log.space();
-	console.log(`
-${ padding }╔═╗ ╦ ╦ ╔╦╗ ╔╦╗ ╦   ╔═╗ ╔╗  ╔═╗ ╦   ╦   ╔═╗
-${ padding }║   ║ ║  ║   ║  ║   ║╣  ╠╩╗ ║╣  ║   ║   ║╣
-${ padding }╚═╝ ╚═╝  ╩   ╩  ╩═╝ ╚═╝ ╚═╝ ╚═╝ ╩═╝ ╩═╝ ╚═╝ v${ pkg.version }
-
-${ padding }The react.js static site generator with editing in mind.
-
-${ padding }Options:
-${ padding }  ${ Style.bold(`version`) }     - Display the version of Cuttlebelle
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-V`) ) }
-${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --version`) ) }
-
-${ padding }  ${ Style.bold(`watch`) }       - Start to watch the content and source folder for changes
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-w`) ) }
-${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --watch`) ) }
-
-${ padding }  ${ Style.bold(`no-generate`) } - Disable generation of all pages, best in combination with watch.
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-n`) ) }
-${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --no-generate --watch`) ) }
-
-${ padding }  ${ Style.bold(`silent`) }      - Disable all notifications the watch might throw
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-s`) ) }
-${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --silent --watch`) ) }
-
-${ padding }  ${ Style.bold(`verbose`) }     - Enable silly verbose mode
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-v`) ) }
-${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --verbose`) ) }
-
-${ padding }  ${ Style.gray( pkg.homepage ) }
-`);
-	Log.space();
-
-	process.exit( 0 );
+	DisplayHelp();
 }
 
 
+// version flag
 if( process.argv.includes('-V') || process.argv.includes('--version') ) {
-	console.log(`Cuttlebelle v${ pkg.version }`);
-	process.exit( 0 );
+	DisplayVersion();
 }
 
 
@@ -89,7 +49,7 @@ if( process.argv.includes('-V') || process.argv.includes('--version') ) {
 const startTime = process.hrtime();
 
 
-Log.welcome(`Cuttlebelle v${ pkg.version }`);
+DisplayWelcome();
 
 
 // verbose flag
