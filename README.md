@@ -699,7 +699,11 @@ _(_ 💡 _Please look at the coding style and work with it, not against it :smil
 
 ## Tests
 
-TODO
+We use [Jest](https://facebook.github.io/jest/) for unit tests.
+
+- `npm run test` to run the tests
+- `npm run test:detail` will give you coverage infos
+- `npm run test:watch` will spin up the jest watch
 
 
 **[⬆ back to top](#contents)**

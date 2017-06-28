@@ -38,27 +38,32 @@ import { Log, Style } from './helper';
 export const ParseContent = ( content, file ) => {
 	Log.verbose(`Parsing content for ${ Style.yellow( file ) }`);
 
-	const _isIndex = Path.extname( file ) === '.yml';
-	const parsedBody = {};
-	let frontmatter = '';
-	let markdown = '';
+	if( typeof content === 'string' ) {
+		const _isIndex = Path.extname( file ) === '.yml';
+		const parsedBody = {};
+		let frontmatter = '';
+		let markdown = '';
 
-	if( _isIndex ) {                         // if this is a yml file
-		parsedBody.frontmatter = ParseYaml( content, file );
-		parsedBody.body = '';
-	}
-	else if( content.startsWith('---\n') ) { // if this is another file that has frontmatter
-		const bodyParts = content.split('---\n');
+		if( _isIndex ) {                         // if this is a yml file
+			parsedBody.frontmatter = ParseYaml( content, file );
+			parsedBody.body = '';
+		}
+		else if( content.startsWith('---\n') ) { // if this is another file that has frontmatter
+			const bodyParts = content.split('---\n');
 
-		parsedBody.frontmatter = bodyParts[1] ? ParseYaml( bodyParts[1], file ) : {};
-		parsedBody.body = ParseMD( bodyParts.slice( 2 ).join('---\n'), file );
-	}
-	else {                                   // in all other cases (markdown without frontmatter)
-		parsedBody.frontmatter = {};
-		parsedBody.body = ParseMD( content, file );
-	}
+			parsedBody.frontmatter = bodyParts[1] ? ParseYaml( bodyParts[1], file ) : {};
+			parsedBody.body = ParseMD( bodyParts.slice( 2 ).join('---\n'), file );
+		}
+		else {                                   // in all other cases (markdown without frontmatter)
+			parsedBody.frontmatter = {};
+			parsedBody.body = ParseMD( content, file );
+		}
 
-	return parsedBody;
+		return parsedBody;
+	}
+	else {
+		return content;
+	}
 }
 
 
@@ -71,16 +76,30 @@ export const ParseContent = ( content, file ) => {
  * @return {string}          - HTML rendered from the given markdown
  */
 export const ParseMD = ( markdown, file ) => {
-	let renderer = new Marked.Renderer();
+	if( typeof markdown === 'string' ) {
+		let renderer = new Marked.Renderer();
 
-	if( SETTINGS.get().site.markdownRenderer ) {
-		const filePath = Path.normalize(`${ process.cwd() }/${ SETTINGS.get().site.markdownRenderer }`);
+		if( SETTINGS.get().site.markdownRenderer ) {
+			const filePath = Path.normalize(`${ process.cwd() }/${ SETTINGS.get().site.markdownRenderer }`);
+
+			try {
+				renderer = require( filePath );
+			}
+			catch( error ) {
+				Log.error(`Using the custom renderer for markdown caused an error at ${ Style.yellow( filePath ) }`);
+				Log.error( error );
+
+				if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if something goes wrong in production
+					process.exit( 1 );
+				}
+			}
+		}
 
 		try {
-			renderer = require( filePath );
+			return Marked( markdown, { renderer: renderer } );
 		}
 		catch( error ) {
-			Log.error(`Using the custom renderer for markdown caused an error at ${ Style.yellow( filePath ) }`);
+			Log.error(`Rendering markdown caused an error in ${ Style.yellow( file ) }`);
 			Log.error( error );
 
 			if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if something goes wrong in production
@@ -88,17 +107,8 @@ export const ParseMD = ( markdown, file ) => {
 			}
 		}
 	}
-
-	try {
-		return Marked( markdown, { renderer: renderer } );
-	}
-	catch( error ) {
-		Log.error(`Rendering markdown caused an error in ${ Style.yellow( file ) }`);
-		Log.error( error );
-
-		if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if something goes wrong in production
-			process.exit( 1 );
-		}
+	else {
+		return markdown;
 	}
 }
 
@@ -112,15 +122,20 @@ export const ParseMD = ( markdown, file ) => {
  * @return {object}      - The parsed yaml
  */
 export const ParseYaml = ( yaml, file ) => {
-	try {
-		return YAML.parse( yaml );
-	}
-	catch( error ) {
-		Log.error(`Rendering yaml caused an error in ${ Style.yellow( file ) }`);
-		Log.error( error );
-
-		if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if something goes wrong in production
-			process.exit( 1 );
+	if( typeof yaml === 'string' ) {
+		try {
+			return YAML.parse( yaml ) || {};
 		}
+		catch( error ) {
+			Log.error(`Rendering yaml caused an error in ${ Style.yellow( file ) }`);
+			Log.error( error );
+
+			if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if something goes wrong in production
+				process.exit( 1 );
+			}
+		}
+	}
+	else {
+		return yaml;
 	}
 }

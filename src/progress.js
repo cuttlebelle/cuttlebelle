@@ -67,7 +67,7 @@ export const Progress = {
 			const whitespace = maxWidth - currentWidth;
 
 			Progress.clear();
-			process.stdout.write(`${ String.repeat( ' ', padding ) }┤${ String.repeat( Style.gray('▓'), currentWidth ) }${ String.repeat( ' ', whitespace ) }├`);
+			process.stdout.write(`${ ' '.repeat( padding ) }┤${ Style.gray('▓').repeat( currentWidth ) }${ ' '.repeat( whitespace ) }├`);
 
 			if( progress === 100 ) {
 				Progress.clear();
