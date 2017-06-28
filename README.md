@@ -4,6 +4,7 @@ Cuttlebelle
 > The react static site generator with editing in mind
 
 [![NPM](https://nodei.co/npm/cuttlebelle.png?downloads=true)](https://nodei.co/npm/cuttlebelle/)
+[![Build Status](https://travis-ci.org/dominikwilkowski/cuttlebelle.svg?branch=master)](https://travis-ci.org/dominikwilkowski/cuttlebelle)
 
 ![Cuttlebelle files](https://raw.githubusercontent.com/dominikwilkowski/cuttlebelle/master/assets/files.gif)
 
