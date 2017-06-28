@@ -38,8 +38,9 @@
 
 		"build": "npm run build:js",
 		"build:js": "babel src --out-dir dist --presets=es2015 --plugins=transform-runtime,transform-es2015-modules-commonjs",
+		"build:watch": "npm run build:js && npm run test:detail",
 
-		"watch": "npm run build && npm run test && onchange 'src/*.js' '__tests__/*.js' -- npm run build:js && npm run test:detail"
+		"watch": "npm run build && npm run test && onchange 'src/*.js' '__tests__/*.js' -- npm run build:watch"
 	},
 	"dependencies": {
 		"babel-plugin-import-redirect": "^1.1.0",
