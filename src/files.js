@@ -35,7 +35,7 @@ import { Log, Style } from './helper';
  *
  * @return {promise object}  - The content of the file
  */
-export const ReadFile = location => {
+export const ReadFile = ( location ) => {
 	return new Promise( ( resolve, reject ) => {
 		Fs.readFile( location, `utf8`, ( error, content ) => {
 			if( error ) {

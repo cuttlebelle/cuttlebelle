@@ -145,13 +145,6 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 			process.env.BABEL_DISABLE_CACHE = 1;
 			delete require.cache[ require.resolve( path ) ]; // cache busting
 
-			// remove babel register components from require cache
-			// const allComponents = Object.keys( require.cache ).filter( ( key ) => key.startsWith( SETTINGS.get().folder.src ) );
-
-			// allComponents.map( ( component ) => {
-			// 	delete require.cache[ component ]; //cache busting
-			// });
-
 			UpdateReact( startTime, path );
 		}
 	}
@@ -266,6 +259,13 @@ export const UpdateReact = ( startTime, path ) => {
  * @param  {array} startTime - The Hrtime array
  */
 export const UpdateAll = ( startTime ) => {
+
+	// remove babel register components from require cache
+	const allComponents = Object.keys( require.cache ).filter( ( key ) => key.startsWith( SETTINGS.get().folder.src ) );
+
+	allComponents.map( ( component ) => {
+		delete require.cache[ component ]; //cache busting
+	});
 
 	PreRender()
 		.catch( error => {
