@@ -119,5 +119,8 @@ export const SETTINGS = {
 
 			return newSettings;
 		}
+		else {
+			return SETTINGS.get();
+		}
 	},
 };

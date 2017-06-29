@@ -16,7 +16,7 @@ import Path from 'path';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // SETTINGS
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-test('SETTINGS.get() - Get default settings correctly', () => {
+test('SETTINGS.get() - The default settings are correct', () => {
 	const defaults = {
 		folder: {
 			cwd: Path.normalize(`${ process.cwd() }/`),
@@ -40,6 +40,62 @@ test('SETTINGS.get() - Get default settings correctly', () => {
 	};
 
 	expect( SETTINGS.get() ).toMatchObject( defaults );
+});
+
+
+test('SETTINGS.set() - Not setting anything will merge default correctly', () => {
+	const changes = undefined;
+	const settings = {
+		folder: {
+			cwd: Path.normalize(`${ process.cwd() }/`),
+			content: Path.normalize(`${ process.cwd() }/content/`),
+			src: Path.normalize(`${ process.cwd() }/src/`),
+			assets: Path.normalize(`${ process.cwd() }/assets/`),
+			site: Path.normalize(`${ process.cwd() }/site/`),
+			index: 'index',
+			homepage: 'index',
+		},
+		layouts: {
+			page: 'page',
+			partial: 'partial',
+		},
+		site: {
+			root: '/',
+			doctype: '<!DOCTYPE html>',
+			redirectReact: true,
+			markdownRenderer: '',
+		},
+	};
+
+	expect( SETTINGS.set( changes ) ).toMatchObject( settings );
+});
+
+
+test('SETTINGS.set() - Not setting folder will merge default correctly', () => {
+	const changes = {};
+	const settings = {
+		folder: {
+			cwd: Path.normalize(`${ process.cwd() }/`),
+			content: Path.normalize(`${ process.cwd() }/content/`),
+			src: Path.normalize(`${ process.cwd() }/src/`),
+			assets: Path.normalize(`${ process.cwd() }/assets/`),
+			site: Path.normalize(`${ process.cwd() }/site/`),
+			index: 'index',
+			homepage: 'index',
+		},
+		layouts: {
+			page: 'page',
+			partial: 'partial',
+		},
+		site: {
+			root: '/',
+			doctype: '<!DOCTYPE html>',
+			redirectReact: true,
+			markdownRenderer: '',
+		},
+	};
+
+	expect( SETTINGS.set( changes ) ).toMatchObject( settings );
 });
 
 

@@ -33,8 +33,15 @@ test('ToDepth() - Should split path into array correctly', () => {
 	ToDepth('first', nested);
 	expect( nested ).toMatchObject( match );
 
+	ToDepth('first/second/more', nested);
+	match = { first: { 'first/second': { 'first/second/last': 'first/second/last', 'first/second/more': 'first/second/more' } } };
+	expect( nested ).toMatchObject( match );
+
 	ToDepth('another/one', nested);
-	match = { first: { 'first/second': { 'first/second/last': 'first/second/last' } }, another: { 'another/one': 'another/one' } };
+	match = {
+		first: { 'first/second': { 'first/second/last': 'first/second/last', 'first/second/more': 'first/second/more' } },
+		another: { 'another/one': 'another/one' }
+	};
 	expect( nested ).toMatchObject( match );
 });
 

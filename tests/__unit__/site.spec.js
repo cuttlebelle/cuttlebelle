@@ -17,7 +17,7 @@ import Path from 'path';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // GetContent
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-test('GetContent() - get all content from the mock folder', () => {
+test('GetContent() - Get all content from the mock folder', () => {
 	const folders = [
 		Path.normalize(`${ __dirname }/mocks/content/page1`),
 		Path.normalize(`${ __dirname }/mocks/content/page2`),
@@ -31,10 +31,19 @@ test('GetContent() - get all content from the mock folder', () => {
 });
 
 
+test('GetContent() - Get an info when the folder doesn’t exist', () => {
+	console.log = jest.fn();
+	console.info = jest.fn();
+
+	expect( GetContent( Path.normalize(`${ __dirname }/mocks/content/non-existing/`) ) ).toEqual( expect.arrayContaining( [] ) );
+	expect( console.info.mock.calls.length ).toBe( 1 );
+});
+
+
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // GetLayout
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-test('GetLayout() - get all content from the mock folder', () => {
+test('GetLayout() - Get all content from the mock folder', () => {
 	const folders = [
 		Path.normalize(`${ __dirname }/mocks/src/layout.js`),
 		Path.normalize(`${ __dirname }/mocks/src/layout1.js`),
@@ -46,4 +55,13 @@ test('GetLayout() - get all content from the mock folder', () => {
 	];
 
 	expect( GetLayout( Path.normalize(`${ __dirname }/mocks/src`) ) ).toEqual( expect.arrayContaining( folders ) );
+});
+
+
+test('GetLayout() - Get an info when the folder doesn’t exist', () => {
+	console.log = jest.fn();
+	console.info = jest.fn();
+
+	expect( GetLayout( Path.normalize(`${ __dirname }/mocks/src/non-existing/`) ) ).toEqual( expect.arrayContaining( [] ) );
+	expect( console.info.mock.calls.length ).toBe( 1 );
 });
