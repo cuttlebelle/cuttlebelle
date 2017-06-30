@@ -54,6 +54,10 @@ ${ padding }  ${ Style.bold(`version`) }     - Display the version of Cuttlebell
 ${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-V`) ) }
 ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --version`) ) }
 
+${ padding }  ${ Style.bold(`docs`) }        - Build documentation from your layout components
+${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-d`) ) }
+${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --docs`) ) }
+
 ${ padding }  ${ Style.bold(`watch`) }       - Start to watch the content and source folder for changes
 ${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-w`) ) }
 ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --watch`) ) }

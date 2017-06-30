@@ -1,0 +1,8 @@
+layout: layout/homepage
+title: Titles are awesome!
+stylesheet: homepage
+partials:
+  - partial1.md
+  - partial2.md
+  - partial3.md
+  - partial4.md

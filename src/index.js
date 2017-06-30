@@ -24,10 +24,8 @@ import { ConvertHrtime, ExitHandler, Style, Log, Notify } from './helper.js';
 import { DisplayHelp, DisplayVersion, DisplayWelcome } from './cli.js';
 import { RenderAllPages, RenderAssets, PreRender } from './render.js';
 import { SETTINGS } from './settings.js';
-import { Progress } from './progress';
+import { BuildDocs } from './docs';
 import { Watch } from './watch.js';
-import { Pages } from './pages';
-import { Nav } from './nav';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -67,6 +65,22 @@ if( process.argv.includes('-s') || process.argv.includes('--silent') ) {
 // set watch flag
 if( process.argv.includes('-w') || process.argv.includes('--watch') ) {
 	Watch.running = true;
+}
+
+
+// docs flag
+if( process.argv.includes('-d') || process.argv.includes('--docs') ) {
+	BuildDocs()
+		.catch( error => {
+			Log.error(`Trying to generate the docs failed.`);
+			Log.error( error );
+
+			process.exit( 1 );
+		})
+		.then( () => {
+			Log.space();
+			process.exit( 0 );
+	});
 }
 
 
@@ -122,7 +136,7 @@ PreRender()
 					);
 
 					// run watch on flag
-					if( process.argv.includes('-w') || process.argv.includes('--watch') ) {
+					if( Watch.running ) {
 						Watch.start();
 					}
 			});
