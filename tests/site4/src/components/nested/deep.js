@@ -49,9 +49,9 @@ GlobalHeader.propTypes = {
 	button: PropTypes.string.isRequired,
 
 	/**
-	 * @example [Lorem ipsum](2)
+	 * @example [text](2)
 	 */
-	_body: PropTypes.string.isRequired,
+	_body: PropTypes.node.isRequired,
 };
 
 
