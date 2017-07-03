@@ -24,15 +24,20 @@ const Homepage = ( page ) => (
 
 
 Homepage.propTypes = {
+	/**
+	 * title: Homepage
+	 */
 	title: PropTypes.string.isRequired,
 
 	/**
-	 * @example [partials](3)
+	 * partials: [partials](3)
 	 */
 	partials: PropTypes.node.isRequired,
 
 	/**
-	 * An object for the header
+	 * header:
+	 *   title: title one
+	 *   intro: [text](2)
 	 */
 	header: PropTypes.shape({
 		title: PropTypes.string.isRequired,

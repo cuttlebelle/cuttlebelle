@@ -18,12 +18,12 @@ const Page = ( page ) => (
 
 Page.propTypes = {
 	/**
-	 * @example Site title
+	 * title: Welcome
 	 */
 	title: PropTypes.string.isRequired,
 
 	/**
-	 * @example [partials](3)
+	 * partials: [partials](5)
 	 */
 	partials: PropTypes.node.isRequired,
 };

@@ -68,7 +68,15 @@ if( process.argv.includes('-w') || process.argv.includes('--watch') ) {
 }
 
 
-// docs flag
+// merging default settings with package.json
+const pkgLocation = Path.normalize(`${ process.cwd() }/package.json`);
+if( Fs.existsSync( pkgLocation ) ) {
+	const loacalPkg = require( pkgLocation );
+	SETTINGS.set( loacalPkg.cuttlebelle );
+}
+
+
+// build docs
 if( process.argv.includes('-d') || process.argv.includes('--docs') ) {
 	BuildDocs()
 		.catch( error => {
@@ -78,76 +86,70 @@ if( process.argv.includes('-d') || process.argv.includes('--docs') ) {
 			process.exit( 1 );
 		})
 		.then( () => {
-			Log.space();
 			process.exit( 0 );
 	});
 }
 
 
-// merging default settings with package.json
-const pkgLocation = Path.normalize(`${ process.cwd() }/package.json`);
-if( Fs.existsSync( pkgLocation ) ) {
-	const loacalPkg = require( pkgLocation );
-	SETTINGS.set( loacalPkg.cuttlebelle );
-}
+// build site
+else {
+	// pre-render everything
+	PreRender()
+		.catch( error => {
+			Log.error(`Trying to initilize the pages failed.`);
+			Log.error( error );
 
+			process.exit( 1 );
+		})
+		.then( ({ content, layout }) => {
 
-// pre-render everything
-PreRender()
-	.catch( error => {
-		Log.error(`Trying to initilize the pages failed.`);
-		Log.error( error );
+			// generate all files unless it’s disabled
+			if( !process.argv.includes('-n') && !process.argv.includes('--no-generate') ) {
+				Log.info(`Generating pages`);
 
-		process.exit( 1 );
-	})
-	.then( ({ content, layout }) => {
+				const allPromises = [];
 
-		// generate all files unless it’s disabled
-		if( !process.argv.includes('-n') && !process.argv.includes('--no-generate') ) {
-			Log.info(`Generating pages`);
+				// copy all asset files to the site/ folder
+				allPromises.push(
+					RenderAssets(
+						SETTINGS.get().folder.assets,
+						Path.normalize(`${ SETTINGS.get().folder.site }/${ SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' ) }`)
+					)
+				);
 
-			const allPromises = [];
+				// render all pages to site/
+				allPromises.push( RenderAllPages( content, layout ) );
 
-			// copy all asset files to the site/ folder
-			allPromises.push(
-				RenderAssets(
-					SETTINGS.get().folder.assets,
-					Path.normalize(`${ SETTINGS.get().folder.site }/${ SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' ) }`)
-				)
-			);
+				Promise.all( allPromises )
+					.catch( error => {
+						Log.error(`Generating pages failed :(`);
+						Log.error( error );
 
-			// render all pages to site/
-			allPromises.push( RenderAllPages( content, layout ) );
+						process.exit( 1 );
+					})
+					.then( pages => {
+						const elapsedTime = process.hrtime( startTime );
 
-			Promise.all( allPromises )
-				.catch( error => {
-					Log.error(`Generating pages failed :(`);
-					Log.error( error );
+						Log.done(
+							`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages[ 1 ].length ) } pages ` : `No pages have been build ` }` +
+							`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+							`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+						);
 
-					process.exit( 1 );
-				})
-				.then( pages => {
-					const elapsedTime = process.hrtime( startTime );
-
-					Log.done(
-						`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages[ 1 ].length ) } pages ` : `No pages have been build ` }` +
-						`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
-						`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
-					);
-
-					// run watch on flag
-					if( Watch.running ) {
-						Watch.start();
-					}
-			});
-		}
-		else {
-			// run watch on flag
-			if( process.argv.includes('-w') || process.argv.includes('--watch') ) {
-				Watch.start();
+						// run watch on flag
+						if( Watch.running ) {
+							Watch.start();
+						}
+				});
 			}
-		}
-});
+			else {
+				// run watch on flag
+				if( process.argv.includes('-w') || process.argv.includes('--watch') ) {
+					Watch.start();
+				}
+			}
+	});
+}
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Exit handler

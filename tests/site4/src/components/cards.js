@@ -11,7 +11,7 @@ const Cards = ( page ) => {
 	const HeadingTag = `h${ page.level }`;
 
 	return (
-		<div className={ hero && 'heroclass' }>
+		<div className={ page.hero && 'heroclass' }>
 			<HeadingTag>{ page.title }</HeadingTag>
 			<p>{ page.description }</p>
 			<ul>
@@ -29,12 +29,30 @@ const Cards = ( page ) => {
 
 
 Cards.propTypes = {
+	/**
+	 * level: "2"
+	 */
 	level: PropTypes.oneOf([ '1', '2', '3', '4', '5', '6' ]).isRequired,
 
+	/**
+	 * hero: true
+	 */
 	hero: PropTypes.bool,
 
 	/**
-	 * An optional string for the header
+	 * cards:
+	 *   - title: yay
+	 *     content: Some content
+	 *     href: http://link/to
+	 *   - title: yay
+	 *     content: Some content
+	 *     href: http://link/to
+	 *   - title: yay
+	 *     content: Some content
+	 *     href: http://link/to
+	 *   - title: yay
+	 *     content: Some content
+	 *     href: http://link/to
 	 */
 	cards: PropTypes.arrayOf(
 		PropTypes.shape({

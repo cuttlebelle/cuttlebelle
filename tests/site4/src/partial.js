@@ -12,12 +12,12 @@ const Partial = ( page ) => (
 
 Partial.propTypes = {
 	/**
-	 * @example First blog post
+	 * title: First blog post
 	 */
 	title: PropTypes.string.isRequired,
 
 	/**
-	 * @example [text](2)
+	 * _body: [text](2)
 	 */
 	_body: PropTypes.node.isRequired,
 };
