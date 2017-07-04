@@ -5,6 +5,7 @@ import React from "react";
 const Page = ( page ) => (
 	<section>
 		<h1>{ page.string }</h1>
+		<div>{ page.text }</div>
 	</section>
 );
 
@@ -144,38 +145,38 @@ Page.propTypes = {
 
 // ***************************** TEXT
 	/**
-	 * text: [text](7)
+	 * text: (text)(7)
 	 */
-	text: PropTypes.string,
+	text: PropTypes.node,
 	/**
-	 * textRequired: [text](7)
+	 * textRequired: (text)(7)
 	 */
-	textRequired: PropTypes.string.isRequired,
+	textRequired: PropTypes.node.isRequired,
 	/**
-	 * textWithDefault: [text](7)
+	 * textWithDefault: (text)(7)
 	 */
-	textWithDefault: PropTypes.string,
+	textWithDefault: PropTypes.node,
 	/**
-	 * textWithDefaultRequired: [text](7)
+	 * textWithDefaultRequired: (text)(7)
 	 */
-	textWithDefaultRequired: PropTypes.string.isRequired,
+	textWithDefaultRequired: PropTypes.node.isRequired,
 
 
 // ***************************** NODE
 	/**
-	 * node: [partials](3)
+	 * node: (partials)(3)
 	 */
 	node: PropTypes.node,
 	/**
-	 * nodeRequired: [partials](3)
+	 * nodeRequired: (partials)(3)
 	 */
 	nodeRequired: PropTypes.node.isRequired,
 	/**
-	 * nodeWithDefault: [partials](3)
+	 * nodeWithDefault: (partials)(3)
 	 */
 	nodeWithDefault: PropTypes.node,
 	/**
-	 * nodeWithDefaultRequired: [partials](3)
+	 * nodeWithDefaultRequired: (partials)(3)
 	 */
 	nodeWithDefaultRequired: PropTypes.node.isRequired,
 };

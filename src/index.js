@@ -85,7 +85,15 @@ if( process.argv.includes('-d') || process.argv.includes('--docs') ) {
 
 			process.exit( 1 );
 		})
-		.then( () => {
+		.then( ( pages ) => {
+			const elapsedTime = process.hrtime( startTime );
+
+			Log.done(
+				`${ pages > 0 ? `Successfully built ${ Style.yellow( pages ) } doc pages ` : `No doc pages have been build ` }` +
+				`to ${ Style.yellow( SETTINGS.get().folder.docs.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+				`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+			);
+
 			process.exit( 0 );
 	});
 }

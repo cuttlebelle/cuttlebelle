@@ -23,7 +23,7 @@ Page.propTypes = {
 	title: PropTypes.string.isRequired,
 
 	/**
-	 * partials: [partials](5)
+	 * partials: (partials)(5)
 	 */
 	partials: PropTypes.node.isRequired,
 };

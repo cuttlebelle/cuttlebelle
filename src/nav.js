@@ -2,9 +2,9 @@
  *
  * Getting and retaining navigation infos
  *
- * Nav          - Retain nav information
- * Nav.set      - Set navigation infos
- * Nav.get      - Get navigation infos
+ * Nav     - Retain nav information
+ * Nav.set - Set navigation infos
+ * Nav.get - Get navigation infos
  *
  **************************************************************************************************************************************************************/
 

@@ -17,7 +17,7 @@ Partial.propTypes = {
 	title: PropTypes.string.isRequired,
 
 	/**
-	 * _body: [text](2)
+	 * _body: (text)(2)
 	 */
 	_body: PropTypes.node.isRequired,
 };

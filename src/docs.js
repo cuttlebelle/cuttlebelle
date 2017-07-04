@@ -11,6 +11,7 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 const ReactDocs = require('react-docgen');
+import React from 'react';
 import Path from 'path';
 import Fs from 'fs';
 
@@ -19,11 +20,13 @@ import Fs from 'fs';
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
+import { ParseYaml, ParseMD } from './parse';
 import { SETTINGS } from './settings.js';
 import { RenderReact } from './render';
 import { Log, Style } from './helper';
-import { ParseYaml, ParseMD } from './parse';
 import { GetLayout } from './site';
+import { Pages } from './pages';
+import { Nav } from './nav';
 
 
 /**
@@ -44,6 +47,8 @@ const Layout = {
 	category: '.template/docs/layout/category.js',
 };
 
+const Root = 'files/';
+
 
 /**
  * Build our docs from the source folder
@@ -52,14 +57,31 @@ export const BuildDocs = () => {
 	Log.info(`Generating docs`);
 
 	const components = GetLayout();
+	// const components = ['all/all.js'];
 	const categories = GetCategories( components );
 	const allLayouts = [];
+	const forNav = [];
+	const forPages = [];
 
 	categories.map( category => {
 		allLayouts.push(
 			GetCategoryComponents( category, components )
 		);
+
+		if( category === '.' ) {
+			category = 'index';
+			forNav.push('index');
+			forPages.push('index');
+		}
+		else {
+			forNav.push( category );
+			forPages.push( category );
+		}
+
+		Pages.inject( category, { title: category });
 	});
+
+	Nav.set( forNav );
 
 
 	return new Promise( ( resolve, reject ) => {
@@ -70,18 +92,18 @@ export const BuildDocs = () => {
 
 				pages.map( page => {
 					allPages.push(
-						CreateCategory( page )
+						CreateCategory( page, components )
 					);
 				});
 
 				allPages.push(
-					CreateIndex()
+					CreateIndex( forPages, components )
 				);
 
 				Promise.all( allPages )
 					.catch( error => reject( error ) )
 					.then( () => {
-						resolve();
+						resolve( allPages.length );
 					});
 		});
 	});
@@ -170,13 +192,25 @@ export const CreateCategory = ( components ) => {
 	Log.verbose(`Creating category ${ Style.yellow( components.category ) }`);
 
 	return new Promise( ( resolve, reject ) => {
-		const categoryPath = Path.normalize(`${ SETTINGS.get().folder.docs }/${ components[ 0 ].category }/index.html`);
+		const categoryPath = Path.normalize(`${ SETTINGS.get().folder.docs }/${ Root }/${ components[ 0 ].category }/index.html`);
 		const layoutPath = Path.normalize(`${ __dirname }/../${ Layout.category }`);
 
+		const ID = components[ 0 ].category === '.' ? `index` : components[ 0 ].category;
+
 		const props = {
-			title: `Category ${ components[ 0 ].category }`,
-			category: components[ 0 ].category,
-			components: components,
+			_ID: ID,
+			_title: `Category ${ components[ 0 ].category }`,
+			_category: components[ 0 ].category,
+			_components: components,
+			_pages: Pages.get(),
+			_nav: Nav.get(),
+			_relativeURL: ( URL, ID ) => {
+				if( ID === 'index' ) {
+					ID = `.`;
+				}
+
+				return Path.relative( Path.normalize(`${ SETTINGS.get().folder.docs }/${ Root }${ ID }`), Path.normalize(`${ SETTINGS.get().folder.docs }/${ Root }/${ URL }`));
+			},
 		};
 
 		const html = RenderReact( layoutPath, props );
@@ -189,15 +223,41 @@ export const CreateCategory = ( components ) => {
 
 
 /**
- * [description]
- * @param  {[type]} object [description]
- * @return {[type]}        [description]
+ * Generate the homepage html and write it to disk
+ *
+ * @param  {array}  categories - An array of all categories
+ * @param  {array}  components - An array of all components
+ *
+ * @return {Promise object} - Resolve when done
  */
-export const CreateIndex = ( object ) => {
+export const CreateIndex = ( categories, components ) => {
 	Log.verbose(`Creating index page`);
 
 	return new Promise( ( resolve, reject ) => {
-		resolve();
+		const categoryPath = Path.normalize(`${ SETTINGS.get().folder.docs }/index.html`);
+		const layoutPath = Path.normalize(`${ __dirname }/../${ Layout.index }`);
+
+		const props = {
+			_ID: '/homepage/',
+			_title: `Docs home`,
+			_pages: Pages.get(),
+			_nav: Nav.get(),
+			_components: components,
+			_categories: categories,
+			_relativeURL: ( URL, ID ) => {
+				if( ID === 'index' ) {
+					ID = '.';
+				}
+
+				return Path.relative( SETTINGS.get().folder.docs, Path.normalize(`${ SETTINGS.get().folder.docs }/${ Root }/${ URL }`));
+			},
+		};
+
+		const html = RenderReact( layoutPath, props );
+
+		CreateFile( categoryPath, html )
+			.catch( error => reject( error ) )
+			.then( () => resolve() );
 	})
 };
 
@@ -205,9 +265,9 @@ export const CreateIndex = ( object ) => {
 /**
  * Get infos about a react component by running it through our propType parser
  *
- * @param  {string} component  - The path to the layout file
+ * @param  {string} component - The path to the layout file
  *
- * @return {Promise object}    - The object with all gathered infos, format: { file: '', infos: {} }
+ * @return {Promise object}   - The object with all gathered infos, format: { file: '', infos: {} }
  */
 export const ParseComponent = ( component ) => {
 	Log.verbose(`Getting component infos from ${ Style.yellow( component ) }`);
@@ -251,8 +311,8 @@ export const BuildPropsYaml = ( object, component ) => {
 
 	return new Promise( ( resolve, reject ) => {
 		const flags = {
-			required: ' <span class="flag flag--optional">Optional</span>',
-			default: ( value ) => ` <span class="flag flag--default">default: <span class="flag__value">${ value }</span></span>`,
+			required: `<span class="flag flag--optional">Optional</span>`,
+			default: ( value ) => `<span class="flag flag--default">default: <span class="flag__value">${ value }</span></span>`,
 		};
 		let props = {};
 		let yaml = '';
@@ -264,10 +324,18 @@ export const BuildPropsYaml = ( object, component ) => {
 
 				prop.description = prop.description || '';
 
-				example = ParseExample( prop.description );
-				props = Object.assign( {}, props, ParseYaml( example ) );
+				example = ParseYaml( prop.description );
+				props = Object.assign( {}, props, ParseExample( example ) );
 
-				yaml += `${ example }${ prop.required ? '' : flags['required'] }${ prop.defaultValue ? flags['default']( prop.defaultValue.value ) : '' }\n`;
+				yaml += `${
+					prop.required
+						? ''
+						: flags['required']
+					}${
+					prop.defaultValue
+						? flags['default']( prop.defaultValue.value )
+						: ''
+					}${ ReplaceMagic( prop.description ) }\n`;
 			});
 		}
 
@@ -275,7 +343,7 @@ export const BuildPropsYaml = ( object, component ) => {
 			file: object.file,
 			infos: object.infos,
 			props,
-			yaml,
+			yaml: <div dangerouslySetInnerHTML={ { __html: yaml } } />,
 		})
 	});
 };
@@ -303,43 +371,60 @@ export const BuildHTML = ( object, component ) => {
 			file: object.file,
 			yaml: object.yaml,
 			html,
+			component: <div dangerouslySetInnerHTML={ { __html: html } } />,
 		})
 	});
 };
 
 
 /**
- * Parse an example string
+ * Parse an example object
  *
- * @param  {string} example - The example from our props description
+ * @param  {object} example - The example from our props description already rendered in yaml
  *
  * @return {sting}          - The example with all magic strings replaced
  */
 export const ParseExample = ( example ) => {
 	Log.verbose(`Parsing example for magic inside ${ Style.yellow( example ) }`);
 
-	const vocabulary = [
-		{
-			name: 'partials',
-			function: MakePartials,
-		},
-		{
-			name: 'text',
-			function: MakeIpsum,
-		},
-	];
+	const parsedExample = Object.assign( {}, example );
+
+	vocabulary.map( command => {
+		Object.keys( example ).map( key => {
+			const exampleVar = example[ key ];
+
+			if( typeof exampleVar === 'object' ) {
+				// TODO
+			}
+			else if( typeof exampleVar === 'string' && exampleVar.includes(`(${ command.name })`) ) {
+				const partials = exampleVar.split(`(${ command.name })(`);
+				const amount = parseInt( partials[ 1 ].slice( 0, -1 ) );
+
+				if( amount > 0 ) {
+					parsedExample[ key ] = command.func( amount );
+				}
+
+			}
+		});
+	});
+
+	return parsedExample;
+};
+
+
+/**
+ * Replace some magic strings with something more human readable
+ *
+ * @param  {string} example - The string to be unmagified
+ *
+ * @return {string}         - More human readable string
+ */
+export const ReplaceMagic = ( example ) => {
 	let parsedExample = example;
 
 	vocabulary.map( command => {
-		if( example.includes(`[${ command.name }]`) ) {
-			const partials = example.split(`[${ command.name }](`);
-			const amount = parseInt( partials[ 1 ].slice( 0, -1 ) );
-
-			if( amount > 0 ) {
-				parsedExample = parsedExample.replace( `[${ command.name }](${ amount })`, command.function( amount ) );
-			}
-
-		}
+		const regex = new RegExp(`(\\(${ command.name }\\))[(].*[)]`, 'g');
+		parsedExample = parsedExample.replace( regex, command.replacement );
 	});
 
 	return parsedExample;
@@ -380,5 +465,26 @@ export const MakeIpsum = ( amount ) => {
 		output += `${ sentences[ i ] }.`;
 	};
 
-	return ParseMD( output ).replace(/(?:\r\n|\r|\n)/g, '');
+	output = ParseMD( output ).replace(/(?:\r\n|\r|\n)/g, ' ');
+
+	return <div dangerouslySetInnerHTML={ { __html: output } } />;
 };
+
+
+/**
+ * Magic strings and how to handle them
+ *
+ * @type {Array}
+ */
+const vocabulary = [
+	{
+		name: 'partials',
+		func: MakePartials,
+		replacement: '\n  - partial1.md\n  - partial2.md\n  - partial3.md',
+	},
+	{
+		name: 'text',
+		func: MakeIpsum,
+		replacement: `${ Ipsum.slice(0, 91) }...`,
+	},
+];

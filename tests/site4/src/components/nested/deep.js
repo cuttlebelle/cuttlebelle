@@ -20,9 +20,9 @@ const GlobalHeader = ({ page }) => {
 
 GlobalHeader.propTypes = {
 	/**
-	 * text: [text](4)
+	 * text: (text)(4)
 	 */
-	text: PropTypes.string,
+	text: PropTypes.node,
 
 	/**
 	 * button: Click here
@@ -30,7 +30,7 @@ GlobalHeader.propTypes = {
 	button: PropTypes.string.isRequired,
 
 	/**
-	 * _body: [text](7)
+	 * _body: (text)(7)
 	 */
 	_body: PropTypes.node.isRequired,
 };

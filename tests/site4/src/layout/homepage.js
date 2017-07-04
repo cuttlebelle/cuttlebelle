@@ -30,14 +30,14 @@ Homepage.propTypes = {
 	title: PropTypes.string.isRequired,
 
 	/**
-	 * partials: [partials](3)
+	 * partials: (partials)(3)
 	 */
 	partials: PropTypes.node.isRequired,
 
 	/**
 	 * header:
 	 *   title: title one
-	 *   intro: [text](2)
+	 *   intro: (text)(2)
 	 */
 	header: PropTypes.shape({
 		title: PropTypes.string.isRequired,
