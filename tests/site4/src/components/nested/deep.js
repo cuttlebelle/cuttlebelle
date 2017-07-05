@@ -2,35 +2,22 @@ import PropTypes from 'prop-types';
 import React from "react";
 
 
-const headerClasses = {
-	light: 'globalheader--light',
-	dark: 'globalheader--dark',
-	white: 'globalheader--white',
-	blue: 'globalheader--blue',
-};
-
-const GlobalHeader = ({ page }) => {
-	return (
-		<div className={`globalheader`}>
-			stuff
-		</div>
-	);
-}
+const GlobalHeader = ( page ) => (
+	<div className={`globalheader`}>
+		<h1>{ page.title }</h1>
+		{ page._body }
+	</div>
+);
 
 
 GlobalHeader.propTypes = {
 	/**
-	 * text: (text)(4)
+	 * title: Welcome
 	 */
-	text: PropTypes.node,
+	title: PropTypes.string,
 
 	/**
-	 * button: Click here
-	 */
-	button: PropTypes.string.isRequired,
-
-	/**
-	 * _body: (text)(7)
+	 * _body: (partials)(7)
 	 */
 	_body: PropTypes.node.isRequired,
 };

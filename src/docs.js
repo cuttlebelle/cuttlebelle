@@ -11,6 +11,7 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 const ReactDocs = require('react-docgen');
+import Pretty from 'pretty';
 import React from 'react';
 import Path from 'path';
 import Fs from 'fs';
@@ -19,10 +20,10 @@ import Fs from 'fs';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
+import { RenderReact, RenderAssets } from './render';
+import { ReadFile, CreateFile } from './files';
 import { ParseYaml, ParseMD } from './parse';
 import { SETTINGS } from './settings.js';
-import { RenderReact } from './render';
 import { Log, Style } from './helper';
 import { GetLayout } from './site';
 import { Pages } from './pages';
@@ -57,28 +58,37 @@ export const BuildDocs = () => {
 	Log.info(`Generating docs`);
 
 	const components = GetLayout();
-	// const components = ['all/all.js'];
 	const categories = GetCategories( components );
+	const css = GetCss();
 	const allLayouts = [];
 	const forNav = [];
 	const forPages = [];
 
 	categories.map( category => {
 		allLayouts.push(
-			GetCategoryComponents( category, components )
+			GetCategoryComponents( category, components ) // getting HTML of components for each category
 		);
 
 		if( category === '.' ) {
-			category = 'index';
-			forNav.push('index');
-			forPages.push('index');
-		}
-		else {
-			forNav.push( category );
-			forPages.push( category );
+			category = 'index'; // preparing some props for the pages
 		}
 
-		Pages.inject( category, { title: category });
+		forNav.push( category );
+		const inside = [];
+
+		components.map( component => {
+			if( category === Path.dirname( component ) || category === 'index' && Path.dirname( component ) === '.' ) {
+				inside.push( component );
+			}
+		});
+
+		forPages.push({
+			ID: category,
+			components: inside,
+		});
+
+
+		Pages.inject( category, { title: category }); // injecting the props for each page
 	});
 
 	Nav.set( forNav );
@@ -92,12 +102,20 @@ export const BuildDocs = () => {
 
 				pages.map( page => {
 					allPages.push(
-						CreateCategory( page, components )
+						CreateCategory( forPages, page, css )  // let’s create each category page
 					);
 				});
 
 				allPages.push(
-					CreateIndex( forPages, components )
+					CreateIndex( forPages, components, css ) // also need that homepage
+				);
+
+				allPages.push(                             // and assets; no sexy look without assets!
+					RenderAssets( Path.normalize(`${ __dirname }/../.template/docs/assets/`), Path.normalize(`${ SETTINGS.get().folder.docs }/assets/`) )
+				);
+
+				allPages.push(
+					RenderAssets( SETTINGS.get().folder.assets, Path.normalize(`${ SETTINGS.get().folder.docs }/assets/pages/`) )
 				);
 
 				Promise.all( allPages )
@@ -178,8 +196,45 @@ export const GetCategoryComponents = ( category, components ) => {
 
 
 /**
+ * Get all css files from the assets folder recursively
+ *
+ * @param  {string} folder    - The start folder we search in
+ * @param  {array}  structure - We keep track of what we found so far to recursively find all folders
+ *
+ * @return {array}            - An array of all relative paths of all css files
+ */
+export const GetCss = ( folder = SETTINGS.get().folder.assets, structure = [] ) => {
+	if( Fs.existsSync( folder ) ) {
+		Fs.readdirSync( folder )                                                          // starting from this level
+			.map(
+				file => {                                                                     // iterate over all files
+					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {              // if this is a directory we just call ourself again
+						structure = [ ...GetCss( Path.join( folder, file ), structure ) ];     // and spread the result into our array
+					}
+					else {
+						if( Path.extname( file ) === '.css' ) {                                   // we only want css files and ignore invisible files
+							Log.verbose(`Found css in ${ Style.yellow( Path.join( folder, file ) ) }`);
+
+							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' );
+
+							structure.push( Path.join( folder, file ).replace( replaceString, '' ) );
+						}
+					}
+				}
+			);
+
+		return structure;
+	}
+	else {
+		return [];
+	}
+};
+
+
+/**
  * Generate the category html and write it to disk
  *
+ * @param  {array}  categories          - An array of all categories
  * @param  {array}  components          - An array of all components parsed
  * @param  {string} components.category - The category of this component
  * @param  {string} components.file     - The file name of this component
@@ -188,7 +243,7 @@ export const GetCategoryComponents = ( category, components ) => {
  *
  * @return {Promise object}             - Resolve when done
  */
-export const CreateCategory = ( components ) => {
+export const CreateCategory = ( categories, components, css ) => {
 	Log.verbose(`Creating category ${ Style.yellow( components.category ) }`);
 
 	return new Promise( ( resolve, reject ) => {
@@ -196,12 +251,15 @@ export const CreateCategory = ( components ) => {
 		const layoutPath = Path.normalize(`${ __dirname }/../${ Layout.category }`);
 
 		const ID = components[ 0 ].category === '.' ? `index` : components[ 0 ].category;
+		const level = ID === 'index' ? 0 : ID.split('/').length;
 
 		const props = {
 			_ID: ID,
 			_title: `Category ${ components[ 0 ].category }`,
-			_category: components[ 0 ].category,
+			_level: level,
+			_css: css,
 			_components: components,
+			_categories: categories,
 			_pages: Pages.get(),
 			_nav: Nav.get(),
 			_relativeURL: ( URL, ID ) => {
@@ -230,7 +288,7 @@ export const CreateCategory = ( components ) => {
  *
  * @return {Promise object} - Resolve when done
  */
-export const CreateIndex = ( categories, components ) => {
+export const CreateIndex = ( categories, components, css ) => {
 	Log.verbose(`Creating index page`);
 
 	return new Promise( ( resolve, reject ) => {
@@ -240,6 +298,7 @@ export const CreateIndex = ( categories, components ) => {
 		const props = {
 			_ID: '/homepage/',
 			_title: `Docs home`,
+			_css: css,
 			_pages: Pages.get(),
 			_nav: Nav.get(),
 			_components: components,
@@ -311,8 +370,8 @@ export const BuildPropsYaml = ( object, component ) => {
 
 	return new Promise( ( resolve, reject ) => {
 		const flags = {
-			required: `<span class="flag flag--optional">Optional</span>`,
-			default: ( value ) => `<span class="flag flag--default">default: <span class="flag__value">${ value }</span></span>`,
+			required: `<span class="cuttlebelle-flag cuttlebelle-flag--optional">Optional</span>`,
+			default: ( value ) => `<span class="cuttlebelle-flag cuttlebelle-flag--default">default: <span class="cuttlebelle-flag__value">${ value }</span></span>`,
 		};
 		let props = {};
 		let yaml = '';
@@ -370,7 +429,7 @@ export const BuildHTML = ( object, component ) => {
 		resolve({
 			file: object.file,
 			yaml: object.yaml,
-			html,
+			html: Pretty( html ),
 			component: <div dangerouslySetInnerHTML={ { __html: html } } />,
 		})
 	});
@@ -439,7 +498,9 @@ export const ReplaceMagic = ( example ) => {
  * @return {string}         - The partial placeholders
  */
 export const MakePartials = ( amount ) => {
-	return 'image '.repeat( amount );
+	const html = '<img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> '.repeat( amount );
+
+	return <div dangerouslySetInnerHTML={ { __html: html } } />
 };
 
 
@@ -485,6 +546,6 @@ const vocabulary = [
 	{
 		name: 'text',
 		func: MakeIpsum,
-		replacement: `${ Ipsum.slice(0, 91) }...`,
+		replacement: `${ Ipsum.slice(0, 53) }...`,
 	},
 ];

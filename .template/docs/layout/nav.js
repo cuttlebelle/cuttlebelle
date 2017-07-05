@@ -7,13 +7,13 @@ export const Navigation = ({
 	relativeURL = ( URL ) => URL,
 	noParents = false,
 	level = 0,
-	wrappingClass = 'navigation',
-	itemClass = 'navigation__item',
-	nestedItemClass = 'navigation__item--has-nested',
-	levelClass = 'navigation--level-',
-	ancorClass = 'navigation__item__anchor',
-	spanClass = 'navigation__item__span',
-	noanchorClass = 'navigation__item--noanchor',
+	wrappingClass = 'cuttlebelle-nav',
+	itemClass = 'cuttlebelle-nav__item',
+	nestedItemClass = 'cuttlebelle-nav__item--has-nested',
+	levelClass = 'cuttlebelle-nav--level-',
+	ancorClass = 'cuttlebelle-nav__item__anchor',
+	spanClass = 'cuttlebelle-nav__item__span',
+	noanchorClass = 'cuttlebelle-nav__item--noanchor',
 }) => (
 	<ul className={`${ wrappingClass } ${ levelClass }${ level }`}>
 		{
