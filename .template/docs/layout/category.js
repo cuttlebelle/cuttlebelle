@@ -24,13 +24,28 @@ const Category = ( page ) => (
 		<main className="cuttlebelle-docs__main">
 			<div className="cuttlebelle-docs__wrapper">
 				<h1 className="cuttlebelle-docs__main__headline">Category { page._ID }</h1>
+				<p>In this category</p>
+				<ul className="cuttlebelle-docs__main__contents">
 				{
 					page._components && page._components.map( ( component, i ) => (
-						<div key={ i } className="cuttlebelle-docs__main__component">
+						<li key={ i } className="cuttlebelle-docs__main__contents__item">
+							<a href={`#${ component.file.replace( '.js', '' ) }`} className="cuttlebelle-docs__main__contents__item__link">
+								{ component.file.replace( '.js', '' ) }
+							</a>
+						</li>
+					))
+				}
+				</ul>
+				{
+					page._components && page._components.map( ( component, i ) => (
+						<div key={ i } id={ component.file.replace( '.js', '' ) } className="cuttlebelle-docs__main__component">
 							<h2 className="cuttlebelle-docs__main__component__name">{ component.file.replace( '.js', '' ) }</h2>
 							<div className="cuttlebelle-docs__main__component__example">{ component.component }</div>
 							<pre className="cuttlebelle-docs__main__component__yaml">{ component.yaml }</pre>
-							<pre className="cuttlebelle-docs__main__component__html"><code>{ component.html }</code></pre>
+							<details className="cuttlebelle-docs__main__component__html">
+								<summary className="cuttlebelle-docs__main__component__html__showhide">Show/Hide</summary>
+								<pre><code>{ component.html }</code></pre>
+							</details>
 						</div>
 					))
 				}

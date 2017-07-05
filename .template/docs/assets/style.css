@@ -72,6 +72,22 @@ a.cuttlebelle-docs__aside__headline:focus {
 	margin-top: 0;
 }
 
+/* CONTENTS */
+.cuttlebelle-docs__main__contents {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.cuttlebelle-docs__main__contents__item__link {
+	color: #f55555;
+}
+
+.cuttlebelle-docs__main__contents__item__link:hover,
+.cuttlebelle-docs__main__contents__item__link:focus {
+	color: #623aa2;
+}
+
 /* COMPONENT */
 .cuttlebelle-docs__main__component {
 	margin: 3em 0;
@@ -79,10 +95,14 @@ a.cuttlebelle-docs__aside__headline:focus {
 
 .cuttlebelle-partial {
 	display: block;
-	max-width: 100%;
+	width: 100%;
 }
 
-.cuttlebelle-docs__main__component:not(:nth-child(2)) {
+.cuttlebelle-partial:not(:first-child) {
+	margin-top: 1em;
+}
+
+.cuttlebelle-docs__main__component:not( :nth-child( 4 ) ) {
 	border-top: 4px dashed rgba(45, 186, 172, 0.2);
 	padding-top: 3em;
 }
@@ -105,9 +125,14 @@ a.cuttlebelle-docs__aside__headline:focus {
 	color: #fff;
 }
 
+.cuttlebelle-docs__main__component__yaml {
+	line-height: 1.5;
+}
+
 .cuttlebelle-docs__main__component__example {
 	background-color: #fff;
 	border-color: #32ccbc;
+	white-space: normal;
 	color: #313131;
 }
 
@@ -135,7 +160,15 @@ a.cuttlebelle-docs__aside__headline:focus {
 	content: 'HTML';
 }
 
-/* YAML */
+.cuttlebelle-docs__main__component__html__showhide {
+	color: #f55555;
+}
+
+.cuttlebelle-docs__main__component__html__showhide:hover {
+	cursor: pointer;
+}
+
+/* FLAG */
 .cuttlebelle-flag {
 	float: right;
 	font-size: 10px;
