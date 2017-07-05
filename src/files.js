@@ -160,7 +160,7 @@ export const CopyFiles = ( source, destination ) => {
 	Log.verbose(`Copy frolder from ${ Style.yellow( source ) } to ${ Style.yellow( destination ) }`);
 
 	return new Promise( ( resolve, reject ) => {
-		RemoveDir([ destination ]); //remove destination first
+		RemoveDir([ destination ]); // remove destination first
 
 		if( Fs.existsSync( source ) ) {
 			Ncp.ncp( source, destination, ( error ) => {

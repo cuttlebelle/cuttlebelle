@@ -36,8 +36,8 @@ import Fs from 'fs';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import { ReadFile, CreateFile, RemoveDir } from './files';
 import { RenderReact, RenderAssets } from './render';
-import { ReadFile, CreateFile } from './files';
 import { ParseYaml, ParseMD } from './parse';
 import { SETTINGS } from './settings.js';
 import { Log, Style } from './helper';
@@ -64,46 +64,57 @@ export const BuildDocs = () => {
 	const categories = GetCategories( components );
 	const css = GetCss();
 	const allLayouts = [];
-	const forNav = [];
-	const forPages = [];
 
 	categories.map( category => {
 		allLayouts.push(
 			GetCategoryComponents( category, components ) // getting HTML of components for each category
 		);
-
-		if( category === '.' ) {
-			category = 'index'; // preparing some props for the pages
-		}
-
-		forNav.push( category );
-		const inside = [];
-
-		components.map( component => {
-			if( category === Path.dirname( component ) || category === 'index' && Path.dirname( component ) === '.' ) {
-				inside.push( component );
-			}
-		});
-
-		forPages.push({
-			ID: category,
-			components: inside,
-		});
-
-
-		Pages.inject( category, { title: category }); // injecting the props for each page
 	});
-
-	Nav.set( forNav );
 
 
 	return new Promise( ( resolve, reject ) => {
 		Promise.all( allLayouts )
 			.catch( error => reject( error ) )
 			.then( pages => {
+				const enabledPages = [];
 				const allPages = [];
+				const forPages = [];
+				const forNav = [];
 
-				pages.map( page => {
+				RemoveDir([ SETTINGS.get().folder.docs ]);        // empty docs folder first
+
+				pages.map( page => {                              // let’s prepare some props
+					let category = Path.dirname( page[ 0 ].file );
+					const inside = [];
+
+					page.map( component => {                        // weed out all disabled components
+						if( !component.disabled ) {
+							inside.push( component.file );
+						}
+					});
+
+					if( inside.length > 0 ) {
+						if( category === '.' ) {
+							category = 'index';                         // preparing some props for the pages
+						}
+
+						forNav.push( category );
+
+						forPages.push({
+							ID: category,
+							components: inside,
+						});
+
+						Pages.inject( category, { title: category }); // injecting the props for each page
+
+						enabledPages.push( page );
+					}
+				});
+
+				Nav.set( forNav );
+
+
+				enabledPages.map( page => {
 					allPages.push(
 						CreateCategory( forPages, page, css )  // let’s create each category page
 					);
@@ -113,11 +124,11 @@ export const BuildDocs = () => {
 					CreateIndex( forPages, components, css ) // also need that homepage
 				);
 
-				allPages.push(                             // and assets; no sexy look without assets!
+				allPages.push(                             // and docs assets; no sexy look without assets!
 					RenderAssets( Path.normalize(`${ __dirname }/../.template/docs/assets/`), Path.normalize(`${ SETTINGS.get().folder.docs }/assets/`) )
 				);
 
-				allPages.push(
+				allPages.push(                             // we also need all css files from our project
 					RenderAssets( SETTINGS.get().folder.assets, Path.normalize(`${ SETTINGS.get().folder.docs }/assets/pages/`) )
 				);
 
@@ -408,6 +419,7 @@ export const BuildPropsYaml = ( object, component ) => {
 			file: object.file,
 			infos: object.infos,
 			props,
+			disabled: object.infos.description.includes('@disable-docs'),
 			yaml: <div dangerouslySetInnerHTML={ { __html: yaml } } />,
 		})
 	});
@@ -435,6 +447,7 @@ export const BuildHTML = ( object, component ) => {
 		resolve({
 			file: object.file,
 			yaml: object.yaml,
+			disabled: object.disabled,
 			html: Pretty( html ),
 			component: <div dangerouslySetInnerHTML={ { __html: html } } />,
 		})
