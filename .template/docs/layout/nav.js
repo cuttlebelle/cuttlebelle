@@ -25,7 +25,7 @@ export const Navigation = ({
 					if( noParents && ID.startsWith( pageID ) || !noParents ) {
 						return <li className={`${ itemClass } ${ nestedItemClass }`} key={ i }>
 							{
-								_displayItem
+								typeof pages[ pageID ] != 'undefined' && _displayItem
 									? <NavigationItem
 											href={ relativeURL( pages[ pageID ].url, ID ) }
 											title={ pages[ pageID ].title }
