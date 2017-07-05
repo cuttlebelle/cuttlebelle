@@ -58,7 +58,7 @@ test('ToNested() - Non arrays stay whatever they are', () => {
 
 test('ToNested() - Should split path into array correctly', () => {
 	const nested = [ 'one/two', 'one', 'three' ];
-	const match = { one: { 'one/two': 'one/two' }, three: 'three' };
+	const match = { index: { one: { 'one/two': 'one/two' }, three: 'three' } };
 	expect( ToNested( nested ) ).toMatchObject( match );
 });
 
@@ -67,7 +67,7 @@ test('ToNested() - Should split path into array correctly', () => {
 // Nav
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 Nav.set( [ 'one', 'one/two', 'three' ] );
-const match = { one: { 'one/two': 'one/two' }, three: 'three' };
+const match = { index: { one: { 'one/two': 'one/two' }, three: 'three' } };
 
 test('Nav.set - Sets the nav correctly from an array', () => {
 	expect( Nav.all ).toMatchObject( match );
