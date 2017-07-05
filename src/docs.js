@@ -2,6 +2,22 @@
  *
  * Build documentation from your react layouts
  *
+ * Ipsum                 - The source of our ipsum lorem
+ * BuildDocs             - Build our docs from the source folder
+ * GetCategories         - Get an array of folder names from an array of paths
+ * GetCategoryComponents - Pick all components of a category and send them to the parser
+ * GetCss                - Get all css files from the assets folder recursively
+ * CreateCategory        - Generate the category html and write it to disk
+ * CreateIndex           - Generate the homepage html and write it to disk
+ * ParseComponent        - Get infos about a react component by running it through our propType parser
+ * BuildPropsYaml        - Build our props and yaml from the description of our propTypes
+ * BuildHTML             - Build out HTML for the component so we can show it
+ * ParseExample          - Parse an example object
+ * ReplaceMagic          - Replace some magic strings with something more human readable
+ * MakePartials          - Make a partial placeholder
+ * MakeIpsum             - Make some dummy text from a text file with n amount of sentences
+ * vocabulary            - Magic strings and how to handle them
+ *
  **************************************************************************************************************************************************************/
 
 'use strict';
@@ -35,20 +51,7 @@ import { Nav } from './nav';
  *
  * @type {string}
  */
-const Ipsum = Fs.readFileSync( Path.normalize(`${ __dirname }/../assets/ipsum.txt`), 'utf8' );
-
-
-/**
- * The layout files we use to render the docs
- *
- * @type {Object}
- */
-const Layout = {
-	index: '.template/docs/layout/index.js',
-	category: '.template/docs/layout/category.js',
-};
-
-const Root = 'files/';
+export const Ipsum = Fs.readFileSync( Path.normalize(`${ __dirname }/../assets/ipsum.txt`), 'utf8' );
 
 
 /**
@@ -129,7 +132,7 @@ export const BuildDocs = () => {
 
 
 /**
- * Get all categories from our src/ folders
+ * Get an array of folder names from an array of paths
  *
  * @param  {array} components - An array of all layout components
  *
@@ -247,8 +250,8 @@ export const CreateCategory = ( categories, components, css ) => {
 	Log.verbose(`Creating category ${ Style.yellow( components.category ) }`);
 
 	return new Promise( ( resolve, reject ) => {
-		const categoryPath = Path.normalize(`${ SETTINGS.get().folder.docs }/${ Root }/${ components[ 0 ].category }/index.html`);
-		const layoutPath = Path.normalize(`${ __dirname }/../${ Layout.category }`);
+		const categoryPath = Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }/${ components[ 0 ].category }/index.html`);
+		const layoutPath = Path.normalize(`${ __dirname }/../${ SETTINGS.get().docs.category }`);
 
 		const ID = components[ 0 ].category === '.' ? `index` : components[ 0 ].category;
 		const level = ID === 'index' ? 0 : ID.split('/').length;
@@ -267,7 +270,10 @@ export const CreateCategory = ( categories, components, css ) => {
 					ID = `.`;
 				}
 
-				return Path.relative( Path.normalize(`${ SETTINGS.get().folder.docs }/${ Root }${ ID }`), Path.normalize(`${ SETTINGS.get().folder.docs }/${ Root }/${ URL }`));
+				return Path.relative(
+					Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }${ ID }`),
+					Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }/${ URL }`)
+				);
 			},
 		};
 
@@ -293,7 +299,7 @@ export const CreateIndex = ( categories, components, css ) => {
 
 	return new Promise( ( resolve, reject ) => {
 		const categoryPath = Path.normalize(`${ SETTINGS.get().folder.docs }/index.html`);
-		const layoutPath = Path.normalize(`${ __dirname }/../${ Layout.index }`);
+		const layoutPath = Path.normalize(`${ __dirname }/../${ SETTINGS.get().docs.index }`);
 
 		const props = {
 			_ID: '/homepage/',
@@ -308,7 +314,7 @@ export const CreateIndex = ( categories, components, css ) => {
 					ID = '.';
 				}
 
-				return Path.relative( SETTINGS.get().folder.docs, Path.normalize(`${ SETTINGS.get().folder.docs }/${ Root }/${ URL }`));
+				return Path.relative( SETTINGS.get().folder.docs, Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }/${ URL }`));
 			},
 		};
 
@@ -537,7 +543,7 @@ export const MakeIpsum = ( amount ) => {
  *
  * @type {Array}
  */
-const vocabulary = [
+export const vocabulary = [
 	{
 		name: 'partials',
 		func: MakePartials,

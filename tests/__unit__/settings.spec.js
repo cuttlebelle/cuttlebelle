@@ -38,6 +38,11 @@ test('SETTINGS.get() - The default settings are correct', () => {
 			redirectReact: true,
 			markdownRenderer: '',
 		},
+		docs: {
+			root: 'files/',
+			index: '.template/docs/layout/index.js',
+			category: '.template/docs/layout/category.js',
+		},
 	};
 
 	expect( SETTINGS.get() ).toMatchObject( defaults );
@@ -67,6 +72,11 @@ test('SETTINGS.set() - Not setting anything will merge default correctly', () =>
 			redirectReact: true,
 			markdownRenderer: '',
 		},
+		docs: {
+			root: 'files/',
+			index: '.template/docs/layout/index.js',
+			category: '.template/docs/layout/category.js',
+		},
 	};
 
 	expect( SETTINGS.set( changes ) ).toMatchObject( settings );
@@ -95,6 +105,11 @@ test('SETTINGS.set() - Not setting folder will merge default correctly', () => {
 			doctype: '<!DOCTYPE html>',
 			redirectReact: true,
 			markdownRenderer: '',
+		},
+		docs: {
+			root: 'files/',
+			index: '.template/docs/layout/index.js',
+			category: '.template/docs/layout/category.js',
 		},
 	};
 
@@ -129,6 +144,11 @@ test('SETTINGS.set() - Prevent cwd from being set', () => {
 			redirectReact: true,
 			markdownRenderer: '',
 		},
+		docs: {
+			root: 'files/',
+			index: '.template/docs/layout/index.js',
+			category: '.template/docs/layout/category.js',
+		},
 	};
 
 	expect( SETTINGS.set( changes ) ).toMatchObject( settings );
@@ -144,6 +164,9 @@ test('SETTINGS.set() - Set settings correctly', () => {
 			page: 'test',
 		},
 		site: {
+			root: 'test',
+		},
+		docs: {
 			root: 'test',
 		},
 	};
@@ -167,6 +190,11 @@ test('SETTINGS.set() - Set settings correctly', () => {
 			doctype: '<!DOCTYPE html>',
 			redirectReact: true,
 			markdownRenderer: '',
+		},
+		docs: {
+			root: 'test',
+			index: '.template/docs/layout/index.js',
+			category: '.template/docs/layout/category.js',
 		},
 	};
 
@@ -196,6 +224,11 @@ test('SETTINGS.set() - Set all settings correctly', () => {
 			redirectReact: 'test',
 			markdownRenderer: 'test',
 		},
+		docs: {
+			root: 'test',
+			index: 'test',
+			category: 'test',
+		},
 	};
 	const settings = {
 		folder: {
@@ -217,6 +250,11 @@ test('SETTINGS.set() - Set all settings correctly', () => {
 			doctype: 'test',
 			redirectReact: 'test',
 			markdownRenderer: 'test',
+		},
+		docs: {
+			root: 'test',
+			index: 'test',
+			category: 'test',
 		},
 	};
 

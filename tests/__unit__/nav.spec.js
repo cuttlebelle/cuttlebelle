@@ -62,6 +62,12 @@ test('ToNested() - Should split path into array correctly', () => {
 	expect( ToNested( nested ) ).toMatchObject( match );
 });
 
+test('ToNested() - Should add index to the beginning', () => {
+	const nested = [ 'index', 'one/two', 'one', 'three' ];
+	const match = { index: { one: { 'one/two': 'one/two' }, three: 'three' } };
+	expect( ToNested( nested ) ).toMatchObject( match );
+});
+
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Nav

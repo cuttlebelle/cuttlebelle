@@ -56,6 +56,11 @@ export const SETTINGS = {
 			redirectReact: true,
 			markdownRenderer: '',
 		},
+		docs: {
+			root: 'files/',
+			index: '.template/docs/layout/index.js',
+			category: '.template/docs/layout/category.js',
+		},
 	},
 
 
@@ -90,6 +95,9 @@ export const SETTINGS = {
 			if( !localSettings.site ) {
 				localSettings.site = {};
 			}
+			if( !localSettings.docs ) {
+				localSettings.docs = {};
+			}
 
 			delete localSettings.folder.cwd; // ignore the cwd key
 
@@ -115,6 +123,7 @@ export const SETTINGS = {
 			newSettings.folder = Object.assign( SETTINGS.defaults.folder, localSettings.folder );
 			newSettings.layouts = Object.assign( SETTINGS.defaults.layouts, localSettings.layouts );
 			newSettings.site = Object.assign( SETTINGS.defaults.site, localSettings.site );
+			newSettings.docs = Object.assign( SETTINGS.defaults.docs, localSettings.docs );
 
 			SETTINGS.defaults = newSettings;
 
