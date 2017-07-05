@@ -62,13 +62,11 @@ test('GetCategories() - Gets all categories from an array', () => {
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 test('GetCss() - Gets all css files from mock folder', () => {
 	const folders = [
-		// Path.normalize(`${ __dirname }/mocks/src/layout.js`),
-		// Path.normalize(`${ __dirname }/mocks/src/layout1.js`),
-		// Path.normalize(`${ __dirname }/mocks/src/layout2.js`),
-		// Path.normalize(`${ __dirname }/mocks/src/layout3.js`),
-		// Path.normalize(`${ __dirname }/mocks/src/folder/layout.js`),
-		// Path.normalize(`${ __dirname }/mocks/src/folder/layout1.js`),
-		// Path.normalize(`${ __dirname }/mocks/src/folder/subfolder/layout.js`),
+		Path.normalize(`${ __dirname }/mocks/assets/nesting/nested/style.css`),
+		Path.normalize(`${ __dirname }/mocks/assets/nesting/style.css`),
+		Path.normalize(`${ __dirname }/mocks/assets/style.css`),
+		Path.normalize(`${ __dirname }/mocks/assets/test/style.css`),
+		Path.normalize(`${ __dirname }/mocks/assets/test/style2.css`),
 	];
 
 	expect( GetCss( Path.normalize(`${ __dirname }/mocks/assets`) ) ).toEqual( expect.arrayContaining( folders ) );
