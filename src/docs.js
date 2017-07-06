@@ -86,10 +86,12 @@ export const BuildDocs = () => {
 				pages.map( page => {                              // let’s prepare some props
 					let category = Path.dirname( page[ 0 ].file );
 					const inside = [];
+					const enabledComponents = [];
 
 					page.map( component => {                        // weed out all disabled components
 						if( !component.disabled ) {
 							inside.push( component.file );
+							enabledComponents.push( component );
 						}
 					});
 
@@ -107,7 +109,7 @@ export const BuildDocs = () => {
 
 						Pages.inject( category, { title: category }); // injecting the props for each page
 
-						enabledPages.push( page );
+						enabledPages.push( enabledComponents );
 					}
 				});
 
@@ -362,10 +364,13 @@ export const ParseComponent = ( component ) => {
 					});
 				}
 				catch( error ) {
-					Log.error(`Trying to gather infos from the react component ${ Style.yellow( component ) } failed.`);
-					Log.error( error );
+					Log.info(`Trying to gather infos from the react component ${ Style.yellow( component ) } failed.`);
+					Log.info( error );
 
-					process.exit( 1 );
+					resolve({
+						file: component,
+						infos: {},
+					});
 				}
 			}
 		);
@@ -392,8 +397,12 @@ export const BuildPropsYaml = ( object, component ) => {
 		};
 		let props = {};
 		let yaml = '';
+		let disabled = false;
+		if( object.infos.description ) {
+			disabled = object.infos.description.includes('@disable-docs');
+		}
 
-		if( object.infos.props ) {
+		if( object.infos.props && !disabled ) {
 			Object.keys( object.infos.props ).map( propKey => {
 				const prop = object.infos.props[ propKey ];
 				let example;
@@ -419,7 +428,7 @@ export const BuildPropsYaml = ( object, component ) => {
 			file: object.file,
 			infos: object.infos,
 			props,
-			disabled: object.infos.description.includes('@disable-docs'),
+			disabled,
 			yaml: <div dangerouslySetInnerHTML={ { __html: yaml } } />,
 		})
 	});
@@ -441,8 +450,12 @@ export const BuildHTML = ( object, component ) => {
 	Log.verbose(`Building HTML for ${ Style.yellow( component ) }`);
 
 	return new Promise( ( resolve, reject ) => {
-		const componentPath = Path.normalize(`${ SETTINGS.get().folder.src }/${ object.file }`);
-		const html = RenderReact( componentPath, object.props );
+		let html = '';
+
+		if( !object.disabled ) {
+			const componentPath = Path.normalize(`${ SETTINGS.get().folder.src }/${ object.file }`);
+			html = RenderReact( componentPath, object.props );
+		}
 
 		resolve({
 			file: object.file,
