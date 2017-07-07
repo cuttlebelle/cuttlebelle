@@ -18,6 +18,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import RequireFromString from 'require-from-string';
 import ReactDOMServer from 'react-dom/server';
 import Traverse from 'traverse';
 import React from 'react';
@@ -45,10 +46,11 @@ import { Nav } from './nav';
  *
  * @param  {string} componentPath - The path to the react component
  * @param  {object} props         - The props
+ * @param  {object} source        - An optional string to compile from a string rather than from a file, optional
  *
  * @return {string}               - The static markup of the component
  */
-export const RenderReact = ( componentPath, props ) => {
+export const RenderReact = ( componentPath, props, source = '' ) => {
 	Log.verbose(`Rendering react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.src, '' ) ) }`);
 
 	try {
@@ -77,7 +79,7 @@ export const RenderReact = ( componentPath, props ) => {
 				presetStage0,
 				presetReact,
 			],
-			cache: !Watch.running, // we don’t need to cache in the watch
+			cache: !Watch.running, // we don’t need to cache during watch
 		};
 
 		// optional we redirect import statements for react to our local node_module folder
@@ -97,9 +99,15 @@ export const RenderReact = ( componentPath, props ) => {
 			];
 		}
 
-		require('babel-register')( registerObj );
+		let component;
+		if( source !== '' ) { // require from string
+			component = RequireBabelfy( source, registerObj ).default;
+		}
+		else {                // require from file
+			require('babel-register')( registerObj );
 
-		const component = require( componentPath ).default;
+			component = require( componentPath ).default;
+		}
 
 		return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
 	}
@@ -113,6 +121,29 @@ export const RenderReact = ( componentPath, props ) => {
 
 		return '';
 	}
+}
+
+
+/**
+ * Require from a string and babelfy the content first
+ *
+ * @param  {string} source - The source code to be babelfied and required
+ *
+ * @return {object}        - The require object
+ */
+const RequireBabelfy = ( source ) => {
+
+	const registerObj = {
+		presets: [
+			'babel-preset-es2015',
+			'babel-preset-stage-0',
+			'babel-preset-react',
+		],
+	};
+
+	const transpiledSource = require("babel-core").transform( source, registerObj );
+
+	return RequireFromString( transpiledSource.code );
 }
 
 

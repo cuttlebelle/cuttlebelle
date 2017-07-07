@@ -40,8 +40,40 @@ test('SETTINGS.get() - The default settings are correct', () => {
 		},
 		docs: {
 			root: 'files/',
-			index: '.template/docs/layout/index.js',
-			category: '.template/docs/layout/category.js',
+			index: Path.normalize(`${ __dirname }/../../.template/docs/layout/index.js`),
+			category: Path.normalize(`${ __dirname }/../../.template/docs/layout/category.js`),
+			IDProp: 'page2',
+			navProp: {
+				index: {
+					page1: 'page1',
+					page2: {
+						'page2/nested': 'page2/nested',
+					},
+					page3: 'page3',
+				},
+			},
+			pagesProp: {
+				page1: {
+					url: '/page1',
+					title: 'Page 1',
+				},
+				page2: {
+					url: '/page2',
+					title: 'Page 2',
+				},
+				'page2/nested': {
+					url: '/page2/nested',
+					title: 'Nested in page 2',
+				},
+				page3: {
+					url: '/page3',
+					title: 'Page 3',
+				},
+				index: {
+					url: '/',
+					title: 'Homepage',
+				},
+			},
 		},
 	};
 
@@ -74,8 +106,40 @@ test('SETTINGS.set() - Not setting anything will merge default correctly', () =>
 		},
 		docs: {
 			root: 'files/',
-			index: '.template/docs/layout/index.js',
-			category: '.template/docs/layout/category.js',
+			index: Path.normalize(`${ __dirname }/../../.template/docs/layout/index.js`),
+			category: Path.normalize(`${ __dirname }/../../.template/docs/layout/category.js`),
+			IDProp: 'page2',
+			navProp: {
+				index: {
+					page1: 'page1',
+					page2: {
+						'page2/nested': 'page2/nested',
+					},
+					page3: 'page3',
+				},
+			},
+			pagesProp: {
+				page1: {
+					url: '/page1',
+					title: 'Page 1',
+				},
+				page2: {
+					url: '/page2',
+					title: 'Page 2',
+				},
+				'page2/nested': {
+					url: '/page2/nested',
+					title: 'Nested in page 2',
+				},
+				page3: {
+					url: '/page3',
+					title: 'Page 3',
+				},
+				index: {
+					url: '/',
+					title: 'Homepage',
+				},
+			},
 		},
 	};
 
@@ -83,7 +147,7 @@ test('SETTINGS.set() - Not setting anything will merge default correctly', () =>
 });
 
 
-test('SETTINGS.set() - Not setting folder will merge default correctly', () => {
+test('SETTINGS.set() - An empty object as settings folder will merge default correctly', () => {
 	const changes = {};
 	const settings = {
 		folder: {
@@ -108,8 +172,40 @@ test('SETTINGS.set() - Not setting folder will merge default correctly', () => {
 		},
 		docs: {
 			root: 'files/',
-			index: '.template/docs/layout/index.js',
-			category: '.template/docs/layout/category.js',
+			index: Path.normalize(`${ __dirname }/../../.template/docs/layout/index.js`),
+			category: Path.normalize(`${ __dirname }/../../.template/docs/layout/category.js`),
+			IDProp: 'page2',
+			navProp: {
+				index: {
+					page1: 'page1',
+					page2: {
+						'page2/nested': 'page2/nested',
+					},
+					page3: 'page3',
+				},
+			},
+			pagesProp: {
+				page1: {
+					url: '/page1',
+					title: 'Page 1',
+				},
+				page2: {
+					url: '/page2',
+					title: 'Page 2',
+				},
+				'page2/nested': {
+					url: '/page2/nested',
+					title: 'Nested in page 2',
+				},
+				page3: {
+					url: '/page3',
+					title: 'Page 3',
+				},
+				index: {
+					url: '/',
+					title: 'Homepage',
+				},
+			},
 		},
 	};
 
@@ -146,8 +242,40 @@ test('SETTINGS.set() - Prevent cwd from being set', () => {
 		},
 		docs: {
 			root: 'files/',
-			index: '.template/docs/layout/index.js',
-			category: '.template/docs/layout/category.js',
+			index: Path.normalize(`${ __dirname }/../../.template/docs/layout/index.js`),
+			category: Path.normalize(`${ __dirname }/../../.template/docs/layout/category.js`),
+			IDProp: 'page2',
+			navProp: {
+				index: {
+					page1: 'page1',
+					page2: {
+						'page2/nested': 'page2/nested',
+					},
+					page3: 'page3',
+				},
+			},
+			pagesProp: {
+				page1: {
+					url: '/page1',
+					title: 'Page 1',
+				},
+				page2: {
+					url: '/page2',
+					title: 'Page 2',
+				},
+				'page2/nested': {
+					url: '/page2/nested',
+					title: 'Nested in page 2',
+				},
+				page3: {
+					url: '/page3',
+					title: 'Page 3',
+				},
+				index: {
+					url: '/',
+					title: 'Homepage',
+				},
+			},
 		},
 	};
 
@@ -193,8 +321,40 @@ test('SETTINGS.set() - Set settings correctly', () => {
 		},
 		docs: {
 			root: 'test',
-			index: '.template/docs/layout/index.js',
-			category: '.template/docs/layout/category.js',
+			index: Path.normalize(`${ __dirname }/../../.template/docs/layout/index.js`),
+			category: Path.normalize(`${ __dirname }/../../.template/docs/layout/category.js`),
+			IDProp: 'page2',
+			navProp: {
+				index: {
+					page1: 'page1',
+					page2: {
+						'page2/nested': 'page2/nested',
+					},
+					page3: 'page3',
+				},
+			},
+			pagesProp: {
+				page1: {
+					url: '/page1',
+					title: 'Page 1',
+				},
+				page2: {
+					url: '/page2',
+					title: 'Page 2',
+				},
+				'page2/nested': {
+					url: '/page2/nested',
+					title: 'Nested in page 2',
+				},
+				page3: {
+					url: '/page3',
+					title: 'Page 3',
+				},
+				index: {
+					url: '/',
+					title: 'Homepage',
+				},
+			},
 		},
 	};
 
@@ -226,8 +386,11 @@ test('SETTINGS.set() - Set all settings correctly', () => {
 		},
 		docs: {
 			root: 'test',
-			index: 'test',
-			category: 'test',
+			index: 'test.js',
+			category: 'test.js',
+			IDProp: 'test',
+			navProp: { test: 'test' },
+			pagesProp: { test: 'test' },
 		},
 	};
 	const settings = {
@@ -253,10 +416,42 @@ test('SETTINGS.set() - Set all settings correctly', () => {
 		},
 		docs: {
 			root: 'test',
-			index: 'test',
-			category: 'test',
+			index: Path.normalize(`${ process.cwd() }/test.js`),
+			category: Path.normalize(`${ process.cwd() }/test.js`),
+			IDProp: 'test',
+			navProp: { test: 'test' },
+			pagesProp: { test: 'test' },
 		},
 	};
 
 	expect( SETTINGS.set( changes ) ).toMatchObject( settings );
+});
+
+
+test('SETTINGS.set() - Merge docs "nav" and "pages" object correctly', () => {
+	const changes = {
+		docs: {
+			navProp: {
+				test: 'test',
+				test2: {
+					test3: 'test3',
+				},
+			},
+			pagesProp: { test2: 'test2' },
+		},
+	};
+	const settings = {
+		root: 'test',
+		index: Path.normalize(`${ process.cwd() }/test.js`),
+		category: Path.normalize(`${ process.cwd() }/test.js`),
+		navProp: {
+			test: 'test',
+			test2: {
+				test3: 'test3',
+			},
+		},
+		pagesProp: { test2: 'test2' },
+	};
+
+	expect( SETTINGS.set( changes ).docs ).toMatchObject( settings );
 });

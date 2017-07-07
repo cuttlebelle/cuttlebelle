@@ -264,7 +264,7 @@ export const CreateCategory = ( categories, components, css ) => {
 
 	return new Promise( ( resolve, reject ) => {
 		const categoryPath = Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }/${ components[ 0 ].category }/index.html`);
-		const layoutPath = Path.normalize(`${ __dirname }/../${ SETTINGS.get().docs.category }`);
+		const layoutPath = SETTINGS.get().docs.category;
 
 		const ID = components[ 0 ].category === '.' ? `index` : components[ 0 ].category;
 		const level = ID === 'index' ? 0 : ID.split('/').length;
@@ -290,10 +290,10 @@ export const CreateCategory = ( categories, components, css ) => {
 			},
 		};
 
-		const html = RenderReact( layoutPath, props );
-
-		CreateFile( categoryPath, html )
+		ReadFile( layoutPath )
 			.catch( error => reject( error ) )
+			.then( layout => RenderReact( '', props, layout ) )
+			.then( html => CreateFile( categoryPath, html ) )
 			.then( () => resolve() );
 	});
 };
@@ -312,7 +312,7 @@ export const CreateIndex = ( categories, components, css ) => {
 
 	return new Promise( ( resolve, reject ) => {
 		const categoryPath = Path.normalize(`${ SETTINGS.get().folder.docs }/index.html`);
-		const layoutPath = Path.normalize(`${ __dirname }/../${ SETTINGS.get().docs.index }`);
+		const layoutPath = SETTINGS.get().docs.index;
 
 		const props = {
 			_ID: '/homepage/',
@@ -331,10 +331,10 @@ export const CreateIndex = ( categories, components, css ) => {
 			},
 		};
 
-		const html = RenderReact( layoutPath, props );
-
-		CreateFile( categoryPath, html )
+		ReadFile( layoutPath )
 			.catch( error => reject( error ) )
+			.then( layout => RenderReact( '', props, layout ) )
+			.then( html => CreateFile( categoryPath, html ) )
 			.then( () => resolve() );
 	})
 };
@@ -451,6 +451,17 @@ export const BuildHTML = ( object, component ) => {
 
 	return new Promise( ( resolve, reject ) => {
 		let html = '';
+
+		// let’s provide the same props a real site would have
+		object.props._ID = object.props._ID || SETTINGS.get().docs.IDProp;
+		object.props._nav = object.props._nav || SETTINGS.get().docs.navProp;
+		object.props._pages = object.props._pages || SETTINGS.get().docs.pagesProp;
+
+		const parents = object.props._ID.split('/').map( ( item, i ) => {
+			return object.props._ID.split('/').splice( 0, object.props._ID.split('/').length - i ).join('/');
+		}).reverse();
+
+		object.props._parents = object.props._parents || parents;
 
 		if( !object.disabled ) {
 			const componentPath = Path.normalize(`${ SETTINGS.get().folder.src }/${ object.file }`);

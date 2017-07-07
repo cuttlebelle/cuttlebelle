@@ -75,7 +75,7 @@ const Navigation = ({
 );
 
 
-export const NavigationItem = ({ itemClass, ancorClass, spanClass, href, title, thisPage }) => {
+const NavigationItem = ({ itemClass, ancorClass, spanClass, href, title, thisPage }) => {
 	if( thisPage ) {
 		return <span className={ spanClass }>{ title }</span>;
 	}

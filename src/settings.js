@@ -58,8 +58,40 @@ export const SETTINGS = {
 		},
 		docs: {
 			root: 'files/',
-			index: '.template/docs/layout/index.js',
-			category: '.template/docs/layout/category.js',
+			index: Path.normalize(`${ __dirname }/../.template/docs/layout/index.js`),
+			category: Path.normalize(`${ __dirname }/../.template/docs/layout/category.js`),
+			IDProp: 'page2',
+			navProp: {
+				index: {
+					page1: 'page1',
+					page2: {
+						'page2/nested': 'page2/nested',
+					},
+					page3: 'page3',
+				},
+			},
+			pagesProp: {
+				page1: {
+					url: '/page1',
+					title: 'Page 1',
+				},
+				page2: {
+					url: '/page2',
+					title: 'Page 2',
+				},
+				'page2/nested': {
+					url: '/page2/nested',
+					title: 'Nested in page 2',
+				},
+				page3: {
+					url: '/page3',
+					title: 'Page 3',
+				},
+				index: {
+					url: '/',
+					title: 'Homepage',
+				},
+			},
 		},
 	},
 
@@ -116,6 +148,13 @@ export const SETTINGS = {
 			}
 			if( localSettings.folder.assets && !Path.isAbsolute( localSettings.folder.assets ) ) {
 				localSettings.folder.assets = Path.normalize(`${ process.cwd() }/${ localSettings.folder.assets }/`);
+			}
+
+			if( localSettings.docs.index && !Path.isAbsolute( localSettings.docs.index ) ) {
+				localSettings.docs.index = Path.normalize(`${ process.cwd() }/${ localSettings.docs.index }`);
+			}
+			if( localSettings.docs.category && !Path.isAbsolute( localSettings.docs.category ) ) {
+				localSettings.docs.category = Path.normalize(`${ process.cwd() }/${ localSettings.docs.category }`);
 			}
 
 			const newSettings = {};

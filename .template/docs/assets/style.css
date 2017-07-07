@@ -136,6 +136,11 @@ a.cuttlebelle-docs__aside__headline:focus {
 	color: #313131;
 }
 
+.cuttlebelle-docs__main__component__example > div {
+	overflow: auto;
+	padding-top: 3em;
+}
+
 .cuttlebelle-docs__main__component__example:after,
 .cuttlebelle-docs__main__component__yaml:after,
 .cuttlebelle-docs__main__component__html:after {
