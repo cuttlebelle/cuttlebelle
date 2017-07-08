@@ -1,6 +1,9 @@
 layout: layout/homepage
 title: Titles are awesome!
 stylesheet: homepage
+header:
+  title: title one
+  intro: Lorem Ipsum stuff
 partials:
   - partial1.md
   - partial2.md

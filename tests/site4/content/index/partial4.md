@@ -1,6 +1,5 @@
 ---
 title: partial4
-layout: layout/cards
 cards:
   - id: ID1
     title: Card1

@@ -3,6 +3,7 @@
  * Render partials or even whole pages
  *
  * RenderReact     - Render a react component to string
+ * RequireBabelfy  - Require from a string and babelfy the content first
  * RenderFile      - Render a file to HTML
  * IteratePartials - Iterate frontmatter and look for partials to render
  * RenderPartial   - Render a partial to HTML from the string inside frontmatter
@@ -101,7 +102,7 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 
 		let component;
 		if( source !== '' ) { // require from string
-			component = RequireBabelfy( source, registerObj ).default;
+			component = RequireBabelfy( source ).default;
 		}
 		else {                // require from file
 			require('babel-register')( registerObj );
@@ -131,7 +132,7 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
  *
  * @return {object}        - The require object
  */
-const RequireBabelfy = ( source ) => {
+export const RequireBabelfy = ( source ) => {
 
 	const registerObj = {
 		presets: [

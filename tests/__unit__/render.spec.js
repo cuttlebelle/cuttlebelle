@@ -6,10 +6,12 @@
  *
  * Testing methods:
  * RenderReact
+ * RequireBabelfy
  **************************************************************************************************************************************************************/
 
 
-import { RenderReact } from '../../src/render';
+import { RenderReact, RequireBabelfy } from '../../src/render';
+import React from 'react';
 import Path from 'path';
 
 
@@ -103,4 +105,24 @@ test('RenderReact() - Render react components correctly', () => {
 		'<li class=\"navigation__item\"><a class=\"navigation__item__anchor\" href=\"page2\">Page 2</a></li></ul></nav><div>Main content</div></main>' +
 		'<aside>Aside content</aside></body></html>';
 	expect( RenderReact( file2, props2 ) ).toBe( HTML2 );
+});
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// RequireBabelfy
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+test('RequireBabelfy() - xxx', () => {
+	const reactSource = `
+		import React from 'react';
+
+		export default ( props ) => (
+			<article>
+				<h2>{ props.title }</h2>
+				<div>{ props._body }</div>
+			</article>
+		);
+	`;
+	const outcome = {};
+
+	expect( RequireBabelfy( reactSource ) ).toMatchObject( outcome );
 });

@@ -193,8 +193,8 @@ export const GetCategoryComponents = ( category, components ) => {
 
 					allComponents.push(
 						ParseComponent( component )                                // Parse the component first
-							.then( ( data ) => BuildPropsYaml( data, component ) )   // then we build the yaml and props
-							.then( ( data ) => BuildHTML( data, component ) )        // now we shoot it all into the HTML blender
+							.then( ( data ) => BuildPropsYaml( data ) )              // then we build the yaml and props
+							.then( ( data ) => BuildHTML( data ) )                   // now we shoot it all into the HTML blender
 							.then( data => Object.assign( {}, { category }, data ) ) // and finally we keep category in our return value
 					);
 				}
@@ -387,20 +387,18 @@ export const ParseComponent = ( component ) => {
  *
  * @return {object}                 - The object with all gathered infos, format: { file: '', contents: '', infos: {}, props: {}, yaml: '' }
  */
-export const BuildPropsYaml = ( object, component ) => {
-	Log.verbose(`Building props and yaml from the gathered infos for ${ Style.yellow( component ) }`);
+export const BuildPropsYaml = ( object ) => {
+	Log.verbose(`Building props and yaml from the gathered infos for ${ Style.yellow( object.file ) }`);
 
 	return new Promise( ( resolve, reject ) => {
 		const flags = {
 			required: `<span class="cuttlebelle-flag cuttlebelle-flag--optional">Optional</span>`,
 			default: ( value ) => `<span class="cuttlebelle-flag cuttlebelle-flag--default">default: <span class="cuttlebelle-flag__value">${ value }</span></span>`,
 		};
+		const disabled = object.infos.description ? object.infos.description.includes('@disable-docs') : false;
 		let props = {};
-		let yaml = '';
-		let disabled = false;
-		if( object.infos.description ) {
-			disabled = object.infos.description.includes('@disable-docs');
-		}
+		let yaml = `<span class="cuttlebelle-yaml-line">layout: ${ object.file.slice( 0, -3 ) }</span>\n`;
+		let _hasBody = false;
 
 		if( object.infos.props && !disabled ) {
 			Object.keys( object.infos.props ).map( propKey => {
@@ -412,16 +410,25 @@ export const BuildPropsYaml = ( object, component ) => {
 				example = ParseYaml( prop.description );
 				props = Object.assign( {}, props, ParseExample( example ) );
 
-				yaml += `${
-					prop.required
-						? ''
-						: flags['required']
-					}${
-					prop.defaultValue
-						? flags['default']( prop.defaultValue.value )
-						: ''
-					}${ ReplaceMagic( prop.description ) }\n`;
+				if( propKey === '_body' ) {
+					_hasBody = true;
+				}
+				else {
+					yaml += `<span class="cuttlebelle-yaml-line">${
+						prop.required
+							? ''
+							: flags['required']
+						}${
+						prop.defaultValue
+							? flags['default']( prop.defaultValue.value )
+							: ''
+						}${ ReplaceMagic( prop.description ) }</span>\n`;
+				}
 			});
+		}
+
+		if( _hasBody ) {
+			yaml = `---\n${ yaml }---\n\n${ Ipsum.split('.').slice(0, 4).join('.') }...`;
 		}
 
 		resolve({
@@ -446,8 +453,8 @@ export const BuildPropsYaml = ( object, component ) => {
  *
  * @return {object}                 - The object with all gathered infos, format: { file: '', yaml: '', html: '' }
  */
-export const BuildHTML = ( object, component ) => {
-	Log.verbose(`Building HTML for ${ Style.yellow( component ) }`);
+export const BuildHTML = ( object ) => {
+	Log.verbose(`Building HTML for ${ Style.yellow( object.file ) }`);
 
 	return new Promise( ( resolve, reject ) => {
 		let html = '';
@@ -456,6 +463,7 @@ export const BuildHTML = ( object, component ) => {
 		object.props._ID = object.props._ID || SETTINGS.get().docs.IDProp;
 		object.props._nav = object.props._nav || SETTINGS.get().docs.navProp;
 		object.props._pages = object.props._pages || SETTINGS.get().docs.pagesProp;
+		object.props._relativeURL = object.props._relativeURL || function() { return '' };
 
 		const parents = object.props._ID.split('/').map( ( item, i ) => {
 			return object.props._ID.split('/').splice( 0, object.props._ID.split('/').length - i ).join('/');
@@ -484,12 +492,12 @@ export const BuildHTML = ( object, component ) => {
  *
  * @param  {object} example - The example from our props description already rendered in yaml
  *
- * @return {sting}          - The example with all magic strings replaced
+ * @return {object}         - The example object with all magic strings replaced
  */
 export const ParseExample = ( example ) => {
 	Log.verbose(`Parsing example for magic inside ${ Style.yellow( example ) }`);
 
-	const parsedExample = Object.assign( {}, example );
+	const parsedExample = Object.assign( {}, example ); // cloning
 
 	vocabulary.map( command => {
 		Object.keys( example ).map( key => {
@@ -538,7 +546,7 @@ export const ReplaceMagic = ( example ) => {
  *
  * @param  {integer} amount - The amount of partials we want to show
  *
- * @return {string}         - The partial placeholders
+ * @return {react object}   - The partial placeholders
  */
 export const MakePartials = ( amount ) => {
 	const html = '<img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> '.repeat( amount );
@@ -552,7 +560,7 @@ export const MakePartials = ( amount ) => {
  *
  * @param  {integer} amount - Amount of sentences
  *
- * @return {string}         - The dummy text
+ * @return {react object}   - The dummy text
  */
 export const MakeIpsum = ( amount ) => {
 	const sentences = Ipsum.split('.');

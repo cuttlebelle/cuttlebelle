@@ -1,5 +1,10 @@
 import React from 'react';
 
+/**
+ * Testing
+ *
+ * @disable-docs
+ */
 const Navigation = ({
 	nav = {},
 	pages = {},
