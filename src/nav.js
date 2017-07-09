@@ -2,9 +2,9 @@
  *
  * Getting and retaining navigation infos
  *
- * Nav          - Retain nav information
- * Nav.set      - Set navigation infos
- * Nav.get      - Get navigation infos
+ * Nav     - Retain nav information
+ * Nav.set - Set navigation infos
+ * Nav.get - Get navigation infos
  *
  **************************************************************************************************************************************************************/
 
@@ -20,6 +20,7 @@ import Path from 'path';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import { SETTINGS } from './settings.js';
 import { Log, Style } from './helper';
 
 
@@ -38,7 +39,10 @@ export const ToDepth = ( source, target = {}, prefix = '' ) => {
 		let element = Path.normalize(`${ prefix }/${ elements.shift() }`);
 
 		if( element.startsWith('/') ) {
-			element = element.slice( 1 );
+			element = element.substring( 1 );
+		}
+		if( element.startsWith(`${ SETTINGS.get().folder.homepage }/`) ) {
+			element = element.substring( SETTINGS.get().folder.homepage.length + 1 );
 		}
 
 		target[ element ] = target[ element ] || element;
@@ -66,7 +70,13 @@ export const ToNested = ( elements ) => {
 	let nested = {};
 
 	if( Array.isArray( elements ) ) {
-		elements.forEach( item => ToDepth( item, nested ) );
+		elements.forEach( item => {
+			if( !( item === SETTINGS.get().folder.homepage ) ) {
+				item = `${ SETTINGS.get().folder.homepage }/${ item }`;
+			}
+
+			ToDepth( item, nested );
+		});
 
 		return nested;
 	}

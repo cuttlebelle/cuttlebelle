@@ -35,7 +35,7 @@ import { Log, Style } from './helper';
  *
  * @return {promise object}  - The content of the file
  */
-export const ReadFile = location => {
+export const ReadFile = ( location ) => {
 	return new Promise( ( resolve, reject ) => {
 		Fs.readFile( location, `utf8`, ( error, content ) => {
 			if( error ) {
@@ -160,7 +160,7 @@ export const CopyFiles = ( source, destination ) => {
 	Log.verbose(`Copy frolder from ${ Style.yellow( source ) } to ${ Style.yellow( destination ) }`);
 
 	return new Promise( ( resolve, reject ) => {
-		RemoveDir([ destination ]); //remove destination first
+		RemoveDir([ destination ]); // remove destination first
 
 		if( Fs.existsSync( source ) ) {
 			Ncp.ncp( source, destination, ( error ) => {

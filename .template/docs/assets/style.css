@@ -1,0 +1,276 @@
+.cuttlebelle-docs {
+	position: relative;
+	margin: 0;
+	padding: 0;
+	color: #313131;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+/* STRUCTURE */
+.cuttlebelle-docs__aside,
+.cuttlebelle-docs__main {
+	min-height: 100%;
+}
+
+.cuttlebelle-docs__aside {
+	position: absolute;
+	left: 0;
+	top: 0;
+	botton: 0;
+	width: 16em;
+}
+
+.cuttlebelle-docs__main {
+	margin-left: 16em;
+	border-left: 8px solid #32ccbc;
+}
+
+.cuttlebelle-docs__wrapper {
+	padding: 1em;
+}
+
+/* ASIDE */
+.cuttlebelle-docs__aside__headline {
+	font-weight: bold;
+	font-size: 20px;
+	text-align: center;
+	display: block;
+	color: #f55555;
+}
+
+a.cuttlebelle-docs__aside__headline:hover,
+a.cuttlebelle-docs__aside__headline:focus {
+	color: #623aa2;
+}
+
+/* NAV */
+.cuttlebelle-nav a {
+	color: #f55555;
+}
+
+.cuttlebelle-nav a:hover,
+.cuttlebelle-nav a:focus {
+	color: #623aa2;
+}
+
+.cuttlebelle-nav {
+	list-style: none;
+	padding: 0;
+}
+
+.cuttlebelle-nav--level-1,
+.cuttlebelle-nav--level-2,
+.cuttlebelle-nav--level-3,
+.cuttlebelle-nav--level-4,
+.cuttlebelle-nav--level-5 {
+	padding-left: 1em;
+}
+
+/* MAIN */
+.cuttlebelle-docs__main__headline,
+.cuttlebelle-docs__main__component__name {
+	margin-top: 0;
+}
+
+/* CONTENTS */
+.cuttlebelle-docs__main__contents {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.cuttlebelle-docs__main__contents__item__link {
+	color: #f55555;
+}
+
+.cuttlebelle-docs__main__contents__item__link:hover,
+.cuttlebelle-docs__main__contents__item__link:focus {
+	color: #623aa2;
+}
+
+/* COMPONENT */
+.cuttlebelle-docs__main__component {
+	margin: 3em 0;
+}
+
+.cuttlebelle-partial {
+	display: block;
+	width: 100%;
+}
+
+.cuttlebelle-partial:not(:first-child) {
+	margin-top: 1em;
+}
+
+.cuttlebelle-docs__main__component:not( :nth-child( 4 ) ) {
+	border-top: 4px dashed rgba(45, 186, 172, 0.2);
+	padding-top: 3em;
+}
+
+.cuttlebelle-docs__main__component__name {
+	font-style: italic;
+	margin-bottom: 1.5em;
+}
+
+.cuttlebelle-docs__main__component__example,
+.cuttlebelle-docs__main__component__yaml,
+.cuttlebelle-docs__main__component__html {
+	position: relative;
+	white-space: pre-wrap;
+	border: 2px solid #5B5B5B;
+	background-color: #41413f;
+	padding: 1.5em 1em;
+	margin-bottom: 2em;
+	border-radius: 3px;
+	color: #fff;
+}
+
+.cuttlebelle-docs__main__component__yaml {
+	line-height: 1.5;
+}
+
+.cuttlebelle-docs__main__component__example {
+	background-color: #fff;
+	border-color: #32ccbc;
+	white-space: normal;
+	color: #313131;
+}
+
+.cuttlebelle-docs__main__component__example > div {
+	overflow: auto;
+	padding-top: 3em;
+}
+
+.cuttlebelle-docs__main__component__example:after,
+.cuttlebelle-docs__main__component__yaml:after,
+.cuttlebelle-docs__main__component__html:after {
+	position: absolute;
+	box-sizing: border-box;
+	font-size: 14px;
+	top: -1em;
+	left: 1em;
+	background-color: #5B5B5B;
+	border-radius: 3px;
+	padding: 0.2em 0.5em;
+	color: #fff;
+	content: 'YAML';
+}
+
+.cuttlebelle-docs__main__component__example:after {
+	background-color: #32ccbc;
+	content: 'EXAMPLE';
+}
+
+.cuttlebelle-docs__main__component__html:after {
+	content: 'HTML';
+}
+
+.cuttlebelle-docs__main__component__html__showhide {
+	color: #f55555;
+}
+
+.cuttlebelle-docs__main__component__html__showhide:hover {
+	cursor: pointer;
+}
+
+/* YAML */
+.cuttlebelle-yaml-line {
+	display: inline-block;
+	width: 100%;
+	padding: 0.3em 0;
+	border-top: 2px dashed #41413f;
+	border-bottom: 2px dashed #41413f;
+	transition: border 0.2s ease;
+}
+
+.cuttlebelle-yaml-line:hover {
+	border-color: #5B5B5B;
+}
+
+/* FLAG */
+.cuttlebelle-flag {
+	float: right;
+	font-size: 10px;
+	background-color: #32ccbc;
+	border-radius: 3px;
+	padding: 0.2em 0.5em;
+	margin-left: 0.5em;
+}
+
+.cuttlebelle-flag__value {
+	color: #313131;
+}
+
+/* INDEX */
+.cuttlebelle-docs__main__list {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.cuttlebelle-docs__main__list__item {
+	box-sizing: border-box;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	padding: 1em;
+	width: 100%;
+}
+
+@media (min-width: 680px) {
+	.cuttlebelle-docs__main__list__item {
+		width: 50%;
+	}
+}
+
+@media (min-width: 1024px) {
+	.cuttlebelle-docs__main__list__item {
+		width: 33.333333333333%;
+	}
+}
+
+@media (min-width: 1200px) {
+	.cuttlebelle-docs__main__list__item {
+		width: 25%;
+	}
+}
+
+.cuttlebelle-docs__main__list__item__wrapper {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	width: 100%;
+	border: 2px solid #32ccbc;
+	border-radius: 3px;
+	padding: 0.5em;
+	text-decoration: none;
+}
+
+.cuttlebelle-docs__main__list__item__headline {
+	display: block;
+	text-align: center;
+	font-weight: bold;
+	color: #f55555;
+	text-decoration: underline;
+}
+
+.cuttlebelle-docs__main__list__item__headline:hover,
+.cuttlebelle-docs__main__list__item__headline:focus {
+	color: #623aa2;
+}
+
+.cuttlebelle-docs__main__list__item__components {
+	list-style: none;
+	padding: 0;
+	margin: 1em 0 0 0;
+	overflow: auto;
+}

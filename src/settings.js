@@ -42,6 +42,7 @@ export const SETTINGS = {
 			src: Path.normalize(`${ process.cwd() }/src/`),
 			assets: Path.normalize(`${ process.cwd() }/assets/`),
 			site: Path.normalize(`${ process.cwd() }/site/`),
+			docs: Path.normalize(`${ process.cwd() }/docs/`),
 			index: 'index',
 			homepage: 'index',
 		},
@@ -54,6 +55,43 @@ export const SETTINGS = {
 			doctype: '<!DOCTYPE html>', // https://github.com/facebook/react/issues/1035
 			redirectReact: true,
 			markdownRenderer: '',
+		},
+		docs: {
+			root: 'files/',
+			index: Path.normalize(`${ __dirname }/../.template/docs/layout/index.js`),
+			category: Path.normalize(`${ __dirname }/../.template/docs/layout/category.js`),
+			IDProp: 'page2',
+			navProp: {
+				index: {
+					page1: 'page1',
+					page2: {
+						'page2/nested': 'page2/nested',
+					},
+					page3: 'page3',
+				},
+			},
+			pagesProp: {
+				page1: {
+					url: '/page1',
+					title: 'Page 1',
+				},
+				page2: {
+					url: '/page2',
+					title: 'Page 2',
+				},
+				'page2/nested': {
+					url: '/page2/nested',
+					title: 'Nested in page 2',
+				},
+				page3: {
+					url: '/page3',
+					title: 'Page 3',
+				},
+				index: {
+					url: '/',
+					title: 'Homepage',
+				},
+			},
 		},
 	},
 
@@ -89,6 +127,9 @@ export const SETTINGS = {
 			if( !localSettings.site ) {
 				localSettings.site = {};
 			}
+			if( !localSettings.docs ) {
+				localSettings.docs = {};
+			}
 
 			delete localSettings.folder.cwd; // ignore the cwd key
 
@@ -102,8 +143,18 @@ export const SETTINGS = {
 			if( localSettings.folder.site && !Path.isAbsolute( localSettings.folder.site ) ) {
 				localSettings.folder.site = Path.normalize(`${ process.cwd() }/${ localSettings.folder.site }/`);
 			}
+			if( localSettings.folder.docs && !Path.isAbsolute( localSettings.folder.docs ) ) {
+				localSettings.folder.docs = Path.normalize(`${ process.cwd() }/${ localSettings.folder.docs }/`);
+			}
 			if( localSettings.folder.assets && !Path.isAbsolute( localSettings.folder.assets ) ) {
 				localSettings.folder.assets = Path.normalize(`${ process.cwd() }/${ localSettings.folder.assets }/`);
+			}
+
+			if( localSettings.docs.index && !Path.isAbsolute( localSettings.docs.index ) ) {
+				localSettings.docs.index = Path.normalize(`${ process.cwd() }/${ localSettings.docs.index }`);
+			}
+			if( localSettings.docs.category && !Path.isAbsolute( localSettings.docs.category ) ) {
+				localSettings.docs.category = Path.normalize(`${ process.cwd() }/${ localSettings.docs.category }`);
 			}
 
 			const newSettings = {};
@@ -111,6 +162,7 @@ export const SETTINGS = {
 			newSettings.folder = Object.assign( SETTINGS.defaults.folder, localSettings.folder );
 			newSettings.layouts = Object.assign( SETTINGS.defaults.layouts, localSettings.layouts );
 			newSettings.site = Object.assign( SETTINGS.defaults.site, localSettings.site );
+			newSettings.docs = Object.assign( SETTINGS.defaults.docs, localSettings.docs );
 
 			SETTINGS.defaults = newSettings;
 
@@ -118,6 +170,9 @@ export const SETTINGS = {
 			Log.verbose( Style.yellow( JSON.stringify( newSettings ) ) );
 
 			return newSettings;
+		}
+		else {
+			return SETTINGS.get();
 		}
 	},
 };

@@ -3,7 +3,7 @@
  *
  * Generate static files from the content folder with react components
  *
- * Handel cli options in this file
+ * This is where we delegate the program and get it all started
  *
  **************************************************************************************************************************************************************/
 
@@ -13,7 +13,6 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import Size from 'window-size';
 import Path from 'path';
 import Fs from 'fs';
 
@@ -22,66 +21,25 @@ import Fs from 'fs';
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { ConvertHrtime, ExitHandler, Style, Log, Notify } from './helper.js';
+import { DisplayHelp, DisplayVersion, DisplayWelcome } from './cli.js';
 import { RenderAllPages, RenderAssets, PreRender } from './render.js';
 import { SETTINGS } from './settings.js';
-import { Progress } from './progress';
+import { BuildDocs } from './docs';
 import { Watch } from './watch.js';
-import { Pages } from './pages';
-import { Nav } from './nav';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLI options
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-const pkg = require('../package.json');
-
-
 // help flag
 if( process.argv.includes('-h') || process.argv.includes('--help') ) {
-	const maxLength = 80;
-	const paddingSize = Math.max( 0, Math.floor( ( Size.width - maxLength ) / 2 ) );
-	const padding = String.repeat(` `, paddingSize );
-
-	Log.space();
-	console.log(`
-${ padding }╔═╗ ╦ ╦ ╔╦╗ ╔╦╗ ╦   ╔═╗ ╔╗  ╔═╗ ╦   ╦   ╔═╗
-${ padding }║   ║ ║  ║   ║  ║   ║╣  ╠╩╗ ║╣  ║   ║   ║╣
-${ padding }╚═╝ ╚═╝  ╩   ╩  ╩═╝ ╚═╝ ╚═╝ ╚═╝ ╩═╝ ╩═╝ ╚═╝ v${ pkg.version }
-
-${ padding }The react.js static site generator with editing in mind.
-
-${ padding }Options:
-${ padding }  ${ Style.bold(`version`) }     - Display the version of Cuttlebelle
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-V`) ) }
-${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --version`) ) }
-
-${ padding }  ${ Style.bold(`watch`) }       - Start to watch the content and source folder for changes
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-w`) ) }
-${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --watch`) ) }
-
-${ padding }  ${ Style.bold(`no-generate`) } - Disable generation of all pages, best in combination with watch.
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-n`) ) }
-${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --no-generate --watch`) ) }
-
-${ padding }  ${ Style.bold(`silent`) }      - Disable all notifications the watch might throw
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-s`) ) }
-${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --silent --watch`) ) }
-
-${ padding }  ${ Style.bold(`verbose`) }     - Enable silly verbose mode
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-v`) ) }
-${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --verbose`) ) }
-
-${ padding }  ${ Style.gray( pkg.homepage ) }
-`);
-	Log.space();
-
-	process.exit( 0 );
+	DisplayHelp();
 }
 
 
+// version flag
 if( process.argv.includes('-V') || process.argv.includes('--version') ) {
-	console.log(`Cuttlebelle v${ pkg.version }`);
-	process.exit( 0 );
+	DisplayVersion();
 }
 
 
@@ -89,7 +47,7 @@ if( process.argv.includes('-V') || process.argv.includes('--version') ) {
 const startTime = process.hrtime();
 
 
-Log.welcome(`Cuttlebelle v${ pkg.version }`);
+DisplayWelcome();
 
 
 // verbose flag
@@ -118,62 +76,88 @@ if( Fs.existsSync( pkgLocation ) ) {
 }
 
 
-// pre-render everything
-PreRender()
-	.catch( error => {
-		Log.error(`Trying to initilize the pages failed.`);
-		Log.error( error );
+// build docs
+if( process.argv.includes('-d') || process.argv.includes('--docs') ) {
+	BuildDocs()
+		.catch( error => {
+			Log.error(`Trying to generate the docs failed.`);
+			Log.error( error );
 
-		process.exit( 1 );
-	})
-	.then( ({ content, layout }) => {
+			process.exit( 1 );
+		})
+		.then( ( pages ) => {
+			const elapsedTime = process.hrtime( startTime );
 
-		// generate all files unless it’s disabled
-		if( !process.argv.includes('-n') && !process.argv.includes('--no-generate') ) {
-			Log.info(`Generating pages`);
-
-			const allPromises = [];
-
-			// copy all asset files to the site/ folder
-			allPromises.push(
-				RenderAssets(
-					SETTINGS.get().folder.assets,
-					Path.normalize(`${ SETTINGS.get().folder.site }/${ SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' ) }`)
-				)
+			Log.done(
+				`${ pages > 0 ? `Successfully built ${ Style.yellow( pages ) } doc pages ` : `No doc pages have been build ` }` +
+				`to ${ Style.yellow( SETTINGS.get().folder.docs.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+				`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
 			);
 
-			// render all pages to site/
-			allPromises.push( RenderAllPages( content, layout ) );
+			process.exit( 0 );
+	});
+}
 
-			Promise.all( allPromises )
-				.catch( error => {
-					Log.error(`Generating pages failed :(`);
-					Log.error( error );
 
-					process.exit( 1 );
-				})
-				.then( pages => {
-					const elapsedTime = process.hrtime( startTime );
+// build site
+else {
+	// pre-render everything
+	PreRender()
+		.catch( error => {
+			Log.error(`Trying to initilize the pages failed.`);
+			Log.error( error );
 
-					Log.done(
-						`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages[ 1 ].length ) } pages ` : `No pages have been build ` }` +
-						`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
-						`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
-					);
+			process.exit( 1 );
+		})
+		.then( ({ content, layout }) => {
 
-					// run watch on flag
-					if( process.argv.includes('-w') || process.argv.includes('--watch') ) {
-						Watch.start();
-					}
-			});
-		}
-		else {
-			// run watch on flag
-			if( process.argv.includes('-w') || process.argv.includes('--watch') ) {
-				Watch.start();
+			// generate all files unless it’s disabled
+			if( !process.argv.includes('-n') && !process.argv.includes('--no-generate') ) {
+				Log.info(`Generating pages`);
+
+				const allPromises = [];
+
+				// copy all asset files to the site/ folder
+				allPromises.push(
+					RenderAssets(
+						SETTINGS.get().folder.assets,
+						Path.normalize(`${ SETTINGS.get().folder.site }/${ SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' ) }`)
+					)
+				);
+
+				// render all pages to site/
+				allPromises.push( RenderAllPages( content, layout ) );
+
+				Promise.all( allPromises )
+					.catch( error => {
+						Log.error(`Generating pages failed :(`);
+						Log.error( error );
+
+						process.exit( 1 );
+					})
+					.then( pages => {
+						const elapsedTime = process.hrtime( startTime );
+
+						Log.done(
+							`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages[ 1 ].length ) } pages ` : `No pages have been build ` }` +
+							`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+							`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+						);
+
+						// run watch on flag
+						if( Watch.running ) {
+							Watch.start();
+						}
+				});
 			}
-		}
-});
+			else {
+				// run watch on flag
+				if( process.argv.includes('-w') || process.argv.includes('--watch') ) {
+					Watch.start();
+				}
+			}
+	});
+}
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Exit handler

@@ -33,8 +33,15 @@ test('ToDepth() - Should split path into array correctly', () => {
 	ToDepth('first', nested);
 	expect( nested ).toMatchObject( match );
 
+	ToDepth('first/second/more', nested);
+	match = { first: { 'first/second': { 'first/second/last': 'first/second/last', 'first/second/more': 'first/second/more' } } };
+	expect( nested ).toMatchObject( match );
+
 	ToDepth('another/one', nested);
-	match = { first: { 'first/second': { 'first/second/last': 'first/second/last' } }, another: { 'another/one': 'another/one' } };
+	match = {
+		first: { 'first/second': { 'first/second/last': 'first/second/last', 'first/second/more': 'first/second/more' } },
+		another: { 'another/one': 'another/one' }
+	};
 	expect( nested ).toMatchObject( match );
 });
 
@@ -51,7 +58,13 @@ test('ToNested() - Non arrays stay whatever they are', () => {
 
 test('ToNested() - Should split path into array correctly', () => {
 	const nested = [ 'one/two', 'one', 'three' ];
-	const match = { one: { 'one/two': 'one/two' }, three: 'three' };
+	const match = { index: { one: { 'one/two': 'one/two' }, three: 'three' } };
+	expect( ToNested( nested ) ).toMatchObject( match );
+});
+
+test('ToNested() - Should add index to the beginning', () => {
+	const nested = [ 'index', 'one/two', 'one', 'three' ];
+	const match = { index: { one: { 'one/two': 'one/two' }, three: 'three' } };
 	expect( ToNested( nested ) ).toMatchObject( match );
 });
 
@@ -60,7 +73,7 @@ test('ToNested() - Should split path into array correctly', () => {
 // Nav
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 Nav.set( [ 'one', 'one/two', 'three' ] );
-const match = { one: { 'one/two': 'one/two' }, three: 'three' };
+const match = { index: { one: { 'one/two': 'one/two' }, three: 'three' } };
 
 test('Nav.set - Sets the nav correctly from an array', () => {
 	expect( Nav.all ).toMatchObject( match );
