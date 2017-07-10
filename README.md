@@ -593,11 +593,12 @@ A file will receive the following props:
 | `_ID`          | The ID of the current page                                                            | `props._ID`                              |
 | `_parents`     | An array of all parent pages IDs                                                      | `props._parents`                         |
 | `_body`        | The body of your markdown file (empty for `index.yml` files)                          | `props._body`                            |
-| `_relativeURL` | A helper function to make an absolute URL relative                                    | `props._relativeURL( URL, yourLocation)` |
 | `_pages`       | An object of all pages; with ID as key                                                | `props._pages.map()`                     |
 | `_nav`         | A nested object of your site structure                                                | `Object.keys( props._nav ).map()`        |
 | `_storeSet`    | You can set data to persist between react components by setting them with this helper | `props._storeSet({ variable: "value" })` |
 | `_store`       | To get that data just call this prop function                                         | `props._store`                           |
+| `_relativeURL` | A helper function to make an absolute URL relative                                    | `props._relativeURL( URL, yourLocation)` |
+| `_parseMD`     | A helper function to parse markdown into HTML                                         | `props._parseMD( props.yourMarkdown )`   |
 
 Plus all other variables declared inside the file either as `frontmatter` or in the `yaml` files.
 

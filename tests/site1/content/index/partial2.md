@@ -1,8 +1,12 @@
 ---
 title: partial2
-layout: components/nested
-var1: value1
-var2: value2
+layout: components/markdown
+yourMarkdown: 'dfssdf
+sdf
+*sdfsdf*
+sdfsdsdf
+
+__gfsdf__'
 ---
 
 *partial2*?
