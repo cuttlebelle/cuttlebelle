@@ -26,6 +26,7 @@ javascript. **No more templating languages** that only do half of what you need.
 * [Install](#install)
 * [Getting started](#getting-started)
 * [Usage](#usage)
+* [Self-documenting](#self-documenting)
 * [Build](#build)
 * [Tests](#tests)
 * [Release History](#release-history)
@@ -341,7 +342,7 @@ This will generate all pages into the `site` folder _(unless [specified otherwis
 You can also run our highly optimized watch while adding content or developing your layouts.
 
 ```
-cuttlebelle --watch
+cuttlebelle watch
 ```
 
 This command will first build your pages and then watch for changes in any of them.
@@ -361,7 +362,7 @@ like a double click. The watch will detect the _double save_<sup>TM</sup> and ge
 Sometimes you may only want to start a watch and not rebuild all pages. For that use the `no-generate` option:
 
 ```shell
-cuttlebelle --watch --no-generate
+cuttlebelle watch --no-generate
 ```
 
 
@@ -370,7 +371,7 @@ cuttlebelle --watch --no-generate
 The watch notifies you each time it encounters an error so you don’t have to watch the watch. You can disable that behavior via the silent option.
 
 ```shell
-cuttlebelle --watch --silent
+cuttlebelle watch --silent
 ```
 
 
@@ -381,7 +382,7 @@ cuttlebelle --watch --silent
 Of course there is also a help option. Just run it with the help flag:
 
 ```shell
-cuttlebelle --help
+cuttlebelle help
 ```
 
 
@@ -593,11 +594,12 @@ A file will receive the following props:
 | `_ID`          | The ID of the current page                                                            | `props._ID`                              |
 | `_parents`     | An array of all parent pages IDs                                                      | `props._parents`                         |
 | `_body`        | The body of your markdown file (empty for `index.yml` files)                          | `props._body`                            |
-| `_relativeURL` | A helper function to make an absolute URL relative                                    | `props._relativeURL( URL, yourLocation)` |
 | `_pages`       | An object of all pages; with ID as key                                                | `props._pages.map()`                     |
 | `_nav`         | A nested object of your site structure                                                | `Object.keys( props._nav ).map()`        |
 | `_storeSet`    | You can set data to persist between react components by setting them with this helper | `props._storeSet({ variable: "value" })` |
 | `_store`       | To get that data just call this prop function                                         | `props._store`                           |
+| `_relativeURL` | A helper function to make an absolute URL relative                                    | `props._relativeURL( URL, yourLocation)` |
+| `_parseMD`     | A helper function to parse markdown into HTML                                         | `props._parseMD( props.yourMarkdown )`   |
 
 Plus all other variables declared inside the file either as `frontmatter` or in the `yaml` files.
 
@@ -638,7 +640,15 @@ See below all configuration with default values:
 +			"root": "/",
 +			"doctype": "<!DOCTYPE html>",
 +			"redirectReact": true,
-+			"markdownRenderer": "",
++			"markdownRenderer": ""
++		},
++		"docs": {
++			"root": "files/",
++			"index": ".template/docs/layout/index.js",
++			"category": ".template/docs/layout/category.js",
++			"IDProp": "page2",
++			"navProp": {},
++			"pagesProp": {}
 +		}
 +	},
 	"keywords": [],
@@ -670,8 +680,141 @@ A breakdown:
     "markdownRenderer": "",       # A path to a file that exposes a Marked.Renderer() object.
                                   # Learn more about it here: https://github.com/chjj/marked#renderer
   }
+  "docs": {                                          # Docs settings
+    "root": "files/",                                # What is the root folder called where all docs
+                                                     # are generated in
+    "index": ".template/docs/layout/index.js",       # The path to the index layout file
+    "category": ".template/docs/layout/category.js", # The path to the category layout file
+                                                     # All following settings are the default props
+                                                     # each component is given for the example
+    "IDProp": "page2",                               # The _ID prop
+    "navProp": {                                     # The _nav prop
+      "index": {
+        "page1": "page1",
+        "page2": {
+          "page2/nested": "page2/nested",
+        },
+        "page3": "page3",
+      },
+    },
+    "pagesProp": {                                   # The _pages prop
+      "page1": {
+        "url": "/page1",
+        "title": "Page 1",
+      },
+      "page2": {
+        "url": "/page2",
+        "title": "Page 2",
+      },
+      "page2/nested": {
+        "url": "/page2/nested",
+        "title": "Nested in page 2",
+      },
+      "page3": {
+        "url": "/page3",
+        "title": "Page 3",
+      },
+      "index": {
+        "url": "/",
+        "title": "Homepage",
+      },
+    },
+  },
 },
 ```
+
+
+**[⬆ back to top](#contents)**
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+## Self-documenting
+
+Because you now can separate the content flow from the development flow you will still need to communicate what partials and layouts the content authors have
+to their disposal and how they might use it.
+
+Cuttlebelle has a built in feature that will generate documentation for your components automatically as long as you use
+[PropTypes](https://facebook.github.io/react/docs/typechecking-with-proptypes.html) and a comment above them that reflects the `yaml`.
+
+```jsx
+Cards.propTypes = {
+  /**
+   * level: "2"
+   */
+  level: PropTypes.oneOf([ '1', '2', '3', '4', '5', '6' ]).isRequired,
+
+  /**
+   * hero: true
+   */
+  hero: PropTypes.bool,
+
+  /**
+   * cards:
+   *   - title: Card 1
+   *     content: Content for card 1
+   *     href: http://link/to
+   *   - title: Card 2
+   *     content: Content for card 2
+   *     href: http://link/to
+   *   - title: Card 3
+   *     content: Content for card 3
+   *     href: http://link/to
+   *   - title: Card 4
+   *     content: Content for card 4
+   *     href: http://link/to
+   */
+  cards: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+      href: PropTypes.string,
+    })
+  ).isRequired,
+};
+```
+
+You can also hide a component from the docs by adding the `@disable-docs` to the main comment before declaring your component:
+
+```jsx
+import PropTypes from 'prop-types';
+import React from "react";
+
+/**
+ * Hiding this component from the docs
+ *
+ * @disable-docs
+ */
+const Hidden = ( page ) => (
+  <article className={`globalheader`}>
+    <h1>{ page.title }</h1>
+    { page._body }
+  </article>
+);
+
+Hidden.propTypes = {
+  /**
+   * title: Welcome
+   */
+  title: PropTypes.string.isRequired,
+
+  /**
+   * _body: (text)(7)
+   */
+  _body: PropTypes.node.isRequired,
+};
+
+export default Hidden;
+```
+
+Once all your components have those comments cuttlebelle can generate the docs for you. All you have to do it run:
+
+```shell
+cuttlebelle docs
+```
+
+The docs will be generated by default in the `docs/` folder of your project.
 
 
 **[⬆ back to top](#contents)**

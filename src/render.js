@@ -31,10 +31,10 @@ import Fs from 'fs';
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
+import { ParseContent, ParseMD } from './parse';
 import { GetContent, GetLayout } from './site';
 import { SETTINGS } from './settings.js';
 import { Layouts, Watch } from './watch';
-import { ParseContent } from './parse';
 import { Log, Style } from './helper';
 import { Progress } from './progress';
 import { Slug } from './helper.js';
@@ -246,6 +246,7 @@ export const RenderFile = ( file, parent = '', iterator = 0 ) => {
 								_storeSet: Store.set,
 								_pages: Pages.get(),
 								_nav: Nav.get(),
+								_parseMD: ( markdown ) => <div key={`${ ID }-${ iterator }-md`} dangerouslySetInnerHTML={ { __html: ParseMD( markdown ) } } />,
 								_relativeURL: ( URL, ID ) => {
 									if( ID === SETTINGS.get().folder.homepage ) {
 										ID = '';

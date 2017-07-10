@@ -32,7 +32,7 @@ import { Watch } from './watch.js';
 // CLI options
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // help flag
-if( process.argv.includes('-h') || process.argv.includes('--help') ) {
+if( process.argv.includes('-h') || process.argv.includes('help') ) {
 	DisplayHelp();
 }
 
@@ -63,7 +63,7 @@ if( process.argv.includes('-s') || process.argv.includes('--silent') ) {
 
 
 // set watch flag
-if( process.argv.includes('-w') || process.argv.includes('--watch') ) {
+if( process.argv.includes('-w') || process.argv.includes('watch') ) {
 	Watch.running = true;
 }
 
@@ -77,7 +77,7 @@ if( Fs.existsSync( pkgLocation ) ) {
 
 
 // build docs
-if( process.argv.includes('-d') || process.argv.includes('--docs') ) {
+if( process.argv.includes('-d') || process.argv.includes('docs') ) {
 	BuildDocs()
 		.catch( error => {
 			Log.error(`Trying to generate the docs failed.`);
@@ -152,7 +152,7 @@ else {
 			}
 			else {
 				// run watch on flag
-				if( process.argv.includes('-w') || process.argv.includes('--watch') ) {
+				if( process.argv.includes('-w') || process.argv.includes('watch') ) {
 					Watch.start();
 				}
 			}
