@@ -50,28 +50,31 @@ ${ padding }╚═╝ ╚═╝  ╩   ╩  ╩═╝ ╚═╝ ╚═╝ ╚═
 ${ padding }The react.js static site generator with editing in mind.
 
 ${ padding }Options:
-${ padding }  ${ Style.bold(`version`) }     - Display the version of Cuttlebelle
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-V`) ) }
+${ padding }                - Building all pages
+${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle`) ) }
+
+${ padding }  ${ Style.bold(`docs`) }          - Build documentation from your layout components
+${ padding }                - Shortcut: ${ Style.yellow( Style.bold(`-d`) ) }
+${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle docs`) ) }
+
+${ padding }  ${ Style.bold(`watch`) }         - Start to watch the content and source folder for changes
+${ padding }                - Shortcut: ${ Style.yellow( Style.bold(`-w`) ) }
+${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle watch`) ) }
+
+${ padding }  ${ Style.bold(`--no-generate`) } - Disable generation of all pages, best in combination with watch.
+${ padding }                - Shortcut: ${ Style.yellow( Style.bold(`-n`) ) }
+${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle watch --no-generate`) ) }
+
+${ padding }  ${ Style.bold(`--silent`) }      - Disable all notifications the watch might throw
+${ padding }                - Shortcut: ${ Style.yellow( Style.bold(`-s`) ) }
+${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle watch --silent`) ) }
+
+${ padding }  ${ Style.bold(`--version`) }     - Display the version of Cuttlebelle
+${ padding }                - Shortcut: ${ Style.yellow( Style.bold(`-V`) ) } ${ Style.gray('(uppercased)') }
 ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --version`) ) }
 
-${ padding }  ${ Style.bold(`docs`) }        - Build documentation from your layout components
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-d`) ) }
-${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --docs`) ) }
-
-${ padding }  ${ Style.bold(`watch`) }       - Start to watch the content and source folder for changes
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-w`) ) }
-${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --watch`) ) }
-
-${ padding }  ${ Style.bold(`no-generate`) } - Disable generation of all pages, best in combination with watch.
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-n`) ) }
-${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --no-generate --watch`) ) }
-
-${ padding }  ${ Style.bold(`silent`) }      - Disable all notifications the watch might throw
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-s`) ) }
-${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --silent --watch`) ) }
-
-${ padding }  ${ Style.bold(`verbose`) }     - Enable silly verbose mode
-${ padding }              - Shortcut: ${ Style.yellow( Style.bold(`-v`) ) }
+${ padding }  ${ Style.bold(`--verbose`) }     - Enable silly verbose mode
+${ padding }                - Shortcut: ${ Style.yellow( Style.bold(`-v`) ) }
 ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle --verbose`) ) }
 
 ${ padding }  ${ Style.gray( pkg.homepage ) }
