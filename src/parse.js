@@ -77,6 +77,7 @@ export const ParseContent = ( content, file ) => {
  */
 export const ParseMD = ( markdown, file ) => {
 	if( typeof markdown === 'string' ) {
+
 		let renderer = new Marked.Renderer();
 
 		if( SETTINGS.get().site.markdownRenderer ) {
@@ -96,6 +97,10 @@ export const ParseMD = ( markdown, file ) => {
 		}
 
 		try {
+			if( typeof renderer.preparse === 'function' ) {
+				markdown = renderer.preparse( markdown );
+			}
+
 			return Marked( markdown, { renderer: renderer } );
 		}
 		catch( error ) {
