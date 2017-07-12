@@ -12,6 +12,7 @@
 
 
 import { ParseContent, ParseMD, ParseYaml } from '../../src/parse';
+import { SETTINGS } from '../../src/settings';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -73,6 +74,19 @@ test('ParseMD() - Markdown is parsed', () => {
 
 	const content2 = `**yes** _test_`;
 	const match2 = '<p><strong>yes</strong> <em>test</em></p>\n';
+	expect( ParseMD( content2 ) ).toBe( match2 );
+});
+
+
+test('ParseMD() - Markdown takes the custom renderer', () => {
+	SETTINGS.defaults.site.markdownRenderer = 'tests/__unit__/mocks/customRenderer.js';
+	const content2 = `
+### testing
+
+— no list
+- list
+`;
+	const match2 = '<h3>!testing!</h3><p>&mdash; no list</p>\n<ul>\n<li>list</li>\n</ul>\n';
 	expect( ParseMD( content2 ) ).toBe( match2 );
 });
 

@@ -24,4 +24,14 @@ renderer.heading = ( text, level ) => {
 	return `<h${ level }${ headingLevels[ display ] ? ` class="${ headingLevels[ display ] }"` : `` }>${ text }</h${ level }>`;
 };
 
+
+renderer.preparse = ( markdown ) => {
+	return markdown
+		.replace(/\—/g, '&mdash;')
+		.replace(/\–/g, '&ndash;')
+		.replace(/\"/g, '&quot;')
+		.replace(/\'/g, '&apos;')
+		.replace(/\.\.\./g, '&hellip;');
+};
+
 module.exports = renderer;

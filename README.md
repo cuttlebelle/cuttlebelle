@@ -677,8 +677,10 @@ A breakdown:
     "doctype": "<!DOCTYPE html>", # What doctype string do you want to add?
     "redirectReact": true         # You can disable redirecting `import` calls to the locally installed
                                   # react instance of cuttlebelle rather than your local folder.
-    "markdownRenderer": "",       # A path to a file that exposes a Marked.Renderer() object.
+    "markdownRenderer": "",       # A path to a file that `module.exports` an Marked.Renderer() object.
                                   # Learn more about it here: https://github.com/chjj/marked#renderer
+                                  # The only addition is the `preparse` key that will be run before we go
+                                  # into the marked parsing
   }
   "docs": {                                          # Docs settings
     "root": "files/",                                # What is the root folder called where all docs
