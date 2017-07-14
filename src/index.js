@@ -162,6 +162,6 @@ else {
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Exit handler
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-process.on( 'exit', ExitHandler.bind( null, { withoutSpace: false } ) );              //on closing
-process.on( 'SIGINT', ExitHandler.bind( null, { withoutSpace: true } ) );             //on [ctrl] + [c]
-process.on( 'uncaughtException', ExitHandler.bind( null, { withoutSpace: false } ) ); //on uncaught exceptions
+process.on( 'exit', ExitHandler.bind( null, { withoutSpace: false } ) );              // on closing
+process.on( 'SIGINT', ExitHandler.bind( null, { withoutSpace: true } ) );             // on [ctrl] + [c]
+process.on( 'uncaughtException', ExitHandler.bind( null, { withoutSpace: false } ) ); // on uncaught exceptions
