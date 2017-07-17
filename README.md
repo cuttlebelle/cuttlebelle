@@ -243,6 +243,7 @@ A **body.md** partial
 
 ```markdown
 ---
+layout: body
 headline: First post
 ---
 
