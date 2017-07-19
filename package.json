@@ -1,18 +1,20 @@
 {
 	"name": "cuttlebelle",
 	"description": "The react static site generator that separates editing and code concerns",
-	"version": "1.0.0-alpha.28",
+	"version": "1.0.0-alpha.29",
 	"homepage": "https://github.com/dominikwilkowski/cuttlebelle",
 	"author": {
 		"name": "Dominik Wilkowski",
 		"email": "Hi@Dominik-Wilkowski.com",
 		"url": "http://dominik-wilkowski.com/"
 	},
-	"contributors": {
-		"name": "Dominik Wilkowski",
-		"email": "Hi@Dominik-Wilkowski.com",
-		"url": "http://dominik-wilkowski.com/"
-	},
+	"contributors": [
+		{
+			"name": "Dominik Wilkowski",
+			"email": "Hi@Dominik-Wilkowski.com",
+			"url": "http://dominik-wilkowski.com/"
+		}
+	],
 	"repository": {
 		"type": "git",
 		"url": "git://github.com/dominikwilkowski/cuttlebelle.git"
