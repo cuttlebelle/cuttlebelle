@@ -65,7 +65,9 @@ export const Watch = {
 			Path.normalize(`${ SETTINGS.get().folder.content }/**/*.md`),
 			Path.normalize(`${ SETTINGS.get().folder.src }/**/*.js`),
 			Path.normalize(`${ SETTINGS.get().folder.assets }/**/*`),
-		], { ignoreInitial: true })
+		], {
+			ignoreInitial: true,
+		})
 		.on('change', path => {
 			Log.info(`File has changed ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
 
@@ -119,10 +121,12 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 	const _isReact = path.startsWith( SETTINGS.get().folder.src );
 	const _isAssets = path.startsWith( SETTINGS.get().folder.assets );
 
-	Progress.set( 1 );
+	Progress.done = 0;
 
 	// A page is being changed
 	if( !_doEverything ) {
+
+		Progress.set( 1 );
 
 		if( _isAssets ) {
 			UpdateAssets( startTime );
