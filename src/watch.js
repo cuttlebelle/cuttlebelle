@@ -65,31 +65,32 @@ export const Watch = {
 			Path.normalize(`${ SETTINGS.get().folder.content }/**/*.md`),
 			Path.normalize(`${ SETTINGS.get().folder.src }/**/*.js`),
 			Path.normalize(`${ SETTINGS.get().folder.assets }/**/*`),
-		], { ignoreInitial: true })
+		], {
+			ignoreInitial: true,
+		})
 		.on('change', path => {
-			Log.info(`File has changed ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
-
 			const thisChange = new Date(); // double save detection
+
 			if( ( thisChange - Watch.lastChange ) < 400 ) {
 				Log.info(`${ Style.bold('Double save detected') }; regenerating all files`);
-
-				UpdateChange( path, true );
+				DebouncedWatch( path, true );
 			}
 			else {
 				Log.verbose(`Time since last change: ${ Style.yellow( ( thisChange - Watch.lastChange ) ) }`);
 
-				UpdateChange( path );
+				Log.info(`File has changed ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
+				DebouncedWatch( path, false );
 			}
 
 			Watch.lastChange = thisChange;
 		})
 		.on('add', path => {
 			Log.info(`File has been added ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
-			UpdateChange( path );
+			DebouncedWatch( path, true );
 		})
 		.on('unlink', path => {
 			Log.info(`File has ben deleted ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
-			UpdateChange( path, true );
+			DebouncedWatch( path, true );
 		});
 
 		Watch.running = true;
@@ -108,6 +109,31 @@ export const Watch = {
 
 
 /**
+ * Debounce watch as simple as possible
+ *
+ * @param  {string}  path      - The path of the changed file
+ * @param  {boolean} _buildAll - Whether or not to build everything
+ */
+let timeout;
+let buildAll = false;
+export const DebouncedWatch = ( path, _buildAll ) => {
+	if( _buildAll ) {
+		buildAll = true; // remember if we ever wanted to rebuild everything and stick with that
+	}
+
+	if( timeout ) {
+		clearTimeout( timeout );
+		timeout = null;
+	}
+
+	timeout = setTimeout( () => {
+		UpdateChange( path, buildAll );
+		buildAll = false; // now let’s go back to where we were before
+	}, 400 );
+};
+
+
+/**
  * Triage changes the the appropriate functions
  *
  * @param  {array}   path          - All changes that have happened
@@ -119,10 +145,12 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 	const _isReact = path.startsWith( SETTINGS.get().folder.src );
 	const _isAssets = path.startsWith( SETTINGS.get().folder.assets );
 
-	Progress.set( 1 );
+	Progress.done = 0;
 
 	// A page is being changed
 	if( !_doEverything ) {
+
+		Progress.set( 1 );
 
 		if( _isAssets ) {
 			UpdateAssets( startTime );
@@ -248,7 +276,7 @@ export const UpdateReact = ( startTime, path ) => {
 	}
 	else {
 		Log.info(`No pages were found to be attached to ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }.`);
-		Log.info(`Consider a ${ Style.bold(`double-save`) } to render all pages.`);
+		Log.info(`Consider a double-save to render all pages.`);
 	}
 };
 
