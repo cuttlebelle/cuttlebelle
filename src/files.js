@@ -157,7 +157,7 @@ export const RemoveDir = ( dir ) => {
  * @return {promise object}     - Resolved once completed
  */
 export const CopyFiles = ( source, destination ) => {
-	Log.verbose(`Copy frolder from ${ Style.yellow( source ) } to ${ Style.yellow( destination ) }`);
+	Log.verbose(`Copy folder from ${ Style.yellow( source ) } to ${ Style.yellow( destination ) }`);
 
 	return new Promise( ( resolve, reject ) => {
 		RemoveDir([ destination ]); // remove destination first
