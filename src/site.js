@@ -71,7 +71,7 @@ export const GetContent = ( folder = SETTINGS.get().folder.content, content = []
  *
  * @return {array}            - An array of all relative paths that should be pages we need to generate
  */
-export const GetLayout = ( folder = SETTINGS.get().folder.src, structure = [] ) => {
+export const GetLayout = ( folder = SETTINGS.get().folder.code, structure = [] ) => {
 	if( Fs.existsSync( folder ) ) {
 		Fs.readdirSync( folder )                                                          // starting from this level
 			.map(
@@ -83,7 +83,7 @@ export const GetLayout = ( folder = SETTINGS.get().folder.src, structure = [] ) 
 						if( Path.extname( file ) === '.js' ) {                                    // we only want js files and ignore invisible files
 							Log.verbose(`Found layout in ${ Style.yellow( Path.join( folder, file ) ) }`);
 
-							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.src.replace( SETTINGS.get().folder.cwd, '' );
+							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.code.replace( SETTINGS.get().folder.cwd, '' );
 
 							structure.push( Path.join( folder, file ).replace( replaceString, '' ) );
 						}

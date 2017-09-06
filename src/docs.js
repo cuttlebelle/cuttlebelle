@@ -352,7 +352,7 @@ export const ParseComponent = ( component ) => {
 
 	return new Promise( ( resolve, reject ) => {
 
-		const componentPath = Path.normalize(`${ SETTINGS.get().folder.src }/${ component }`);
+		const componentPath = Path.normalize(`${ SETTINGS.get().folder.code }/${ component }`);
 
 		ReadFile( componentPath )
 			.catch( error => reject( error ) )
@@ -472,7 +472,7 @@ export const BuildHTML = ( object ) => {
 		object.props._parents = object.props._parents || parents;
 
 		if( !object.disabled ) {
-			const componentPath = Path.normalize(`${ SETTINGS.get().folder.src }/${ object.file }`);
+			const componentPath = Path.normalize(`${ SETTINGS.get().folder.code }/${ object.file }`);
 			html = RenderReact( componentPath, object.props );
 		}
 

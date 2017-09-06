@@ -39,7 +39,7 @@ export const SETTINGS = {
 		folder: {
 			cwd: Path.normalize(`${ process.cwd() }/`),
 			content: Path.normalize(`${ process.cwd() }/content/`),
-			src: Path.normalize(`${ process.cwd() }/src/`),
+			code: Path.normalize(`${ process.cwd() }/code/`),
 			assets: Path.normalize(`${ process.cwd() }/assets/`),
 			site: Path.normalize(`${ process.cwd() }/site/`),
 			docs: Path.normalize(`${ process.cwd() }/docs/`),
@@ -137,8 +137,8 @@ export const SETTINGS = {
 			if( localSettings.folder.content && !Path.isAbsolute( localSettings.folder.content ) ) {
 				localSettings.folder.content = Path.normalize(`${ process.cwd() }/${ localSettings.folder.content }/`);
 			}
-			if( localSettings.folder.src && !Path.isAbsolute( localSettings.folder.src ) ) {
-				localSettings.folder.src = Path.normalize(`${ process.cwd() }/${ localSettings.folder.src }/`);
+			if( localSettings.folder.code && !Path.isAbsolute( localSettings.folder.code ) ) {
+				localSettings.folder.code = Path.normalize(`${ process.cwd() }/${ localSettings.folder.code }/`);
 			}
 			if( localSettings.folder.site && !Path.isAbsolute( localSettings.folder.site ) ) {
 				localSettings.folder.site = Path.normalize(`${ process.cwd() }/${ localSettings.folder.site }/`);

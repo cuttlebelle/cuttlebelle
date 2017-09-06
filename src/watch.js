@@ -63,7 +63,7 @@ export const Watch = {
 		browsersync.watch([ // watch all content and src files
 			Path.normalize(`${ SETTINGS.get().folder.content }/**/*.yml`),
 			Path.normalize(`${ SETTINGS.get().folder.content }/**/*.md`),
-			Path.normalize(`${ SETTINGS.get().folder.src }/**/*.js`),
+			Path.normalize(`${ SETTINGS.get().folder.code }/**/*.js`),
 			Path.normalize(`${ SETTINGS.get().folder.assets }/**/*`),
 		], {
 			ignoreInitial: true,
@@ -142,7 +142,7 @@ export const DebouncedWatch = ( path, _buildAll ) => {
 export const UpdateChange = ( path, _doEverything = false ) => {
 	const startTime = process.hrtime();
 
-	const _isReact = path.startsWith( SETTINGS.get().folder.src );
+	const _isReact = path.startsWith( SETTINGS.get().folder.code );
 	const _isAssets = path.startsWith( SETTINGS.get().folder.assets );
 
 	Progress.done = 0;
@@ -249,7 +249,7 @@ export const UpdateContent = ( startTime, path, page ) => {
 export const UpdateReact = ( startTime, path ) => {
 	Log.verbose(`Only doing react changes`);
 
-	const page = path.replace( SETTINGS.get().folder.src, '' ).replace( '.js', '' );
+	const page = path.replace( SETTINGS.get().folder.code, '' ).replace( '.js', '' );
 
 	Log.verbose(`Changes effected ${ Style.yellow( JSON.stringify( Layouts.get()[ page ] ) ) }`);
 
@@ -289,7 +289,7 @@ export const UpdateReact = ( startTime, path ) => {
 export const UpdateAll = ( startTime ) => {
 
 	// remove babel register components from require cache
-	const allComponents = Object.keys( require.cache ).filter( ( key ) => key.startsWith( SETTINGS.get().folder.src ) );
+	const allComponents = Object.keys( require.cache ).filter( ( key ) => key.startsWith( SETTINGS.get().folder.code ) );
 
 	allComponents.map( ( component ) => {
 		delete require.cache[ component ]; //cache busting

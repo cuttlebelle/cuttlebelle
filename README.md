@@ -392,7 +392,7 @@ cuttlebelle help
 
 ### Your content
 
-The default folder structure divides content into the `content/` folder and the layout and component react files into the `src/` folder.
+The default folder structure divides content into the `content/` folder and the layout and component react files into the `code/` folder.
 
 ```shell
 .
@@ -408,7 +408,7 @@ The default folder structure divides content into the `content/` folder and the 
 │                      # it will be converted to `page2/subpage1/index.html`
 │
 ├── assets/            # The assets folder
-└── src/               # The `src` folder is where your layout lives
+└── code/              # The `code` folder is where your layout lives
 ```
 
 _(_ 💡 _All folders can be configured in your `package.json` file via the [cuttlebelle customizations](#customizations).)_
@@ -496,7 +496,7 @@ aside:
   - callout.md
 ```
 
-`src/layout/homepage.js`
+`code/layout/homepage.js`
 
 ```jsx
 import React from "react";
@@ -628,7 +628,7 @@ See below all configuration with default values:
 +	"cuttlebelle": {
 +		"folder": {
 +			"content": "/content/",
-+			"src": "/src/",
++			"code": "/code/",
 +			"site": "/site/",
 +			"index": "index",
 +			"homepage": "index"
@@ -664,7 +664,7 @@ A breakdown:
 "cuttlebelle": {                  # The cuttlebelle object
   "folder": {                     # The is where we can adjust folder/file names
     "content": "content/",        # Where does your content live?
-    "src": "src/",                # Where do your react layouts live?
+    "code": "code/",              # Where do your react layouts live?
     "site": "site/",              # Where do you want to generate your static site to?
     "index": "index",             # What is the name of the file we look for to generate pages?
     "homepage": "index"           # What should the index folder be named?

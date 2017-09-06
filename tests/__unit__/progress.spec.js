@@ -25,6 +25,8 @@ test('Progress.set - Set the amount correctly', () => {
 
 
 test('Progress.tick - Tick increases the amount correctly', () => {
+	process.stdout.write = jest.fn();
+
 	Progress.tick();
 
 	expect( Progress.done ).toBe( 1 );

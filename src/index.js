@@ -98,7 +98,6 @@ if( process.argv.includes('-d') || process.argv.includes('docs') ) {
 	});
 }
 
-
 // build site
 else {
 	// pre-render everything
@@ -110,50 +109,58 @@ else {
 			process.exit( 1 );
 		})
 		.then( ({ content, layout }) => {
+			if( content.length === 0 ) {
+				Log.info(`Consider running ${ Style.yellow(`cuttlebelle init`) } to get a clean slate.`);
 
-			// generate all files unless it’s disabled
-			if( !process.argv.includes('-n') && !process.argv.includes('--no-generate') ) {
-				Log.info(`Generating pages`);
-
-				const allPromises = [];
-
-				// copy all asset files to the site/ folder
-				allPromises.push(
-					RenderAssets(
-						SETTINGS.get().folder.assets,
-						Path.normalize(`${ SETTINGS.get().folder.site }/${ SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' ) }`)
-					)
-				);
-
-				// render all pages to site/
-				allPromises.push( RenderAllPages( content, layout ) );
-
-				Promise.all( allPromises )
-					.catch( error => {
-						Log.error(`Generating pages failed :(`);
-						Log.error( error );
-
-						process.exit( 1 );
-					})
-					.then( pages => {
-						const elapsedTime = process.hrtime( startTime );
-
-						Log.done(
-							`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages[ 1 ].length ) } pages ` : `No pages have been build ` }` +
-							`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
-							`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
-						);
-
-						// run watch on flag
-						if( Watch.running ) {
-							Watch.start();
-						}
-				});
+				const elapsedTime = process.hrtime( startTime );
+				Log.done(`Done in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`);
 			}
 			else {
-				// run watch on flag
-				if( process.argv.includes('-w') || process.argv.includes('watch') ) {
-					Watch.start();
+
+				// generate all files unless it’s disabled
+				if( !process.argv.includes('-n') && !process.argv.includes('--no-generate') ) {
+					Log.info(`Generating pages`);
+
+					const allPromises = [];
+
+					// copy all asset files to the site/ folder
+					allPromises.push(
+						RenderAssets(
+							SETTINGS.get().folder.assets,
+							Path.normalize(`${ SETTINGS.get().folder.site }/${ SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' ) }`)
+						)
+					);
+
+					// render all pages to site/
+					allPromises.push( RenderAllPages( content, layout ) );
+
+					Promise.all( allPromises )
+						.catch( error => {
+							Log.error(`Generating pages failed :(`);
+							Log.error( error );
+
+							process.exit( 1 );
+						})
+						.then( pages => {
+							const elapsedTime = process.hrtime( startTime );
+
+							Log.done(
+								`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages[ 1 ].length ) } pages ` : `No pages have been build ` }` +
+								`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+								`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+							);
+
+							// run watch on flag
+							if( Watch.running ) {
+								Watch.start();
+							}
+					});
+				}
+				else {
+					// run watch on flag
+					if( process.argv.includes('-w') || process.argv.includes('watch') ) {
+						Watch.start();
+					}
 				}
 			}
 	});

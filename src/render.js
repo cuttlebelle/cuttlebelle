@@ -52,7 +52,7 @@ import { Nav } from './nav';
  * @return {string}               - The static markup of the component
  */
 export const RenderReact = ( componentPath, props, source = '' ) => {
-	Log.verbose(`Rendering react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.src, '' ) ) }`);
+	Log.verbose(`Rendering react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.code, '' ) ) }`);
 
 	try {
 		// resolving relative dependencies
@@ -113,7 +113,7 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 		return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
 	}
 	catch( error ) {
-		Log.error(`The react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.src, '' ) ) } had trouble rendering:`);
+		Log.error(`The react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.code, '' ) ) } had trouble rendering:`);
 		Log.error( error );
 
 		if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if the render fails in production
@@ -238,7 +238,7 @@ export const RenderFile = ( file, parent = '', iterator = 0 ) => {
 
 						// and off we go into the react render machine
 						let pageHTML = RenderReact(
-							Path.normalize(`${ SETTINGS.get().folder.src }/${ parsedBody.frontmatter.layout }`),
+							Path.normalize(`${ SETTINGS.get().folder.code }/${ parsedBody.frontmatter.layout }`),
 							{
 								_ID: ID,
 								_parents: parents,
@@ -435,20 +435,24 @@ export const PreRender = () => {
 	const layout = GetLayout();
 	Log.verbose(`Found following layout:\n${ Style.yellow( JSON.stringify( layout ) ) }`);
 
-	// Setting how many pages we will have to go through
-	Progress.set( content.length );
+	if( content === undefined ) {
+		return Promise.resolve( { content: [], layout: [] } );
+	}
+	else {
+		// Setting how many pages we will have to go through
+		Progress.set( content.length );
 
-
-	return new Promise( ( resolve, reject ) => {
-		// Get all front matter from all pages and put them into a global var
-		Pages
-			.setAll( content )
-			.catch( error => reject( error ) )
-			.then( () => resolve({
-				content,
-				layout,
-			}) );
-	})
+		return new Promise( ( resolve, reject ) => {
+			// Get all front matter from all pages and put them into a global var
+			Pages
+				.setAll( content )
+				.catch( error => reject( error ) )
+				.then( () => resolve({
+					content,
+					layout,
+				}) );
+		});
+	}
 };
 
 
