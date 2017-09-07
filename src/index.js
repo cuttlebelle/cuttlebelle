@@ -110,7 +110,7 @@ else {
 		})
 		.then( ({ content, layout }) => {
 			if( content.length === 0 ) {
-				Log.info(`Consider running ${ Style.yellow(`cuttlebelle init`) } to get a clean slate.`);
+				Log.info(`Nothing to generate; consider running ${ Style.yellow(`cuttlebelle init`) } to get a clean slate.`);
 
 				const elapsedTime = process.hrtime( startTime );
 				Log.done(`Done in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`);

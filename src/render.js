@@ -61,6 +61,7 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 		let presetReact = Path.normalize(`${ __dirname }/../node_modules/babel-preset-react`);
 		let pluginSyntax = Path.normalize(`${ __dirname }/../node_modules/babel-plugin-syntax-dynamic-import`);
 		let pluginImport = Path.normalize(`${ __dirname }/../node_modules/babel-plugin-import-redirect`);
+		let propTypes = Path.normalize(`${ __dirname }/../node_modules/prop-types`);
 		let react = Path.normalize(`${ __dirname }/../node_modules/react`);
 
 		if( !Fs.existsSync( presetES2015 ) ) { // looks like it was installed locally
@@ -69,6 +70,7 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 			presetReact = Path.normalize(`${ __dirname }/../../babel-preset-react`);
 			pluginSyntax = Path.normalize(`${ __dirname }/../../babel-plugin-syntax-dynamic-import`);
 			pluginImport = Path.normalize(`${ __dirname }/../../babel-plugin-import-redirect`);
+			propTypes = Path.normalize(`${ __dirname }/../../prop-types`);
 			react = Path.normalize(`${ __dirname }/../../react`);
 		}
 
@@ -93,6 +95,7 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 					{
 						redirect: {
 							react: react,
+							"prop-types": propTypes,
 						},
 						suppressResolveWarning: true,
 					},
