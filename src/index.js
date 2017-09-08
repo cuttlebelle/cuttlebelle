@@ -26,6 +26,7 @@ import { RenderAllPages, RenderAssets, PreRender } from './render.js';
 import { SETTINGS } from './settings.js';
 import { BuildDocs } from './docs';
 import { Watch } from './watch.js';
+import { Init } from './init.js';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -73,6 +74,12 @@ const pkgLocation = Path.normalize(`${ process.cwd() }/package.json`);
 if( Fs.existsSync( pkgLocation ) ) {
 	const loacalPkg = require( pkgLocation );
 	SETTINGS.set( loacalPkg.cuttlebelle );
+}
+
+
+// run init before building
+if( process.argv.includes('-i') || process.argv.includes('init') ) {
+	Init();
 }
 
 
