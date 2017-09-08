@@ -4,7 +4,7 @@
  *
  * @file - src/docs.js
  *
- * Testing methods:
+ * Tested methods:
  * Ipsum
  * GetCategories
  * GetCss
@@ -14,6 +14,7 @@
  * MakePartials
  * MakeIpsum
  * vocabulary
+ *
  **************************************************************************************************************************************************************/
 
 

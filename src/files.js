@@ -16,8 +16,8 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import FsExtra from 'fs-extra';
 import Path from 'path';
-import Ncp from 'ncp';
 import Del from 'del';
 import Fs from 'fs';
 
@@ -163,7 +163,7 @@ export const CopyFiles = ( source, destination ) => {
 		RemoveDir([ destination ]); // remove destination first
 
 		if( Fs.existsSync( source ) ) {
-			Ncp.ncp( source, destination, ( error ) => {
+			FsExtra.copy( source, destination, ( error ) => {
 				if( error ) {
 					reject( error );
 				}

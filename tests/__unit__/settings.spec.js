@@ -4,8 +4,9 @@
  *
  * @file - src/settings.js
  *
- * Testing methods:
+ * Tested methods:
  * SETTINGS
+ *
  **************************************************************************************************************************************************************/
 
 
@@ -21,7 +22,7 @@ test('SETTINGS.get() - The default settings are correct', () => {
 		folder: {
 			cwd: Path.normalize(`${ process.cwd() }/`),
 			content: Path.normalize(`${ process.cwd() }/content/`),
-			src: Path.normalize(`${ process.cwd() }/src/`),
+			code: Path.normalize(`${ process.cwd() }/code/`),
 			assets: Path.normalize(`${ process.cwd() }/assets/`),
 			site: Path.normalize(`${ process.cwd() }/site/`),
 			docs: Path.normalize(`${ process.cwd() }/docs/`),
@@ -87,7 +88,7 @@ test('SETTINGS.set() - Not setting anything will merge default correctly', () =>
 		folder: {
 			cwd: Path.normalize(`${ process.cwd() }/`),
 			content: Path.normalize(`${ process.cwd() }/content/`),
-			src: Path.normalize(`${ process.cwd() }/src/`),
+			code: Path.normalize(`${ process.cwd() }/code/`),
 			assets: Path.normalize(`${ process.cwd() }/assets/`),
 			site: Path.normalize(`${ process.cwd() }/site/`),
 			docs: Path.normalize(`${ process.cwd() }/docs/`),
@@ -153,7 +154,7 @@ test('SETTINGS.set() - An empty object as settings folder will merge default cor
 		folder: {
 			cwd: Path.normalize(`${ process.cwd() }/`),
 			content: Path.normalize(`${ process.cwd() }/content/`),
-			src: Path.normalize(`${ process.cwd() }/src/`),
+			code: Path.normalize(`${ process.cwd() }/code/`),
 			assets: Path.normalize(`${ process.cwd() }/assets/`),
 			site: Path.normalize(`${ process.cwd() }/site/`),
 			docs: Path.normalize(`${ process.cwd() }/docs/`),
@@ -223,7 +224,7 @@ test('SETTINGS.set() - Prevent cwd from being set', () => {
 		folder: {
 			cwd: Path.normalize(`${ process.cwd() }/`),
 			content: Path.normalize(`${ process.cwd() }/content/`),
-			src: Path.normalize(`${ process.cwd() }/src/`),
+			code: Path.normalize(`${ process.cwd() }/code/`),
 			assets: Path.normalize(`${ process.cwd() }/assets/`),
 			site: Path.normalize(`${ process.cwd() }/site/`),
 			docs: Path.normalize(`${ process.cwd() }/docs/`),
@@ -302,7 +303,7 @@ test('SETTINGS.set() - Set settings correctly', () => {
 		folder: {
 			cwd: Path.normalize(`${ process.cwd() }/`),
 			content: Path.normalize(`${ process.cwd() }/test/`),
-			src: Path.normalize(`${ process.cwd() }/src/`),
+			code: Path.normalize(`${ process.cwd() }/code/`),
 			assets: Path.normalize(`${ process.cwd() }/assets/`),
 			site: Path.normalize(`${ process.cwd() }/site/`),
 			docs: Path.normalize(`${ process.cwd() }/docs/`),
@@ -367,7 +368,7 @@ test('SETTINGS.set() - Set all settings correctly', () => {
 		folder: {
 			cwd: 'test',
 			content: 'test',
-			src: 'test',
+			code: 'test',
 			assets: 'test/test/',
 			site: 'test/',
 			docs: 'test/',
@@ -397,7 +398,7 @@ test('SETTINGS.set() - Set all settings correctly', () => {
 		folder: {
 			cwd: Path.normalize(`${ process.cwd() }/`),
 			content: Path.normalize(`${ process.cwd() }/test/`),
-			src: Path.normalize(`${ process.cwd() }/test/`),
+			code: Path.normalize(`${ process.cwd() }/test/`),
 			assets: Path.normalize(`${ process.cwd() }/test/test/`),
 			site: Path.normalize(`${ process.cwd() }/test/`),
 			docs: Path.normalize(`${ process.cwd() }/test/`),

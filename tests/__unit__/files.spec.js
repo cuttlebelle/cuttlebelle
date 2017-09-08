@@ -4,12 +4,13 @@
  *
  * @file - src/files.js
  *
- * Testing methods:
+ * Tested methods:
  * CreateDir
  * CreateFile
  * CopyFiles
  * ReadFile
  * RemoveDir
+ *
  **************************************************************************************************************************************************************/
 
 
@@ -96,6 +97,6 @@ test('RemoveDir() - Removing a non existent directory', () => {
 	RemoveDir( `${ testDir }/NonExistent/CreateDir/` );
 	expect( Fs.existsSync( `${ testDir }/NonExistent/CreateDir/` ) ).toEqual( false );
 
-	RemoveDir( `${ testDir }` );
+	RemoveDir( testDir );
 	expect( Fs.existsSync( `${ testDir }` ) ).toEqual( false );
 });

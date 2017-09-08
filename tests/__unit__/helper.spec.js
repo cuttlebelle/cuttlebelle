@@ -4,7 +4,7 @@
  *
  * @file - src/helper.js
  *
- * Testing methods:
+ * Tested methods:
  * Slug
  * ConvertHrtime
  * Style

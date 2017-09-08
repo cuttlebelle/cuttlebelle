@@ -1,0 +1,36 @@
+html {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+	line-height: 1.1;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+	color: #313131;
+}
+
+body {
+	display: grid;
+	min-height: 100%;
+	grid-template-rows: 1fr auto;
+}
+
+header {
+	text-align: center;
+	font-weight: bold;
+	font-size: 2rem;
+	border-bottom: 8px solid #32ccbc;
+}
+
+main {
+	padding: 1rem;
+}
+
+footer {
+	grid-row-start: 2;
+	grid-row-end: 3;
+	padding: 1rem;
+	border-top: 2px solid #f55555;
+}
