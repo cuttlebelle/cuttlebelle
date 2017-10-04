@@ -55,6 +55,7 @@ export const SETTINGS = {
 			doctype: '<!DOCTYPE html>', // https://github.com/facebook/react/issues/1035
 			redirectReact: true,
 			markdownRenderer: '',
+			watchTimeout: 400,
 		},
 		docs: {
 			root: 'files/',

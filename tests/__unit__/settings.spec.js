@@ -38,6 +38,7 @@ test('SETTINGS.get() - The default settings are correct', () => {
 			doctype: '<!DOCTYPE html>',
 			redirectReact: true,
 			markdownRenderer: '',
+			watchTimeout: 400,
 		},
 		docs: {
 			root: 'files/',
@@ -104,6 +105,7 @@ test('SETTINGS.set() - Not setting anything will merge default correctly', () =>
 			doctype: '<!DOCTYPE html>',
 			redirectReact: true,
 			markdownRenderer: '',
+			watchTimeout: 400,
 		},
 		docs: {
 			root: 'files/',
@@ -170,6 +172,7 @@ test('SETTINGS.set() - An empty object as settings folder will merge default cor
 			doctype: '<!DOCTYPE html>',
 			redirectReact: true,
 			markdownRenderer: '',
+			watchTimeout: 400,
 		},
 		docs: {
 			root: 'files/',
@@ -240,6 +243,7 @@ test('SETTINGS.set() - Prevent cwd from being set', () => {
 			doctype: '<!DOCTYPE html>',
 			redirectReact: true,
 			markdownRenderer: '',
+			watchTimeout: 400,
 		},
 		docs: {
 			root: 'files/',
@@ -319,6 +323,7 @@ test('SETTINGS.set() - Set settings correctly', () => {
 			doctype: '<!DOCTYPE html>',
 			redirectReact: true,
 			markdownRenderer: '',
+			watchTimeout: 400,
 		},
 		docs: {
 			root: 'test',
@@ -384,6 +389,7 @@ test('SETTINGS.set() - Set all settings correctly', () => {
 			doctype: 'test',
 			redirectReact: 'test',
 			markdownRenderer: 'test',
+			watchTimeout: 100,
 		},
 		docs: {
 			root: 'test',
@@ -414,6 +420,7 @@ test('SETTINGS.set() - Set all settings correctly', () => {
 			doctype: 'test',
 			redirectReact: 'test',
 			markdownRenderer: 'test',
+			watchTimeout: 100,
 		},
 		docs: {
 			root: 'test',
