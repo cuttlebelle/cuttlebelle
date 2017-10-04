@@ -71,7 +71,7 @@ export const Watch = {
 		.on('change', path => {
 			const thisChange = new Date(); // double save detection
 
-			if( ( thisChange - Watch.lastChange ) < 400 ) {
+			if( ( thisChange - Watch.lastChange ) < SETTINGS.get().site.watchTimeout ) {
 				Log.info(`${ Style.bold('Double save detected') }; regenerating all files`);
 				DebouncedWatch( path, true );
 			}
@@ -133,7 +133,7 @@ export const DebouncedWatch = ( path, _buildAll ) => {
 		UpdateChange( path, history, buildAll );
 		buildAll = false; // now let’s go back to where we were before
 		history = [];
-	}, 400 );
+	}, SETTINGS.get().site.watchTimeout );
 };
 
 
