@@ -301,7 +301,7 @@ export const IteratePartials = ( object, file, iterator = 0 ) => {
 		let tree;
 
 		try {
-			tree = Traverse( object );                 // we have to convert the deep object into a tree
+			tree = Traverse( object );                       // we have to convert the deep object into a tree
 		}
 		catch( error ) {
 			Log.error(`Traversing frontmatter failed in ${ Style.yellow( file ) }`)

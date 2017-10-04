@@ -116,9 +116,12 @@ export const Watch = {
  */
 let timeout;
 let buildAll = false;
+let history = [];
 export const DebouncedWatch = ( path, _buildAll ) => {
+	history.push( path ); // let’s keep a record of the changes
+
 	if( _buildAll ) {
-		buildAll = true; // remember if we ever wanted to rebuild everything and stick with that
+		buildAll = true;    // remember if we ever wanted to rebuild everything and stick with that
 	}
 
 	if( timeout ) {
@@ -127,8 +130,9 @@ export const DebouncedWatch = ( path, _buildAll ) => {
 	}
 
 	timeout = setTimeout( () => {
-		UpdateChange( path, buildAll );
+		UpdateChange( path, history, buildAll );
 		buildAll = false; // now let’s go back to where we were before
+		history = [];
 	}, 400 );
 };
 
@@ -136,10 +140,11 @@ export const DebouncedWatch = ( path, _buildAll ) => {
 /**
  * Triage changes the the appropriate functions
  *
- * @param  {array}   path          - All changes that have happened
+ * @param  {array}   path          - The path of the change
+ * @param  {array}   history       - All changes that have happened since last debounce
  * @param  {boolean} _doEverything - Shall we just do all pages?
  */
-export const UpdateChange = ( path, _doEverything = false ) => {
+export const UpdateChange = ( path, history, _doEverything = false ) => {
 	const startTime = process.hrtime();
 
 	const _isReact = path.startsWith( SETTINGS.get().folder.code );
@@ -176,9 +181,18 @@ export const UpdateChange = ( path, _doEverything = false ) => {
 			UpdateReact( startTime, path );
 		}
 	}
-	// re-generating all pages
+	// double save
 	else {
-		UpdateAll( startTime );
+		if(
+			history.find( item => item.startsWith( SETTINGS.get().folder.code ) ) !== undefined ||
+			history.find( item => item.startsWith( SETTINGS.get().folder.content ) ) !== undefined
+		) {
+			UpdateAll( startTime ); // re-generating all pages
+		}
+
+		if( history.find( item => item.startsWith( SETTINGS.get().folder.assets ) ) !== undefined ) {
+			UpdateAssets( startTime ); // re-generating assets
+		}
 	}
 };
 
