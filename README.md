@@ -641,7 +641,8 @@ See below all configuration with default values:
 +			"root": "/",
 +			"doctype": "<!DOCTYPE html>",
 +			"redirectReact": true,
-+			"markdownRenderer": ""
++			"markdownRenderer": "",
++			"watchTimeout": 400
 +		},
 +		"docs": {
 +			"root": "files/",
