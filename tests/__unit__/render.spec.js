@@ -6,14 +6,22 @@
  *
  * Tested methods:
  * RenderReact
- * RequireBabelfy
+ * RenderFile
  *
  **************************************************************************************************************************************************************/
 
 
-import { RenderReact, RequireBabelfy } from '../../src/render';
+import { RenderReact, RenderFile } from '../../src/render';
+import { CreateDir, RemoveDir } from '../../src/files';
+import { SETTINGS } from '../../src/settings';
 import React from 'react';
 import Path from 'path';
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Globals
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+const testDir = `${ __dirname }/temp`;
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -110,20 +118,37 @@ test('RenderReact() - Render react components correctly', () => {
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-// RequireBabelfy
+// RenderFile
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-test('RequireBabelfy() - xxx', () => {
-	const reactSource = `
-		import React from 'react';
+test('RenderFile() - Generate the right HTML from a mock file', () => {
+	CreateDir( testDir );
 
-		export default ( props ) => (
-			<article>
-				<h2>{ props.title }</h2>
-				<div>{ props._body }</div>
-			</article>
-		);
-	`;
-	const outcome = {};
+	SETTINGS.get().folder = {
+		// cwd: Path.normalize(`${ __dirname }/mocks/`),
+		// content: Path.normalize(`${ __dirname }/mocks/content/`),
+		code: Path.normalize(`${ __dirname }/mocks/code/`),
+		// assets: Path.normalize(`${ __dirname }/mocks/assets/`),
+		// site: Path.normalize(`${ __dirname }/mocks/site/`),
+		// docs: Path.normalize(`${ __dirname }/mocks/docs/`),
+	};
 
-	expect( RequireBabelfy( reactSource ) ).toMatchObject( outcome );
+	const content = `
+title: Title
+header:
+  - Header
+main:
+  - Hello world
+footer:
+  - Footer
+`;
+
+	const fixture = '<html><head><title>Cuttlebelle - Title</title><meta charset="utf-8"/><meta content="ie=edge"/>' +
+		'<meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/assets/css/site.css"/></head><body><div class="top">' +
+		'<header role="banner">Header</header><main>Hello world</main></div><footer>Footer</footer></body></html>';
+
+	return RenderFile( content, 'index.yml' ).then( result => {
+		RemoveDir( testDir );
+
+		expect( result ).toBe( fixture );
+	})
 });

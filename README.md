@@ -337,7 +337,7 @@ This will generate all pages into the `site` folder _(unless [specified otherwis
 
 ![Cuttlebelle watch](https://raw.githubusercontent.com/dominikwilkowski/cuttlebelle/master/assets/watch.png)
 
-You can also run our highly optimized watch while adding content or developing your layouts.
+You can also run the highly optimized watch while adding content or developing your layouts.
 
 ```
 cuttlebelle watch
@@ -630,6 +630,7 @@ See below all configuration with default values:
 +			"content": "/content/",
 +			"code": "/code/",
 +			"site": "/site/",
++			"docs": "/docs/",
 +			"index": "index",
 +			"homepage": "index"
 +		},
@@ -663,10 +664,11 @@ A breakdown:
 
 ```shell
 "cuttlebelle": {                  # The cuttlebelle object
-  "folder": {                     # The is where we can adjust folder/file names
+  "folder": {                     # Where we can adjust folder/file names
     "content": "content/",        # Where does your content live?
     "code": "code/",              # Where do your react layouts live?
     "site": "site/",              # Where do you want to generate your static site to?
+    "docs": "docs",               # Where do you want to generate the docs to?
     "index": "index",             # What is the name of the file we look for to generate pages?
     "homepage": "index"           # What should the index folder be named?
   },
@@ -681,17 +683,21 @@ A breakdown:
                                   # react instance of cuttlebelle rather than your local folder.
     "markdownRenderer": "",       # A path to a file that `module.exports` an Marked.Renderer() object.
                                   # Learn more about it here: https://github.com/chjj/marked#renderer
-                                  # The only addition is the `preparse` key that will be run before we go
-                                  # into the marked parsing
-    "watchTimeout": 400,          # This is the time in milliseconds the watch waits to detect double saves
+                                  # The only addition is the `preparse` key that will be run
+                                  # before we go into the markdown parsing
+    "watchTimeout": 400,          # This is the time in milliseconds the watch waits
+                                  # to detect a double saves action
   }
   "docs": {                                          # Docs settings
-    "root": "files/",                                # What is the root folder called where all docs
-                                                     # are generated in
+    "root": "files/",                                # What is the root folder called where all
+                                                     # categories are generated in
     "index": ".template/docs/layout/index.js",       # The path to the index layout file
     "category": ".template/docs/layout/category.js", # The path to the category layout file
                                                      # All following settings are the default props
                                                      # each component is given for the example
+
+                                                     # The following props are important so we
+                                                     # can generate the docs example:
     "IDProp": "page2",                               # The _ID prop
     "navProp": {                                     # The _nav prop
       "index": {
