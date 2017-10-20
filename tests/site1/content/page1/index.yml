@@ -1,4 +1,3 @@
-layout: layout/page
 title: Page 1 not nested yet
 partials:
   - partial1.md

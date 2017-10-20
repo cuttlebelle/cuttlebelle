@@ -3,8 +3,9 @@ title: Wow! titles are awesome!
 stylesheet: homepage
 partials:
   - /shared/component1.md
-  - partial1.md
-  - partial2.md
   - partial3.md
+  - /shared/component1.md
   - partial4.md
   - /shared/component2.md
+  # - partial1.md
+  # - partial2.md

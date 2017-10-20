@@ -1,7 +1,7 @@
 ---
-title: partial3
-var1: value1
-var2: value2
+layout: subnesting
+title: Sub nesting via layout
+subnest: partial4.md
 ---
 
 __partial3__

@@ -6,7 +6,7 @@ export default ( partial ) => {
 	return (
 		<div>
 			<h2>{ partial.title }</h2>
-			<p>Store: { JSON.stringify( partial._store ) }</p>
+			<p>Store: { JSON.stringify( partial._store() ) }</p>
 			<div>{ partial._body }</div>
 		</div>
 	);

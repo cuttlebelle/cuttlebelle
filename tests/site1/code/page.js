@@ -7,6 +7,7 @@ export default ( page ) => (
 	</head>
 	<body>
 		<main>
+			_store: { page._storeSet({ test: 'done!' }) }?{ JSON.stringify( page._store() ) }?
 			<h1>{ page.title }</h1>
 			<div>{ page.partials }</div>
 		</main>

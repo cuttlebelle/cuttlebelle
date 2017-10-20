@@ -20,6 +20,7 @@ import Path from 'path';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 test('GetContent() - Get all content from the mock folder', () => {
 	const folders = [
+		Path.normalize(`${ __dirname }/mocks/content/index`),
 		Path.normalize(`${ __dirname }/mocks/content/page1`),
 		Path.normalize(`${ __dirname }/mocks/content/page2`),
 		Path.normalize(`${ __dirname }/mocks/content/page2/subpage1`),

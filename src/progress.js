@@ -48,25 +48,26 @@ export const Progress = {
 	/**
 	 * Tick off one page
 	 */
-	tick: () => {
+	tick: ( width ) => {
 		Progress.done ++;
 
-		Progress.display();
+		Progress.display( width );
 	},
 
 
 	/**
 	 * Display current progress
 	 */
-	display: () => {
+	display: ( width = Size.width ) => {
 		if( Progress.todo > 30 && !Log.verboseMode ) { // only if we have at least x pages to render and verbose is off
 			const progress = ( 100 / Progress.todo ) * Progress.done;
 			const padding = 13;
 
-			if( Size.width > padding ) {
-				const maxWidth = Size.width - ( padding * 2 ) - 2;
+			if( width > padding ) {
+				const maxWidth = width - ( padding * 2 ) - 2;
 				const currentWidth = Math.ceil( maxWidth * ( progress / 100 ) );
-				const whitespace = maxWidth - currentWidth < 0 ? 0 : maxWidth - currentWidth;
+				const whitespace = maxWidth - currentWidth;
+
 
 				Progress.clear();
 				process.stdout.write(`${ ' '.repeat( padding ) }┤${ Style.gray('▓').repeat( currentWidth ) }${ ' '.repeat( whitespace ) }├`);

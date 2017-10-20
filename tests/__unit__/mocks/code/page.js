@@ -28,6 +28,15 @@ const Page = ( page ) => (
 
 			<main>
 				{ page.main }
+				props:
+				- _ID: { page._ID }
+				- _parents: { JSON.stringify( page._parents ) }
+				- _body: { page._body }
+				- _pages: { JSON.stringify( page._pages ) }
+				- _nav: { JSON.stringify( page._nav ) }
+				- _store: { page._storeSet({ test: 'done' }) }{ JSON.stringify( page._store() ) }
+				- _relativeURL: { page._relativeURL( page._pages[ page._ID ].url, '/anotherpage/' ) }
+				- _parseMD: { page._parseMD(`# headline\n\n**bold** yay!`) }
 			</main>
 		</div>
 
