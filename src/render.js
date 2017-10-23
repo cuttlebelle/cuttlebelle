@@ -174,7 +174,7 @@ export const RequireBabelfy = ( source ) => {
 /**
  * Render a file to HTML
  *
- * @param  {string} content  - The path to the file to be rendered
+ * @param  {string} content  - The content of the file to be rendered
  * @param  {string} file     - The path to this file
  * @param  {string} parent   - The path to the parent file, optional, default: ''
  * @param  {array}  rendered - An array of all pages that have been through this render loop to detect circular dependencies, optional, default: []
@@ -213,7 +213,12 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 				parsedBody.frontmatter = frontmatter ? frontmatter : {}; // we only got one promise to resolve
 
 				// set the default layout
-				parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.page;
+				if( file.endsWith('.yml') ) {
+					parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.page;
+				}
+				else {
+					parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.partial;
+				}
 
 				// keeping track of all pages per layout will make the watch better
 				Layouts.set( ID, parsedBody.frontmatter.layout );
