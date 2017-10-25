@@ -1,11 +1,11 @@
-layout: layout/homepage
-title: Wow! titles are awesome!
-stylesheet: homepage
-partials:
+layout: homepage
+title: Homepage
+stylesheet: style1
+header:
   - /shared/component1.md
+main:
+  - partial1.md
+  - partial2.md
   - partial3.md
-  - /shared/component1.md
-  - partial4.md
+footer:
   - /shared/component2.md
-  # - partial1.md
-  # - partial2.md

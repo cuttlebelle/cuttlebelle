@@ -1,0 +1,9 @@
+body:before {
+	content: "style1 stylesheet loaded";
+	display: block;
+	padding: 1em;
+	background-color: rebeccapurple;
+	color: #fff;
+	font-family: sans-serif;
+	text-align: center;
+}

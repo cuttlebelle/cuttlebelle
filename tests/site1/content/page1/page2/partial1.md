@@ -1,4 +1,4 @@
 ---
-title: breadcrumbs
-layout: layout/breadcrumbs
+layout: components/sections
+headline: "**Lot's of sections**"
 ---

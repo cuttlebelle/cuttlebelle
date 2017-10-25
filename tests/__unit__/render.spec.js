@@ -206,7 +206,7 @@ footer:
 			'- _ID: subpage' +
 			'- _parents: [&quot;subpage&quot;]' +
 			'- _body: <div></div>' +
-			'- _pages: {&quot;subpage&quot;:{&quot;url&quot;:&quot;/subpage&quot;}}' +
+			'- _pages: {&quot;subpage&quot;:{&quot;url&quot;:&quot;/subpage&quot;,&quot;title&quot;:&quot;Title&quot;,&quot;header&quot;:[&quot;Header&quot;],&quot;main&quot;:[&quot;/nonpage/partial.md&quot;],&quot;footer&quot;:[&quot;Footer&quot;]}}' +
 			'- _nav: []' +
 			'- _store: {&quot;test&quot;:&quot;done&quot;}' +
 			'- _relativeURL: ../subpage' +

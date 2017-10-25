@@ -1,8 +1,12 @@
 import React from "react";
 
-export default ( partial ) => (
-	<div>
-		<h2>{ partial.title }</h2>
-		<div>{ partial._body }</div>
-	</div>
-);
+export default ( props ) => {
+	props._storeSet({ title: props._pages[ props._ID ].title });
+
+	return (
+		<header>
+			<h1>{ props._store()['title'] }</h1>
+			<div>{ props._body }</div>
+		</header>
+	);
+}

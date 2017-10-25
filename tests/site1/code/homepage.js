@@ -5,13 +5,14 @@ export default ( page ) => (
 	<head>
 		<title>{ page.title }</title>
 
-		<link rel="stylesheet" href={ `/assets/css/${ page.stylesheet }.css` } />
+		{ page.stylesheet && <link rel="stylesheet" href={ `/assets/css/${ page.stylesheet }.css` } /> }
 	</head>
 	<body>
+		{ page.header }
 		<main>
-			<h1>{ page.title }</h1>
-			<div>{ page.partials }</div>
+			<div>{ page.main }</div>
 		</main>
+		{ page.footer }
 	</body>
 	</html>
 );

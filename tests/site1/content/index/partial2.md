@@ -1,14 +1,4 @@
 ---
-title: partial2
-layout: components/markdown
-yourMarkdown: 'dfssdf
-sdf
-*sdfsdf*
-sdfsdsdf
-
-__gfsdf__'
-
-subnest: partial1.md
+layout: components/sections
+headline: Have a look at my **projects**:
 ---
-
-*partial2*?

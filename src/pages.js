@@ -124,7 +124,7 @@ export const Pages = {
 		}
 
 		data = JSON.parse( JSON.stringify( data ) ); // cloning
-		data = { url: url, ...data };
+		data = { url: url, ...Pages.all[ page ], ...data };
 
 		Pages.all[ page ] = data;
 

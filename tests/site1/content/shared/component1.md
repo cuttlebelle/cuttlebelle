@@ -2,4 +2,4 @@
 layout: components/component1
 ---
 
-[component1 text link](sadsad/sadsad.com)
+The place to find out more about the my work

@@ -1,7 +1,6 @@
 ---
-layout: subnesting
-title: Sub nesting via layout
-subnest: partial4.md
+layout: components/projects
+projects:
+  - partial4.md
+  - partial5.md
 ---
-
-__partial3__

@@ -2,3 +2,4 @@ title: Page 1 not nested yet
 partials:
   - partial1.md
   - partial2.md
+  - /shared/component2.md

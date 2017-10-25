@@ -1,17 +1,6 @@
 ---
-title: partial4
-layout: layout/cards
-cards:
-  - id: ID1
-    title: Card1
-    content: content for this card
-  - id: ID2
-    title: Card2
-    content: content for this card
-  - id: ID3
-    title: Card3
-    content: content for this card
-  - id: ID4
-    title: Card4
-    content: content for this card
+layout: components/project
+title: My first project
+description: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam fugiat non maxime odit incidunt minima eaque deleniti expedita, molestiae nesciunt
+  unde consequuntur, rerum earum. Fugiat qui, aliquam voluptate nostrum hic.
 ---

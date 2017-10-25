@@ -58,7 +58,11 @@ export const Progress = {
 	/**
 	 * Display current progress
 	 */
-	display: ( width = Size.width ) => {
+	display: ( width ) => {
+		if( !width || width === undefined ) {
+			width = Size ? Size.width : 0;
+		}
+
 		if( Progress.todo > 30 && !Log.verboseMode ) { // only if we have at least x pages to render and verbose is off
 			const progress = ( 100 / Progress.todo ) * Progress.done;
 			const padding = 13;
