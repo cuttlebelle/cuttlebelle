@@ -226,14 +226,19 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 				// to get the parents we just look at the path
 				const parents = ID.split('/').map( ( item, i ) => {
 					return ID.split('/').splice( 0, ID.split('/').length - i ).join('/');
-				}).reverse();
+				});
+
+				// we add the homepage to the parents root
+				if( ID !== SETTINGS.get().folder.index ) {
+					parents.push( SETTINGS.get().folder.index )
+				}
 
 				// and off we go into the react render machine
 				let pageHTML = RenderReact(
 					Path.normalize(`${ SETTINGS.get().folder.code }/${ parsedBody.frontmatter.layout }`),
 					{
 						_ID: ID,
-						_parents: parents,
+						_parents: parents.reverse(),
 						_storeSet: Store.set,
 						_store: Store.get,
 						_pages: Pages.get(),

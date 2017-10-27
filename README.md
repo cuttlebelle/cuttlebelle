@@ -861,10 +861,15 @@ _(_ 💡 _Please look at the coding style and work with it, not against it :smil
 
 ## Tests
 
-We use [Jest](https://facebook.github.io/jest/) for unit tests.
+I got an [end-to-end test script](https://github.com/dominikwilkowski/cuttlebelle/blob/master/tests/tester.js) that compares fixtures to what cuttlebelle
+generates. In each of those folders I test for [specific things](https://github.com/dominikwilkowski/cuttlebelle/blob/master/tests/tester.js#L30) and make sure
+the checksum of the generated files match the fixtures. In addition to that I created as many
+[unit tests](https://github.com/dominikwilkowski/cuttlebelle/tree/master/tests/__unit__) as I can via [Jest](https://facebook.github.io/jest/).
 
-- `npm run test` to run the tests
-- `npm run test:detail` will give you coverage infos
+- `npm run test` to run all tests
+- `npm run test:end-to-end` will run the end-to-end test only
+- `npm run test:unit-test` will run the unit test only
+- `npm run test:detail` will give you coverage infos for the unit tests
 - `npm run test:watch` will spin up the jest watch
 
 
@@ -876,7 +881,7 @@ We use [Jest](https://facebook.github.io/jest/) for unit tests.
 
 ## Release History
 
-* v0.1.0 - 💥 Initial version
+* v1.0.0.alphaX - 💥 Alpha versions with breaking API changes
 
 
 **[⬆ back to top](#contents)**
