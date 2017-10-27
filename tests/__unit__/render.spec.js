@@ -5,15 +5,45 @@
  * @file - src/render.js
  *
  * Tested methods:
+ * RelativeURL
  * RenderReact
- * RequireBabelfy
+ * RenderFile
+ * RenderPartial
+ * PreRender
+ * RenderAssets
  *
  **************************************************************************************************************************************************************/
 
 
-import { RenderReact, RequireBabelfy } from '../../src/render';
+import { RelativeURL, RenderReact, RenderFile, RenderPartial, PreRender, RenderAssets } from '../../src/render';
+import { CreateDir, RemoveDir } from '../../src/files';
+import { Progress } from '../../src/progress';
+import { SETTINGS } from '../../src/settings';
+import { Pages } from '../../src/pages';
 import React from 'react';
 import Path from 'path';
+import Fs from 'fs';
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Globals
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+const testDir = `${ __dirname }/temp2`;
+
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// RelativeURL
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+test('RelativeURL() - Resolve two URLs to a relative path', () => {
+	expect( RelativeURL( '/path/to', '/path' ) )                   .toBe( 'to' );
+	expect( RelativeURL( '/path/to', '/' ) )                       .toBe( 'path/to' );
+	expect( RelativeURL( '/path/to', '/path2' ) )                  .toBe( '../path/to' );
+	expect( RelativeURL( '/path/to', '/path2/more/deep/yay/wow' ) ).toBe( '../../../../../path/to' );
+	expect( RelativeURL( '/path/to', '/path/to/deepter' ) )        .toBe( '..' );
+	expect( RelativeURL( '/path/to', '/path/to' ) )                .toBe( '.' );
+	expect( RelativeURL( '/path/to', '/path/to/more/pages' ) )     .toBe( '../..' );
+});
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -110,20 +140,201 @@ test('RenderReact() - Render react components correctly', () => {
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-// RequireBabelfy
+// RenderFile
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-test('RequireBabelfy() - xxx', () => {
-	const reactSource = `
-		import React from 'react';
+test('RenderFile() - Generate the right HTML from a mock index.yml file WITHOUT partials', () => {
+	CreateDir( testDir );
 
-		export default ( props ) => (
-			<article>
-				<h2>{ props.title }</h2>
-				<div>{ props._body }</div>
-			</article>
-		);
-	`;
-	const outcome = {};
+	SETTINGS.get().folder.code = Path.normalize(`${ __dirname }/mocks/code/`);
 
-	expect( RequireBabelfy( reactSource ) ).toMatchObject( outcome );
+	const content = `
+title: Title
+header:
+  - Header
+main:
+  - Hello world
+footer:
+  - Footer
+`;
+
+	const fixture = '<html><head><title>Cuttlebelle - Title</title><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/>' +
+		'<meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/assets/css/site.css"/></head><body><div class="top">' +
+		'<header role="banner">Header</header>' +
+		'<main>Hello world' +
+			'props: ' +
+			'- _ID: subpage' +
+			'- _parents: [&quot;index&quot;,&quot;subpage&quot;]' +
+			'- _body: <div></div>' +
+			'- _pages: {&quot;subpage&quot;:{&quot;url&quot;:&quot;/subpage&quot;,&quot;title&quot;:&quot;Title&quot;,&quot;header&quot;:[&quot;Header&quot;]' +
+			',&quot;main&quot;:[&quot;Hello world&quot;],&quot;footer&quot;:[&quot;Footer&quot;]}}' +
+			'- _nav: []' +
+			'- _store: {&quot;test&quot;:&quot;done&quot;}' +
+			'- _relativeURL: ../subpage' +
+			'- _parseMD: <div><h1 id="headline">headline</h1>\n<p><strong>bold</strong> yay!</p>\n</div>' +
+		'</main></div><footer>Footer</footer></body></html>';
+
+	return RenderFile( content, 'subpage/index.yml' ).then( result => {
+		RemoveDir( testDir );
+
+		expect( result ).toBe( fixture );
+	})
+});
+
+
+test('RenderFile() - Generate the right HTML from a mock index.yml file WITH partials', () => {
+	CreateDir( testDir );
+
+	SETTINGS.get().folder.code = Path.normalize(`${ __dirname }/mocks/code/`);
+	SETTINGS.get().folder.content = Path.normalize(`${ __dirname }/mocks/content/`);
+
+	const content = `
+title: Title
+header:
+  - Header
+main:
+  - /nonpage/partial.md
+footer:
+  - Footer
+`;
+
+	const fixture = '<html><head><title>Cuttlebelle - Title</title><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/>' +
+		'<meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/assets/css/site.css"/></head><body><div class="top">' +
+		'<header role="banner">Header</header>' +
+		'<main>' +
+			'<div><div class="textwrapper"><div><h1 id="test">test</h1>\n</div></div></div>' +
+			'props: ' +
+			'- _ID: subpage' +
+			'- _parents: [&quot;index&quot;,&quot;subpage&quot;]' +
+			'- _body: <div></div>' +
+			'- _pages: {&quot;subpage&quot;:{&quot;url&quot;:&quot;/subpage&quot;,&quot;title&quot;:&quot;Title&quot;,&quot;header&quot;:[&quot;Header&quot;],&quot;main&quot;:[&quot;/nonpage/partial.md&quot;],&quot;footer&quot;:[&quot;Footer&quot;]}}' +
+			'- _nav: []' +
+			'- _store: {&quot;test&quot;:&quot;done&quot;}' +
+			'- _relativeURL: ../subpage' +
+			'- _parseMD: <div><h1 id="headline">headline</h1>\n<p><strong>bold</strong> yay!</p>\n</div>' +
+		'</main></div><footer>Footer</footer></body></html>';
+
+	return RenderFile( content, 'subpage/index.yml' ).then( result => {
+		RemoveDir( testDir );
+
+		expect( result ).toBe( fixture );
+	})
+});
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// RenderPartial
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+test('RenderPartial() - We should not change non-partial strings', () => {
+	console.log = jest.fn();
+	console.info = jest.fn();
+
+	const partial = 'non partial string';
+
+	return RenderPartial( partial, Path.normalize(`${ __dirname }/mocks/content/nonpage`), [] )
+		.then( ( result ) => {
+			expect( result ).toEqual( partial );
+	});
+});
+
+
+test('RenderPartial() - Return a rendered object for partials', () => {
+	console.log = jest.fn();
+	console.info = jest.fn();
+
+	const HTML = '{\"type\":\"div\",\"key\":\"cuttlebelleIDpartial-md-0\",\"ref\":null,\"props\":{\"dangerouslySetInnerHTML\":' +
+		'{\"__html\":\"<div class=\\\"textwrapper\\\"><div><h1 id=\\\"test\\\">test</h1>\\n</div></div>\"}},\"_owner\":null,\"_store\":{}}';
+
+	return RenderPartial( 'partial.md', Path.normalize(`${ __dirname }/mocks/content/nonpage/index.yml`), [] )
+		.then( ( result ) => {
+			expect( JSON.stringify( result.partial ) ).toBe( HTML );
+	});
+});
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// PreRender
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+test('PreRender() - Resolve with empty object if no content was found', () => {
+	console.log = jest.fn();
+	console.info = jest.fn();
+
+	SETTINGS.get().folder.content = Path.normalize(`${ __dirname }/mocks/content/NonExistent-Dir`);
+
+	return PreRender()
+		.then( ( result ) => {
+			expect( result.content.length ).toEqual( 0 );
+			expect( result.layout.length ).toEqual( 0 );
+	});
+});
+
+
+test('PreRender() - Return the correct content and layout data', () => {
+	console.log = jest.fn();
+	console.info = jest.fn();
+
+	SETTINGS.get().folder.content = Path.normalize(`${ __dirname }/mocks/content`);
+	SETTINGS.get().folder.code = Path.normalize(`${ __dirname }/mocks/code`);
+
+	const content = [
+		'/index',
+		'/page1',
+		'/page2',
+		'/page2/subpage1',
+		'/page2/subpage1/subsubpage1',
+		'/page2/subpage1/subsubpage1/subsubsubpage1',
+		'/page3',
+	];
+
+	const layout = [
+		'/folder/layout.js',
+		'/folder/layout1.js',
+		'/folder/subfolder/layout.js',
+		'/layout.js',
+		'/layout1.js',
+		'/layout2.js',
+		'/layout3.js',
+		'/page.js',
+		'/partial.js',
+	];
+
+	const pages = [
+		'subpage',
+		'/index',
+		'/page1',
+		'/page2',
+		'/page2/subpage1',
+		'/page2/subpage1/subsubpage1',
+		'/page2/subpage1/subsubpage1/subsubsubpage1',
+		'/page3',
+	];
+
+	return PreRender()
+		.then( ( result ) => {
+			expect( result.content ).toEqual( expect.arrayContaining( content ) );
+			expect( result.layout ).toEqual( expect.arrayContaining( layout ) );
+			expect( Progress.todo ).toEqual( content.length );
+			expect( Object.keys( Pages.all ) ).toEqual( expect.arrayContaining( pages ) );
+	});
+});
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// RenderFile
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+test('RenderAssets() - Copy all nested assets files to its destination', () => {
+	return RenderAssets( Path.normalize(`${ __dirname }/mocks/assets/`), testDir )
+		.then( () => {
+			expect( Fs.existsSync( Path.normalize(`${ testDir }/style.css`) ) ).toEqual( true );
+			expect( Fs.existsSync( Path.normalize(`${ testDir }/test/style2.css`) ) ).toEqual( true );
+
+			RemoveDir( testDir );
+	});
+});
+
+
+test('RenderAssets() - Cannot copy files from non existent directory', () => {
+	return RenderAssets( Path.normalize(`${ __dirname }/mocks/assets/NonExistent-Dir/`), `${ testDir }/NonExistent/` )
+		.then( () => {
+			expect( Fs.existsSync( `${ testDir }/NonExistent/` ) ).toEqual( false );
+	});
 });

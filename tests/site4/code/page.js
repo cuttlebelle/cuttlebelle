@@ -1,31 +1,59 @@
 import PropTypes from 'prop-types';
-import React from "react";
+import React from 'react';
+import Navigation from './navigation';
 
 
-const Page = ( page ) => (
+/**
+ * The Page component for the default layout of pages
+ */
+const Page = ( props ) => (
 	<html>
 	<head>
-		<title>{ page.title }</title>
+		<title>{ props.title }</title>
+
+		{ props.stylesheet && <link rel="stylesheet" href={ `/assets/css/${ props.stylesheet }.css` } /> }
 	</head>
 	<body>
 		<main>
-			<h1>{ page.title }</h1>
-			<div>{ page.partials }</div>
+			<h1>{ props.title }</h1>
+			<Navigation nav={ props._nav } pages={ props._pages } ID={ props._ID } relativeURL={ props._relativeURL } />
+			<div>{ props.partials }</div>
+			{
+				props.test
+					&& <pre><code>
+						test[0]['partial3.md'][0]['test']:<br/>
+						{ JSON.stringify( props.test[0]['partial3.md'][0]['test'] ) }<hr/>
+						test[0]['partial3.md'][1]['testing a variable with special? characters'][0]:<br/>
+						{ props.test[0]['partial3.md'][1]['testing a variable with special? characters'][0] }<hr/>
+						test[0]['partial3.md'][1]['testing a variable with special? characters'][1]:<br/>
+						{ JSON.stringify( props.test[0]['partial3.md'][1]['testing a variable with special? characters'][1] ) }<hr/>
+						test[0]['partial3.md'][1]['testing a variable with special? characters'][2]['testing']['testing']['something']:<br/>
+						{ props.test[0]['partial3.md'][1]['testing a variable with special? characters'][2]['testing']['testing']['something'] }<hr/>
+						test[0]['partial3.md'][1]['testing a variable with special? characters'][2]['testing']['testing']['testing']['testing']:<br/>
+						{ props.test[0]['partial3.md'][1]['testing a variable with special? characters'][2]['testing']['testing']['testing']['testing'] }<hr/>
+					</code></pre>
+			}
 		</main>
 	</body>
 	</html>
 );
 
+
 Page.propTypes = {
 	/**
-	 * title: Welcome
+	 * title: Page title  # if not given, it takes the title from the current page
 	 */
 	title: PropTypes.string.isRequired,
 
 	/**
-	 * partials: (partials)(5)
+	 * stylesheet: style1
 	 */
-	partials: PropTypes.node.isRequired,
+	stylesheet: PropTypes.string,
+
+	/**
+	 * partials: (partials)(4)
+	 */
+	partials: PropTypes.node,
 };
 
 

@@ -1,23 +1,26 @@
 import PropTypes from 'prop-types';
-import React from "react";
+import React from 'react';
 
 
-const Partial = ( page ) => (
+/**
+ * The Partial component for the default layout of partials
+ */
+const Partial = ( props ) => (
 	<article>
-		<h2>{ page.title }</h2>
-		<div>{ page._body }</div>
+		{ props.title && <h2>{ props.title }</h2> }
+		<div>{ props._body }</div>
 	</article>
 );
 
 
 Partial.propTypes = {
 	/**
-	 * title: First blog post
+	 * title: Partial title
 	 */
-	title: PropTypes.string.isRequired,
+	title: PropTypes.string,
 
 	/**
-	 * _body: (text)(2)
+	 * _body: (partials)(4)
 	 */
 	_body: PropTypes.node.isRequired,
 };

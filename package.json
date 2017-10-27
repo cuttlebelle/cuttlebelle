@@ -1,18 +1,18 @@
 {
 	"name": "cuttlebelle",
 	"description": "The react static site generator that separates editing and code concerns",
-	"version": "1.0.0-alpha.32",
+	"version": "1.0.0-alpha.33",
 	"homepage": "https://github.com/dominikwilkowski/cuttlebelle",
 	"author": {
 		"name": "Dominik Wilkowski",
 		"email": "Hi@Dominik-Wilkowski.com",
-		"url": "http://dominik-wilkowski.com/"
+		"url": "https://dominik-wilkowski.com/"
 	},
 	"contributors": [
 		{
 			"name": "Dominik Wilkowski",
 			"email": "Hi@Dominik-Wilkowski.com",
-			"url": "http://dominik-wilkowski.com/"
+			"url": "https://dominik-wilkowski.com/"
 		}
 	],
 	"repository": {
@@ -34,9 +34,11 @@
 	"scripts": {
 		"prepublish": "npm run build && npm run test",
 
-		"test": "jest",
+		"test": "npm run test:end-to-end && npm run test:unit-test",
+		"test:unit-test": "jest",
 		"test:detail": "jest --coverage",
 		"test:watch": "jest --watch --coverage",
+		"test:end-to-end": "node tests/tester.js",
 
 		"build": "npm run build:js",
 		"build:js": "babel src --out-dir dist --presets=es2015 --plugins=transform-runtime,transform-es2015-modules-commonjs",
@@ -52,26 +54,30 @@
 		"babel-register": "^6.26.0",
 		"babel-runtime": "^6.26.0",
 		"browser-sync": "^2.18.13",
-		"del": "^2.2.2",
+		"del": "^3.0.0",
 		"fs-extra": "^4.0.2",
 		"marked": "^0.3.6",
 		"node-notifier": "^5.1.2",
 		"pretty": "^2.0.0",
 		"prop-types": "^15.6.0",
-		"react": "^15.6.2",
+		"react": "^16.0.0",
 		"react-docgen": "^2.18.0",
-		"react-dom": "^15.6.2",
-		"require-from-string": "^1.2.1",
+		"react-dom": "^16.0.0",
+		"require-from-string": "^2.0.1",
 		"slugify": "^1.2.1",
 		"traverse": "^0.6.6",
 		"window-size": "^1.1.0",
-		"yamljs": "^0.2.10"
+		"yamljs": "^0.3.0"
 	},
 	"devDependencies": {
 		"babel-cli": "^6.26.0",
 		"babel-plugin-transform-runtime": "^6.22.0",
-		"jest-cli": "^20.0.4",
-		"onchange": "^3.2.1"
+		"chalk": "^2.3.0",
+		"copy-dir": "^0.3.0",
+		"dirsum": "^0.1.1",
+		"jest-cli": "^21.2.1",
+		"onchange": "^3.2.1",
+		"replace-in-file": "^3.0.0-beta.2"
 	},
 	"jest": {
 		"testEnvironment": "node",

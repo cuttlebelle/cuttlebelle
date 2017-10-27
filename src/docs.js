@@ -43,6 +43,7 @@ import { SETTINGS } from './settings.js';
 import { Log, Style } from './helper';
 import { GetLayout } from './site';
 import { Pages } from './pages';
+import { Store } from './store';
 import { Nav } from './nav';
 
 
@@ -464,6 +465,9 @@ export const BuildHTML = ( object ) => {
 		object.props._nav = object.props._nav || SETTINGS.get().docs.navProp;
 		object.props._pages = object.props._pages || SETTINGS.get().docs.pagesProp;
 		object.props._relativeURL = object.props._relativeURL || function() { return '' };
+		object.props._parseMD = ( markdown ) => <div key={`${ object.props._ID }-md`} dangerouslySetInnerHTML={ { __html: ParseMD( markdown ) } } />;
+		object.props._storeSet = Store.set;
+		object.props._store = Store.get;
 
 		const parents = object.props._ID.split('/').map( ( item, i ) => {
 			return object.props._ID.split('/').splice( 0, object.props._ID.split('/').length - i ).join('/');

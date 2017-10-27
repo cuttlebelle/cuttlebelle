@@ -32,6 +32,7 @@ import Fs from 'fs';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { RenderFile, RenderAllPages, RenderAssets, PreRender } from './render';
 import { ConvertHrtime, Log, Style } from './helper';
+import { ReadFile, CreateFile } from './files';
 import { GetLayout, GetContent } from './site';
 import { SETTINGS } from './settings.js';
 import { Progress } from './progress';
@@ -235,16 +236,28 @@ export const UpdateAssets = ( startTime ) => {
 export const UpdateContent = ( startTime, path, page ) => {
 	Log.verbose(`Only doing content changes`);
 
-	RenderFile(`${ page }/${ SETTINGS.get().folder.index }.yml`)
+	const filePath = Path.normalize(`${ SETTINGS.get().folder.content }/${ page }/${ SETTINGS.get().folder.index }.yml`);
+
+	ReadFile( filePath )
 		.catch( error => {
 			Log.error(`An error occured while trying to generate ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
 			Log.error( error );
+		})
+		.then( content => RenderFile( content, filePath.replace( SETTINGS.get().folder.content, '' ) ) )
+		.then( HTML => {
+				const newPath = Path.normalize(`${ SETTINGS.get().folder.site }/${ page === SETTINGS.get().folder.homepage ? '' : page }/index.html`);
+
+				CreateFile( newPath, HTML ).catch( error => reject( error ) );
+
+				Progress.tick();
+
+				return newPath.replace( SETTINGS.get().folder.cwd, '' );
 		})
 		.then( page => {
 			const elapsedTime = process.hrtime( startTime );
 
 			Log.done(
-				`Successfully built ${ Style.yellow( page.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+				`Successfully built ${ Style.yellow( page ) } ` +
 				`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
 			);
 

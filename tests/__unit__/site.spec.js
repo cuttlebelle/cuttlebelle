@@ -20,6 +20,7 @@ import Path from 'path';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 test('GetContent() - Get all content from the mock folder', () => {
 	const folders = [
+		Path.normalize(`${ __dirname }/mocks/content/index`),
 		Path.normalize(`${ __dirname }/mocks/content/page1`),
 		Path.normalize(`${ __dirname }/mocks/content/page2`),
 		Path.normalize(`${ __dirname }/mocks/content/page2/subpage1`),
@@ -46,16 +47,17 @@ test('GetContent() - Get an info when the folder doesn’t exist', () => {
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 test('GetLayout() - Get all content from the mock folder', () => {
 	const folders = [
-		Path.normalize(`${ __dirname }/mocks/src/layout.js`),
-		Path.normalize(`${ __dirname }/mocks/src/layout1.js`),
-		Path.normalize(`${ __dirname }/mocks/src/layout2.js`),
-		Path.normalize(`${ __dirname }/mocks/src/layout3.js`),
-		Path.normalize(`${ __dirname }/mocks/src/folder/layout.js`),
-		Path.normalize(`${ __dirname }/mocks/src/folder/layout1.js`),
-		Path.normalize(`${ __dirname }/mocks/src/folder/subfolder/layout.js`),
+		Path.normalize(`${ __dirname }/mocks/code/layout.js`),
+		Path.normalize(`${ __dirname }/mocks/code/layout1.js`),
+		Path.normalize(`${ __dirname }/mocks/code/layout2.js`),
+		Path.normalize(`${ __dirname }/mocks/code/layout3.js`),
+		Path.normalize(`${ __dirname }/mocks/code/folder/layout.js`),
+		Path.normalize(`${ __dirname }/mocks/code/folder/layout1.js`),
+		Path.normalize(`${ __dirname }/mocks/code/folder/subfolder/layout.js`),
+		Path.normalize(`${ __dirname }/mocks/code/page.js`),
 	];
 
-	expect( GetLayout( Path.normalize(`${ __dirname }/mocks/src`) ) ).toEqual( expect.arrayContaining( folders ) );
+	expect( GetLayout( Path.normalize(`${ __dirname }/mocks/code`) ) ).toEqual( expect.arrayContaining( folders ) );
 });
 
 

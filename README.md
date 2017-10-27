@@ -80,7 +80,8 @@ Then run `npm run build` to run cuttlebelle.
 
 ## Getting started
 
-After [installing](#install) cuttlebelle, create a folder called `content` and start populating it.
+After [installing](#install) cuttlebelle, create a folders called `content` and `code` and start populating them.
+Each folder with an `index.yml` file will become an `index.html` in cuttlebelles generated pages.
 
 <table>
 	<tbody>
@@ -337,7 +338,7 @@ This will generate all pages into the `site` folder _(unless [specified otherwis
 
 ![Cuttlebelle watch](https://raw.githubusercontent.com/dominikwilkowski/cuttlebelle/master/assets/watch.png)
 
-You can also run our highly optimized watch while adding content or developing your layouts.
+You can also run the highly optimized watch while adding content or developing your layouts.
 
 ```
 cuttlebelle watch
@@ -400,14 +401,14 @@ The default folder structure divides content into the `content/` folder and the 
 │   ├── page1/         # Each folder represents a page and will be converted to `page1/index.html`
 │   │                  # 💡 As long as it contains an `index.yml` file.
 │   │
-│   ├── index/         # The index folder is treated as the homepage and converted to `index.html`
+│   ├── index/         # The index folder is treated as the homepage and converted to `/index.html`
 │   │
 │   └── page2/         # You can nest pages by nesting them in the folder structure
 │       │
 │       └── subpage1/  # As long as this folder has an `index.yml` file
 │                      # it will be converted to `page2/subpage1/index.html`
 │
-├── assets/            # The assets folder
+├── assets/            # The assets folder, every file you add here will be moved to your output.
 └── code/              # The `code` folder is where your layout lives
 ```
 
@@ -419,9 +420,10 @@ Now let’s look into one folder:
 .
 └── content
     ├── page1
-    │   ├── index.yml      # This folder includes an `index.yml` file so it will be converted into a page
+    │   ├── index.yml      # This folder includes an `index.yml` file so it will be converted into
+    │   │                  # a page in the output of cuttlebelle.
     │   ├── partial1.md    # The partials are all in markdown format and can have any name.
-    │   └── partial2.md    # They are only converted if they are referenced inside your `index.yml` file
+    │   └── partial2.md    # You can reference partials from your index.yml or another partial.
     │
     └── shared             # A folder won’t be generated if it doesn’t have an `index.yml` file
         ├── component1.md  # You can use such folders to share partials between pages
@@ -434,15 +436,18 @@ Now let’s look into one folder:
 A typical `index.yml` file could look like this:
 
 ```yaml
-layout: page          # The layout defaults to `page` if it’s not set
+layout: page          # The layout of an `index.yml` defaults to `page` if it’s not set
 title: Homepage       # It’s always a good idea to give your page a title
 main:                 # Defining an array in yaml
-  - feature-image.md  # This is a partial (because it ends with ".md") and points to a markdown file that exists
+  - feature-image.md  # This is a partial (because it ends with ".md") and points to a markdown
+                      # file that exists
   - cta.md
   - contact-cards.md
-  - /shared/footer.md # This is also a partial but because it starts with a slash "/" the location where this
-                      # partial sits is relative to your content folder and not the page folder you’re in.
+  - /shared/footer.md # This is also a partial but because it starts with a slash "/" the
+                      # location where this partial sits is relative to your content folder
+                      # and not the page folder you’re in.
 header: header.md     # You can define a partial to a variable or to an array as seen above
+content: Hello world  # Or you can put any type of string into your yaml if you prefer.
 ```
 
 _(_ 💡 _All variables that are defined inside a page are available as props under `{ _pages }` to all partials.)_
@@ -455,7 +460,7 @@ And a typical `partial.md` file could look like this:
 ```markdown
 ---                                 # Each markdown file can have frontmatter
 layout: cards                       # The power of cuttlebelle is each partial has it’s own layout
-                                    # The layout defaults to `partial` if it’s not set
+                                    # The layout of partials defaults to `partial` if it’s not set
 headline: Partial headline          # You can add any number of variables
 cards:                              # Even arrays
   - id: ID1                         # Or objects
@@ -595,10 +600,10 @@ A file will receive the following props:
 | `_ID`          | The ID of the current page                                                            | `props._ID`                              |
 | `_parents`     | An array of all parent pages IDs                                                      | `props._parents`                         |
 | `_body`        | The body of your markdown file (empty for `index.yml` files)                          | `props._body`                            |
-| `_pages`       | An object of all pages; with ID as key                                                | `props._pages.map()`                     |
+| `_pages`       | An object of all pages and their props; with ID as key                                | `props._pages.map()`                     |
 | `_nav`         | A nested object of your site structure                                                | `Object.keys( props._nav ).map()`        |
 | `_storeSet`    | You can set data to persist between react components by setting them with this helper | `props._storeSet({ variable: "value" })` |
-| `_store`       | To get that data just call this prop function                                         | `props._store`                           |
+| `_store`       | To get that data just call this prop function                                         | `props._store()`                           |
 | `_relativeURL` | A helper function to make an absolute URL relative                                    | `props._relativeURL( URL, yourLocation)` |
 | `_parseMD`     | A helper function to parse markdown into HTML                                         | `props._parseMD( props.yourMarkdown )`   |
 
@@ -630,6 +635,7 @@ See below all configuration with default values:
 +			"content": "/content/",
 +			"code": "/code/",
 +			"site": "/site/",
++			"docs": "/docs/",
 +			"index": "index",
 +			"homepage": "index"
 +		},
@@ -663,10 +669,11 @@ A breakdown:
 
 ```shell
 "cuttlebelle": {                  # The cuttlebelle object
-  "folder": {                     # The is where we can adjust folder/file names
+  "folder": {                     # Where we can adjust folder/file names
     "content": "content/",        # Where does your content live?
     "code": "code/",              # Where do your react layouts live?
     "site": "site/",              # Where do you want to generate your static site to?
+    "docs": "docs",               # Where do you want to generate the docs to?
     "index": "index",             # What is the name of the file we look for to generate pages?
     "homepage": "index"           # What should the index folder be named?
   },
@@ -677,21 +684,27 @@ A breakdown:
   "site": {                       # General settings
     "root": "/",                  # What should cuttlebelle append to links?
     "doctype": "<!DOCTYPE html>", # What doctype string do you want to add?
-    "redirectReact": true         # You can disable redirecting `import` calls to the locally installed
-                                  # react instance of cuttlebelle rather than your local folder.
-    "markdownRenderer": "",       # A path to a file that `module.exports` an Marked.Renderer() object.
-                                  # Learn more about it here: https://github.com/chjj/marked#renderer
-                                  # The only addition is the `preparse` key that will be run before we go
-                                  # into the marked parsing
-    "watchTimeout": 400,          # This is the time in milliseconds the watch waits to detect double saves
+    "redirectReact": true         # You can disable redirecting `import` calls to the locally
+                                  # installed react instance of cuttlebelle rather than your
+                                  # local folder.
+    "markdownRenderer": "",       # A path to a file that `module.exports` an Marked.Renderer()
+                                  # object. Learn more about it here:
+                                  # https://github.com/chjj/marked#renderer
+                                  # The only addition is the `preparse` key that will be run
+                                  # before we go into the markdown parsing
+    "watchTimeout": 400,          # This is the time in milliseconds the watch waits
+                                  # to detect a double saves action
   }
   "docs": {                                          # Docs settings
-    "root": "files/",                                # What is the root folder called where all docs
-                                                     # are generated in
+    "root": "files/",                                # What is the root folder called where all
+                                                     # categories are generated in
     "index": ".template/docs/layout/index.js",       # The path to the index layout file
     "category": ".template/docs/layout/category.js", # The path to the category layout file
                                                      # All following settings are the default props
                                                      # each component is given for the example
+
+                                                     # The following props are important so we
+                                                     # can generate the docs example:
     "IDProp": "page2",                               # The _ID prop
     "navProp": {                                     # The _nav prop
       "index": {
@@ -848,10 +861,15 @@ _(_ 💡 _Please look at the coding style and work with it, not against it :smil
 
 ## Tests
 
-We use [Jest](https://facebook.github.io/jest/) for unit tests.
+I got an [end-to-end test script](https://github.com/dominikwilkowski/cuttlebelle/blob/master/tests/tester.js) that compares fixtures to what cuttlebelle
+generates. In each of those folders I test for [specific things](https://github.com/dominikwilkowski/cuttlebelle/blob/master/tests/tester.js#L30) and make sure
+the checksum of the generated files match the fixtures. In addition to that I created as many
+[unit tests](https://github.com/dominikwilkowski/cuttlebelle/tree/master/tests/__unit__) as I can via [Jest](https://facebook.github.io/jest/).
 
-- `npm run test` to run the tests
-- `npm run test:detail` will give you coverage infos
+- `npm run test` to run all tests
+- `npm run test:end-to-end` will run the end-to-end test only
+- `npm run test:unit-test` will run the unit test only
+- `npm run test:detail` will give you coverage infos for the unit tests
 - `npm run test:watch` will spin up the jest watch
 
 
@@ -863,7 +881,7 @@ We use [Jest](https://facebook.github.io/jest/) for unit tests.
 
 ## Release History
 
-* v0.1.0 - 💥 Initial version
+* v1.0.0.alphaX - 💥 Alpha versions with breaking API changes
 
 
 **[⬆ back to top](#contents)**

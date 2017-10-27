@@ -5,7 +5,7 @@
  * RenderReact     - Render a react component to string
  * RequireBabelfy  - Require from a string and babelfy the content first
  * RenderFile      - Render a file to HTML
- * IteratePartials - Iterate frontmatter and look for partials to render
+ * FindPartial     - Iterate frontmatter and look for partials to render
  * RenderPartial   - Render a partial to HTML from the string inside frontmatter
  * RenderAllPages  - Render all pages in the content folder
  * PreRender       - Pre-render all pages to populate all helpers
@@ -41,6 +41,26 @@ import { Slug } from './helper.js';
 import { Pages } from './pages';
 import { Store } from './store';
 import { Nav } from './nav';
+
+
+/**
+ * Resolve two paths relative to each other
+ *
+ * @param  {string} URL - The URL you want to link to
+ * @param  {string} ID  - The ID of the page you are on
+ *
+ * @return {string}     - A relative path to URL from ID
+ */
+export const RelativeURL = ( URL, ID ) => {
+	if( ID === SETTINGS.get().folder.homepage ) {
+		ID = '';
+	}
+
+	const relative = Path.relative(`${ SETTINGS.get().site.root }${ ID }`, URL);
+
+	return relative === '' ? '.' : relative;
+}
+
 
 /**
  * Render a react component to string
@@ -154,133 +174,86 @@ export const RequireBabelfy = ( source ) => {
 /**
  * Render a file to HTML
  *
- * @param  {string} file     - The path to the file to be rendered
+ * @param  {string} content  - The content of the file to be rendered
+ * @param  {string} file     - The path to this file
  * @param  {string} parent   - The path to the parent file, optional, default: ''
+ * @param  {array}  rendered - An array of all pages that have been through this render loop to detect circular dependencies, optional, default: []
  * @param  {number} iterator - An iterator so we can generate unique IDs, default 0
  *
  * @return {promise object}  - The HTML content of the page
  */
-export const RenderFile = ( file, parent = '', iterator = 0 ) => {
+export const RenderFile = ( content, file, parent = '', rendered = [], iterator = 0 ) => {
 	Log.verbose(`Rendering file ${ Style.yellow( file ) }`);
 
-	const _isIndex = Path.extname( file ) === '.yml';
 	iterator ++;
 
-	return new Promise( ( resolve, reject ) => {
-		// So apparently getting the index pages from the cached object is slower than going to disk... mh
-		// const allIndexs = [];
+	if( rendered.includes( file ) ) {
+		return Promise.reject(`A circular dependency (${ Style.yellow( file ) }) was detected in ${ Style.yellow( parent ) }`);
+	}
+	else {
+		return new Promise( ( resolve, reject ) => {
+			let parsedBody = ParseContent( content, file ); // parsing out front matter for this file
+			const ID = parent.length > 0 ? Path.dirname( parent ) : Path.dirname( file ); // the ID of this page is the folder in which it exists
 
-		// // let’s check if we have a cached version of this file
-		// if( _isIndex && typeof Pages.get()[ Path.dirname( file ) ] === 'object' && !Watch.running ) {
-		// 	Log.verbose(`Taking content of ${ Style.yellow( file ) } from cache`);
+			rendered.push( file ); // keeping track of all files we render to avoid circular dependencies
 
-		// 	allIndexs.push(
-		// 		Promise.resolve({
-		// 			frontmatter: Pages.get()[ Path.dirname( file ) ],
-		// 			body: '',
-		// 		})
-		// 	);
-		// }
-		// else {
-		// 	Log.verbose(`Taking content of ${ Style.yellow( file ) } from file`);
+			Pages.inject( ID, parsedBody.frontmatter ); // we inject the frontmatter early so partials have access to it
 
-		// 	const content = Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`);
+			FindPartial(
+				parsedBody.frontmatter,
+				Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`),
+				rendered,
+				iterator
+			)
+			.catch( error => {
+				Log.error(`Generating page failed in ${ Style.yellow( file ) }`);
+				reject( error );
+			})
+			.then( frontmatter => {
+				parsedBody.frontmatter = frontmatter ? frontmatter : {}; // we only got one promise to resolve
 
-		// 	allIndexs.push(
-		// 		ReadFile( content )
-		// 			.catch( error => reject( error ) )
-		// 			.then( body => ParseContent( body, file ) )
-		// 	);
-		// }
-
-		// Promise.all( allIndexs )
-		const content = Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`);
-		ReadFile( content )
-			.catch( error => reject( error ) )
-			.then( body => {
-				let parsedBody = ParseContent( body, file );
-				// let parsedBody = body[ 0 ];
-				const ID = parent.length > 0 ? Path.dirname( parent ) : Path.dirname( file ); // the ID of this page is the folder in which parent exists
-				const allPartials = [];
-
-				if( _isIndex ) {
-					Pages.inject( ID, parsedBody.frontmatter ); // we inject the frontmatter early so partials have access to it
-
-					allPartials.push(
-						IteratePartials( parsedBody.frontmatter, Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`), iterator )
-							.catch( error => {
-								Log.error(`Generating page failed in ${ Style.yellow( file ) }`)
-								reject( error );
-							})
-					);
+				// set the default layout
+				if( file.endsWith('.yml') ) {
+					parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.page;
 				}
 				else {
-					allPartials.push( Promise.resolve( parsedBody.frontmatter ) );
+					parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.partial;
 				}
 
-				Promise.all( allPartials )
-					.catch( error => reject( error ) )
-					.then( frontmatter => {
-						parsedBody.frontmatter = frontmatter[ 0 ] ? frontmatter[ 0 ] : {}; // we only got one promise to resolve
+				// keeping track of all pages per layout will make the watch better
+				Layouts.set( ID, parsedBody.frontmatter.layout );
 
-						// set the default layout
-						if( _isIndex ) {
-							parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.page;
-						}
-						else {
-							parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.partial;
-						}
-
-						// keeping track of all pages per layout will make the watch better
-						Layouts.set( ID, parsedBody.frontmatter.layout );
-
-						// to get the parents we just look at the path
-						const parents = ID.split('/').map( ( item, i ) => {
-							return ID.split('/').splice( 0, ID.split('/').length - i ).join('/');
-						}).reverse();
-
-						// and off we go into the react render machine
-						let pageHTML = RenderReact(
-							Path.normalize(`${ SETTINGS.get().folder.code }/${ parsedBody.frontmatter.layout }`),
-							{
-								_ID: ID,
-								_parents: parents,
-								_store: Store.get(),
-								_storeSet: Store.set,
-								_pages: Pages.get(),
-								_nav: Nav.get(),
-								_parseMD: ( markdown ) => <div key={`${ ID }-${ iterator }-md`} dangerouslySetInnerHTML={ { __html: ParseMD( markdown ) } } />,
-								_relativeURL: ( URL, ID ) => {
-									if( ID === SETTINGS.get().folder.homepage ) {
-										ID = '';
-									}
-
-									return Path.relative(`${ SETTINGS.get().site.root }${ ID }`, URL);
-								},
-								_body: <div key={`${ ID }-${ iterator }`} dangerouslySetInnerHTML={ { __html: parsedBody.body } } />,
-								...parsedBody.frontmatter
-							}
-						);
-
-						// An index file will be written to disk
-						if( _isIndex ) {
-							// prefix our content with a doctype
-							pageHTML = SETTINGS.get().site.doctype + pageHTML;
-
-							const newPath = Path.normalize(`${ SETTINGS.get().folder.site }/${ ID === SETTINGS.get().folder.homepage ? '' : ID }/index.html`);
-							CreateFile( newPath, pageHTML )
-								.catch( error => reject( error ) )
-								.then( () => resolve( newPath ) );
-
-							Progress.tick();
-						}
-						// but a partial will be returned as HTML string
-						else {
-							resolve( pageHTML );
-						}
+				// to get the parents we just look at the path
+				const parents = ID.split('/').map( ( item, i ) => {
+					return ID.split('/').splice( 0, ID.split('/').length - i ).join('/');
 				});
+
+				// we add the homepage to the parents root
+				if( ID !== SETTINGS.get().folder.index ) {
+					parents.push( SETTINGS.get().folder.index )
+				}
+
+				// and off we go into the react render machine
+				let pageHTML = RenderReact(
+					Path.normalize(`${ SETTINGS.get().folder.code }/${ parsedBody.frontmatter.layout }`),
+					{
+						_ID: ID,
+						_parents: parents.reverse(),
+						_storeSet: Store.set,
+						_store: Store.get,
+						_pages: Pages.get(),
+						_nav: Nav.get(),
+						_parseMD: ( markdown ) => <div key={`${ ID }-${ iterator }-md`} dangerouslySetInnerHTML={ { __html: ParseMD( markdown ) } } />,
+						_relativeURL: RelativeURL,
+						_body: <div key={`${ ID }-${ iterator }`} dangerouslySetInnerHTML={ { __html: parsedBody.body } } />,
+						...parsedBody.frontmatter
+					}
+				);
+
+				resolve( pageHTML );
+			});
 		});
-	});
+	}
 };
 
 
@@ -289,11 +262,12 @@ export const RenderFile = ( file, parent = '', iterator = 0 ) => {
  *
  * @param  {object}  object   - The frontmatter object
  * @param  {string}  file     - The file path we got the frontmatter from
+ * @param  {array}   rendered - An array of all pages rendered so far
  * @param  {integer} iterator - An iterator so we can generate unique ID keys
  *
  * @return {promise object}   - The converted frontmatter now with partials replaced with their content
  */
-export const IteratePartials = ( object, file, iterator = 0 ) => {
+export const FindPartial = ( object, file, rendered, iterator = 0 ) => {
 	Log.verbose(`Rendering all partials ${ Style.yellow( JSON.stringify( object ) ) }`);
 
 	return new Promise( ( resolve, reject ) => {
@@ -313,11 +287,17 @@ export const IteratePartials = ( object, file, iterator = 0 ) => {
 				iterator ++;
 
 				allPartials.push(
-					RenderPartial( partial, file, this.path, iterator )
-						.catch( error => {
-							Log.error(`Render partial failed for ${ Style.yellow( partial ) }`)
-							reject( error );
-						})
+					RenderPartial(
+						partial,
+						file,
+						this.path,
+						[ ...rendered ],
+						iterator
+					)
+					.catch( error => {
+						Log.error(`Render partial failed for ${ Style.yellow( partial ) }`)
+						reject( error );
+					})
 				);
 			}
 		});
@@ -344,11 +324,12 @@ export const IteratePartials = ( object, file, iterator = 0 ) => {
  * @param  {string}  partial  - The partial string
  * @param  {string}  file     - The file path we got the frontmatter from
  * @param  {array}   path     - The path to the deep object structure of the frontmatter
+ * @param  {array}   rendered - An array of all pages rendered so far
  * @param  {integer} iterator - An iterator so we can generate unique ID keys
  *
  * @return {promise object}   - An object with the path and the rendered HTML react object, format: { path, partial }
  */
-export const RenderPartial = ( partial, file, path, iterator = 0 ) => {
+export const RenderPartial = ( partial, file, path, rendered, iterator = 0 ) => {
 	Log.verbose(`Testing if we can render ${ Style.yellow( partial ) } as partial`);
 
 	return new Promise( ( resolve, reject ) => {
@@ -362,11 +343,23 @@ export const RenderPartial = ( partial, file, path, iterator = 0 ) => {
 		if( partial.endsWith('.md') && Fs.existsSync( partialPath ) ) {     // only if the string ends with ".md" and the corresponding file exists
 			Log.verbose(`Partial ${ Style.yellow( partial ) } found`);
 
-			RenderFile( partialPath.replace( SETTINGS.get().folder.content, '' ), file.replace( SETTINGS.get().folder.content, '' ), iterator )
+			const ID = partialPath.replace( SETTINGS.get().folder.content, '' )
+			const filePath = Path.normalize(`${ SETTINGS.get().folder.content }/${ ID }`);
+
+			ReadFile( filePath )
 				.catch( error => {
 					Log.error(`Generating partial failed in ${ Style.yellow( partial ) }`)
 					reject( error );
 				})
+				.then( content => RenderFile(
+						content,
+						filePath.replace( SETTINGS.get().folder.content, '' ),
+						file.replace( SETTINGS.get().folder.content, '' ),
+						rendered,
+						iterator
+					)
+					.catch( reason => reject( reason ) )
+				)
 				.then( HTML => {
 					const ID = `cuttlebelleID${ Slug( partial ) }-${ iterator }`; // We generate a unique ID for react
 
@@ -403,8 +396,19 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 			const allPages = [];
 
 			content.forEach( page => {
+				const filePath = Path.normalize(`${ SETTINGS.get().folder.content }/${ page }/${ SETTINGS.get().folder.index }.yml`);
+
 				allPages.push(
-					RenderFile(`${ page }/${ SETTINGS.get().folder.index }.yml`)
+					ReadFile( filePath )
+						.catch( error => reject( error ) )
+						.then( content => RenderFile( content, filePath.replace( SETTINGS.get().folder.content, '' ) ) )
+						.then( HTML => {
+							const newPath = Path.normalize(`${ SETTINGS.get().folder.site }/${ page === SETTINGS.get().folder.homepage ? '' : page }/index.html`);
+
+							CreateFile( newPath, HTML ).catch( error => reject( error ) );
+
+							Progress.tick();
+					})
 				);
 			});
 
