@@ -10,7 +10,7 @@ const Page = ( page ) => (
 	<head>
 		<title>Cuttlebelle - { page.title }</title>
 		<meta charSet="utf-8" />
-		<meta http-equiv="x-ua-compatible" content="ie=edge" />
+		<meta httpEquiv="x-ua-compatible" content="ie=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 		<link rel="stylesheet" href={ `/assets/css/site.css` } />

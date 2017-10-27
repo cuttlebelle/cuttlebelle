@@ -29,8 +29,35 @@ const SETTINGS = {
 	PASS: true,
 	UNITS: [
 		{
-			name: 'Test1: xxx',
+			name: 'Test1: testing partials, nesting, all props, assets, markdown, basics',
 			folder: 'site1',
+			script: {
+				options: [],
+			},
+			compare: 'site/',
+			empty: false,
+		},
+		{
+			name: 'Test2: testing docs generation',
+			folder: 'site2',
+			script: {
+				options: ['docs'],
+			},
+			compare: 'docs/',
+			empty: false,
+		},
+		{
+			name: 'Test3: testing package.json settings and custom md renderer',
+			folder: 'site3',
+			script: {
+				options: [],
+			},
+			compare: 'site2/',
+			empty: false,
+		},
+		{
+			name: 'Test4: testing deep nesting, nav and deep partial conversion',
+			folder: 'site4',
 			script: {
 				options: [],
 			},
@@ -57,7 +84,7 @@ const Tester = () => {
 		const scriptFolder = Path.normalize(`${ __dirname }/${ unit.folder }/`);
 
 		allTasks.push(
-			Delete( scriptFolder, unit )                                // delete trash first
+			Delete( scriptFolder )                                      // delete trash first
 				.then( ()      => CopyFixtures( scriptFolder, unit ) )    // copy fixtures
 				.then( ()      => ReplaceFixtures( scriptFolder, unit ) ) // compile fixtures
 				.then( ()      => Run( scriptFolder, unit ) )             // now run script
@@ -66,7 +93,10 @@ const Tester = () => {
 				.then( result  => Compare( unit, result ) )               // now compare both and detail errors
 				.then( success => {                                       // cleaning up after ourself
 					if( success ) {
-						Delete( scriptFolder, unit );
+						return Delete( scriptFolder );
+					}
+					else {
+						return Promise.resolve();
 					}
 				})
 				.catch( error => Log.error(`Nooo: ${ error }`) )         // catch errors...
@@ -123,18 +153,17 @@ const Flatten = object => {
  * Deleting files from previous tests
  *
  * @param  {string} path     - The path to the folder that needs cleaning
- * @param  {object} settings - The settings object for this test
  *
  * @return {Promise object}
  */
-const Delete = ( path, settings ) => {
+const Delete = ( path ) => {
 	const trash = [
 		Path.normalize(`${ path }/site`),
 		Path.normalize(`${ path }/docs`),
 		Path.normalize(`${ path }/testfolder/`),
 		Path.normalize(`${ path }/*.log.*`),
+		Path.normalize(`${ path }/assets/**/.DS_Store`),
 		Path.normalize(`${ path }/fixture/**/.DS_Store`),
-		Path.normalize(`${ path }/fixture/*/.DS_Store`),
 		Path.normalize(`${ path }/_fixture/`),
 	];
 
@@ -193,28 +222,17 @@ const ReplaceFixtures = ( path, settings ) => {
 			resolve();
 		}
 		else {
-			// const version = require('../packages/pancake/package.json').version;
-			// const sassVersion = require('../packages/pancake-sass/package.json').version;
-			// const jsVersion = require('../packages/pancake-js/package.json').version;
-			// const reactVersion = require('../packages/pancake-react/package.json').version;
+			// maybe in the future we have dynamic paths that depend on the system they are tested on.
 
 			// Replace({
 			// 		files: [
 			// 			Path.normalize(`${ path }/_fixture/**`),
 			// 		],
 			// 		from: [
-			// 			/\[version\]/g,
-			// 			/\[sass-version\]/g,
-			// 			/\[js-version\]/g,
-			// 			/\[react-version\]/g,
-			// 			/\[path\]/g,
+			// 			/\[thing\]/g,
 			// 		],
 			// 		to: [
-			// 			version,
-			// 			sassVersion,
-			// 			jsVersion,
-			// 			reactVersion,
-			// 			Path.normalize(`${ __dirname }/..`),
+			// 			'thing',
 			// 		],
 			// 		allowEmptyPaths: true,
 			// 		encoding: 'utf8',
@@ -223,10 +241,8 @@ const ReplaceFixtures = ( path, settings ) => {
 			// 		reject( error );
 			// 	})
 			// 	.then( changedFiles => {
-			// 		resolve();
+					resolve();
 			// });
-
-			resolve();
 		}
 	});
 };

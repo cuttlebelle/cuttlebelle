@@ -2,6 +2,7 @@ layout: page
 title: Page 2 nested
 stylesheet: style2
 partials:
+  - /shared/component1.md
   - partial1.md
   - partial2.md
   - partial3.md

@@ -1,11 +1,15 @@
-layout: layout/homepage
-title: Titles are awesome!
-stylesheet: homepage
-header:
-  title: title one
-  intro: Lorem Ipsum stuff
+title: Homepage
 partials:
   - partial1.md
-  - partial2.md
-  - partial3.md
-  - partial4.md
+test:
+  - partial3.md:
+    - test: testing
+    - testing a variable with special? characters:
+      - partial1.md
+      - normal variable
+      - testing:
+         testing:
+           something: partial1.md
+           testing:
+             testing:
+               - partial1.md

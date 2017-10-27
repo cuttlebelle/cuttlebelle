@@ -157,13 +157,13 @@ footer:
   - Footer
 `;
 
-	const fixture = '<html><head><title>Cuttlebelle - Title</title><meta charset="utf-8"/><meta content="ie=edge"/>' +
+	const fixture = '<html><head><title>Cuttlebelle - Title</title><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/>' +
 		'<meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/assets/css/site.css"/></head><body><div class="top">' +
 		'<header role="banner">Header</header>' +
 		'<main>Hello world' +
 			'props: ' +
 			'- _ID: subpage' +
-			'- _parents: [&quot;subpage&quot;]' +
+			'- _parents: [&quot;index&quot;,&quot;subpage&quot;]' +
 			'- _body: <div></div>' +
 			'- _pages: {&quot;subpage&quot;:{&quot;url&quot;:&quot;/subpage&quot;,&quot;title&quot;:&quot;Title&quot;,&quot;header&quot;:[&quot;Header&quot;]' +
 			',&quot;main&quot;:[&quot;Hello world&quot;],&quot;footer&quot;:[&quot;Footer&quot;]}}' +
@@ -197,14 +197,14 @@ footer:
   - Footer
 `;
 
-	const fixture = '<html><head><title>Cuttlebelle - Title</title><meta charset="utf-8"/><meta content="ie=edge"/>' +
+	const fixture = '<html><head><title>Cuttlebelle - Title</title><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/>' +
 		'<meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/assets/css/site.css"/></head><body><div class="top">' +
 		'<header role="banner">Header</header>' +
 		'<main>' +
 			'<div><div class="textwrapper"><div><h1 id="test">test</h1>\n</div></div></div>' +
 			'props: ' +
 			'- _ID: subpage' +
-			'- _parents: [&quot;subpage&quot;]' +
+			'- _parents: [&quot;index&quot;,&quot;subpage&quot;]' +
 			'- _body: <div></div>' +
 			'- _pages: {&quot;subpage&quot;:{&quot;url&quot;:&quot;/subpage&quot;,&quot;title&quot;:&quot;Title&quot;,&quot;header&quot;:[&quot;Header&quot;],&quot;main&quot;:[&quot;/nonpage/partial.md&quot;],&quot;footer&quot;:[&quot;Footer&quot;]}}' +
 			'- _nav: []' +
