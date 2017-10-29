@@ -327,11 +327,20 @@ Will give us this HTML
 ![Cuttlebelle cli](https://raw.githubusercontent.com/dominikwilkowski/cuttlebelle/master/assets/cuttlebelle.png)
 
 ```shell
-cd /path/to/my/project
 cuttlebelle
 ```
 
 This will generate all pages into the `site` folder _(unless [specified otherwise](#customizations))_.
+
+
+#### Init
+
+For when you’re just starting out on a new project use the `init` option. It will generate the folder structure for you and add some files for you to get
+started quickly.
+
+```shell
+cuttlebelle init
+```
 
 
 #### Watch
@@ -359,7 +368,9 @@ like a double click. The watch will detect the _double save_<sup>TM</sup> and ge
 💡Tip: You can change the timeout of the watch to detect a double save via the `watchTimeout` [setting](#customizations).
 
 
-#### No generator
+#### Watch flags
+
+##### No generator flag
 
 Sometimes you may only want to start a watch and not rebuild all pages. For that use the `no-generate` option:
 
@@ -368,12 +379,32 @@ cuttlebelle watch --no-generate
 ```
 
 
-#### Silent
+##### Silent flag
 
 The watch notifies you each time it encounters an error so you don’t have to watch the watch. You can disable that behavior via the silent option.
 
 ```shell
 cuttlebelle watch --silent
+```
+
+
+#### Docs
+
+Cuttlebelle comes with a nifty feature that will auto-document your layouts if you use the right propTypes and comments.
+Read more about how in the [self documenting](#self-documenting) section.
+
+
+```shell
+cuttlebelle docs
+```
+
+
+#### Version
+
+To display the version of your cuttlebelle install all you have to do is run the version flag:
+
+```shell
+cuttlebelle --version
 ```
 
 
