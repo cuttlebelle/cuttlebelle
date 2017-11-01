@@ -5,17 +5,21 @@ import React from 'react';
 /**
  * The Page component for the default layout of pages
  */
-const Page = ( props ) => (
+const Page = ({
+	title,
+	stylesheet,
+	partials
+}) => (
 	<html>
 	<head>
-		<title>{ props.title }</title>
+		<title>{ title }</title>
 
-		{ props.stylesheet && <link rel="stylesheet" href={ `/assets/css/${ props.stylesheet }.css` } /> }
+		{ stylesheet && <link rel="stylesheet" href={ `/assets/css/${ stylesheet }.css` } /> }
 	</head>
 	<body>
 		<main>
-			<h1>{ props.title }</h1>
-			<div>{ props.partials }</div>
+			<h1>{ title }</h1>
+			<div>{ partials }</div>
 		</main>
 	</body>
 	</html>

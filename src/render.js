@@ -138,7 +138,7 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 					{
 						redirect: {
 							react: react,
-							"prop-types": propTypes,
+							'prop-types': propTypes,
 						},
 						suppressResolveWarning: true,
 					},

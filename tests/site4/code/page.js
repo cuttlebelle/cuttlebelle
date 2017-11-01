@@ -6,31 +6,40 @@ import Navigation from './navigation';
 /**
  * The Page component for the default layout of pages
  */
-const Page = ( props ) => (
+const Page = ({
+	_ID,
+	_nav,
+	_pages,
+	_relativeURL,
+	title,
+	stylesheet,
+	partials,
+	test
+}) => (
 	<html>
 	<head>
-		<title>{ props.title }</title>
+		<title>{ title }</title>
 
-		{ props.stylesheet && <link rel="stylesheet" href={ `/assets/css/${ props.stylesheet }.css` } /> }
+		{ stylesheet && <link rel="stylesheet" href={ `/assets/css/${ stylesheet }.css` } /> }
 	</head>
 	<body>
 		<main>
-			<h1>{ props.title }</h1>
-			<Navigation nav={ props._nav } pages={ props._pages } ID={ props._ID } relativeURL={ props._relativeURL } />
-			<div>{ props.partials }</div>
+			<h1>{ title }</h1>
+			<Navigation nav={ _nav } pages={ _pages } ID={ _ID } relativeURL={ _relativeURL } />
+			<div>{ partials }</div>
 			{
-				props.test
+				test
 					&& <pre><code>
 						test[0]['partial3.md'][0]['test']:<br/>
-						{ JSON.stringify( props.test[0]['partial3.md'][0]['test'] ) }<hr/>
+						{ JSON.stringify( test[0]['partial3.md'][0]['test'] ) }<hr/>
 						test[0]['partial3.md'][1]['testing a variable with special? characters'][0]:<br/>
-						{ props.test[0]['partial3.md'][1]['testing a variable with special? characters'][0] }<hr/>
+						{ test[0]['partial3.md'][1]['testing a variable with special? characters'][0] }<hr/>
 						test[0]['partial3.md'][1]['testing a variable with special? characters'][1]:<br/>
-						{ JSON.stringify( props.test[0]['partial3.md'][1]['testing a variable with special? characters'][1] ) }<hr/>
+						{ JSON.stringify( test[0]['partial3.md'][1]['testing a variable with special? characters'][1] ) }<hr/>
 						test[0]['partial3.md'][1]['testing a variable with special? characters'][2]['testing']['testing']['something']:<br/>
-						{ props.test[0]['partial3.md'][1]['testing a variable with special? characters'][2]['testing']['testing']['something'] }<hr/>
+						{ test[0]['partial3.md'][1]['testing a variable with special? characters'][2]['testing']['testing']['something'] }<hr/>
 						test[0]['partial3.md'][1]['testing a variable with special? characters'][2]['testing']['testing']['testing']['testing']:<br/>
-						{ props.test[0]['partial3.md'][1]['testing a variable with special? characters'][2]['testing']['testing']['testing']['testing'] }<hr/>
+						{ test[0]['partial3.md'][1]['testing a variable with special? characters'][2]['testing']['testing']['testing']['testing'] }<hr/>
 					</code></pre>
 			}
 		</main>

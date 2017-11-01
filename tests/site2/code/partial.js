@@ -5,10 +5,10 @@ import React from 'react';
 /**
  * The Partial component for the default layout of partials
  */
-const Partial = ( props ) => (
+const Partial = ({ _body, title }) => (
 	<article>
-		{ props.title && <h2>{ props.title }</h2> }
-		<div>{ props._body }</div>
+		{ title && <h2>{ title }</h2> }
+		<div>{ _body }</div>
 	</article>
 );
 

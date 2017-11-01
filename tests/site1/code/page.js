@@ -5,19 +5,26 @@ import React from 'react';
 /**
  * The Page component for the default layout of pages
  */
-const Page = ( props ) => (
+const Page = ({
+	_ID,
+	_pages,
+	_relativeURL,
+	title,
+	partials,
+	stylesheet
+}) => (
 	<html>
 	<head>
-		<title>{ props.title }</title>
+		<title>{ title }</title>
 
 		{
-			props.stylesheet
-				&& <link rel="stylesheet" href={ props._relativeURL( `/assets/css/${ props.stylesheet }.css`, props._pages[ props._ID ].url ) } />
+			stylesheet
+				&& <link rel="stylesheet" href={ _relativeURL( `/assets/css/${ stylesheet }.css`, _pages[ _ID ].url ) } />
 		}
 	</head>
 	<body>
 		<main>
-			<div>{ props.partials }</div>
+			<div>{ partials }</div>
 		</main>
 	</body>
 	</html>

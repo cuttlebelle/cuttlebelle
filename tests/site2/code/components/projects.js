@@ -5,13 +5,13 @@ import React from 'react';
 /**
  * The Projects component for Listing two projects
  */
-const Projects = ( props ) => (
+const Projects = ({ projects }) => (
 	<table>
 		<tbody>
 			<tr><td>
-				{ props.projects[ 0 ] }
+				{ projects[ 0 ] }
 			</td><td>
-				{ props.projects[ 1 ] }
+				{ projects[ 1 ] }
 			</td></tr>
 		</tbody>
 	</table>

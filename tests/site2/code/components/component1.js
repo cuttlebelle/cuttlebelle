@@ -5,13 +5,19 @@ import React from 'react';
 /**
  * The Component1 component for the header
  */
-const Component1 = ( props ) => {
-	props._storeSet({ title: props._pages[ props._ID ].title }); // getting the title from the store (to test the store)
+const Component1 = ({
+	_ID,
+	_pages,
+	_storeSet,
+	_store,
+	_body
+}) => {
+	_storeSet({ title: _pages[ _ID ].title }); // getting the title from the store (to test the store)
 
 	return (
 		<header>
-			<h1>{ props._store()['title'] }</h1>
-			<div>{ props._body }</div>
+			<h1>{ _store()['title'] }</h1>
+			<div>{ _body }</div>
 		</header>
 	);
 }
