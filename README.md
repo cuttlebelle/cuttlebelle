@@ -165,14 +165,14 @@ main:
 ```jsx
 import React from "react";
 
-export default ( page ) => (
+export default ({ title, main }) => (
   <html>
   <head>
-    <title>{ page.title }</title>
+    <title>{ title }</title>
   </head>
   <body>
     <main>
-      { page.main }
+      { main }
     </main>
   </body>
   </html>
@@ -211,12 +211,12 @@ sub: Clear content separation
 ```jsx
 import React from "react";
 
-export default ( page ) => (
+export default ({ headline, sub }) => (
   <header>
-    <h1 className="header__headline">{ page.headline }</h1>
+    <h1 className="header__headline">{ headline }</h1>
     {
-      page.sub
-        && <p className="header__sub">{ page.sub }</p>
+      sub
+        && <p className="header__sub">{ sub }</p>
     }
   </header>
 );
@@ -255,10 +255,10 @@ headline: First post
 ```jsx
 import React from "react";
 
-export default ( page ) => (
+export default ({ _body, headline }) => (
   <article>
-    <h2>{ page.headline }</h2>
-    <div className="body-text">{ page._body }</div>
+    <h2>{ headline }</h2>
+    <div className="body-text">{ _body }</div>
   </article>
 );
 ```
@@ -537,22 +537,22 @@ aside:
 ```jsx
 import React from "react";
 
-export default ( page ) => (
+export default ({ title, stylesheet, title, main, aside }) => (
 	<html>
 	<head>
-		<title>{ page.title }</title>
-		{ page.stylesheet != undefined
-			? ( <link rel="stylesheet" href={ `/assets/css/${ page.stylesheet }.css` } /> )
+		<title>{ title }</title>
+		{ stylesheet != undefined
+			? ( <link rel="stylesheet" href={ `/assets/css/${ stylesheet }.css` } /> )
 			: null
 		}
 	</head>
 	<body>
 		<main>
-			<h1>{ page.title }</h1>
-			<div>{ page.main }</div>
+			<h1>{ title }</h1>
+			<div>{ main }</div>
 		</main>
 		<aside>
-			{ page.aside }
+			{ aside }
 		</aside>
 	</body>
 	</html>
@@ -588,15 +588,15 @@ A typical component for a page might look like this:
 ```jsx
 import React from "react";
 
-export default ( page ) => (
+export default ({ title, partials }) => (
 	<html>
 	<head>
-		<title>{ page.title }</title>
+		<title>{ title }</title>
 	</head>
 	<body>
 		<main>
-			<h1>{ page.title }</h1>
-			<div>{ page.partials }</div>
+			<h1>{ title }</h1>
+			<div>{ partials }</div>
 		</main>
 	</body>
 	</html>
@@ -611,15 +611,15 @@ A typical component for a partial might look like this:
 ```jsx
 import React from "react";
 
-export default ( page ) => (
+export default ({ _body, title }) => (
 	<article>
-		<h2>{ page.title }</h2>
-		<div>{ page._body }</div>
+		<h2>{ title }</h2>
+		<div>{ _body }</div>
 	</article>
 );
 ```
 
-_(_ 💡 _You can access the page your partial was called in via: `page._pages[ page._ID ]`.)_
+_(_ 💡 _You can access the page your partial was called in via: `props._pages[ props._ID ]`.)_
 
 
 #### Props
@@ -634,7 +634,7 @@ A file will receive the following props:
 | `_pages`       | An object of all pages and their props; with ID as key                                | `props._pages.map()`                     |
 | `_nav`         | A nested object of your site structure                                                | `Object.keys( props._nav ).map()`        |
 | `_storeSet`    | You can set data to persist between react components by setting them with this helper | `props._storeSet({ variable: "value" })` |
-| `_store`       | To get that data just call this prop function                                         | `props._store()`                           |
+| `_store`       | To get that data just call this prop function                                         | `props._store()`                         |
 | `_relativeURL` | A helper function to make an absolute URL relative                                    | `props._relativeURL( URL, yourLocation)` |
 | `_parseMD`     | A helper function to parse markdown into HTML                                         | `props._parseMD( props.yourMarkdown )`   |
 
@@ -835,10 +835,10 @@ import React from "react";
  *
  * @disable-docs
  */
-const Hidden = ( page ) => (
+const Hidden = ({ _body, title }) => (
   <article className={`globalheader`}>
-    <h1>{ page.title }</h1>
-    { page._body }
+    <h1>{ title }</h1>
+    { _body }
   </article>
 );
 

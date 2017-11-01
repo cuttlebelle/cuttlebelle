@@ -6,16 +6,22 @@ import List from './list';
 /**
  * The Component2 component for the footer
  */
-const Component2 = ( props ) => {
-	const background = {
-		backgroundColor: props.background,
+const Component2 = ({
+	_ID,
+	_pages,
+	_relativeURL,
+	background,
+	links
+}) => {
+	const backgroundStyle = {
+		backgroundColor: background,
 		padding: '1em',
 		marginTop: '3em',
 	};
 
 	return (
-		<footer style={ background }>
-			<List items={ props.links } props={ props } />
+		<footer style={ backgroundStyle }>
+			<List items={ links } _ID={ _ID } _pages={ _pages } _relativeURL={ _relativeURL } />
 		</footer>
 	);
 }

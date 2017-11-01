@@ -5,19 +5,25 @@ import React from 'react';
 /**
  * The Homepage component for the homepage layout
  */
-const Homepage = ( props ) => (
+const Homepage = ({
+	title,
+	stylesheet,
+	header,
+	main,
+	footer
+}) => (
 	<html>
 	<head>
-		<title>{ props.title }</title>
+		<title>{ title }</title>
 
-		{ props.stylesheet && <link rel="stylesheet" href={ `/assets/css/${ props.stylesheet }.css` } /> }
+		{ stylesheet && <link rel="stylesheet" href={ `/assets/css/${ stylesheet }.css` } /> }
 	</head>
 	<body>
-		{ props.header }
+		{ header }
 		<main>
-			<div>{ props.main }</div>
+			<div>{ main }</div>
 		</main>
-		{ props.footer }
+		{ footer }
 	</body>
 	</html>
 );

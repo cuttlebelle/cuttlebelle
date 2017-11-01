@@ -5,9 +5,9 @@ import React from 'react';
 /**
  * The Sections component for section text
  */
-const Sections = ( props ) => (
+const Sections = ({ _parseMD, headline }) => (
 	<div>
-		{ props._parseMD( props.headline ) }
+		{ _parseMD( headline ) }
 	</div>
 );
 

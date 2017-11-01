@@ -5,10 +5,10 @@ import React from 'react';
 /**
  * The Project component for the display of a project
  */
-const Project = ( props ) => (
+const Project = ({ title, description }) => (
 	<div>
-		<h3>{ props.title }</h3>
-		<div>{ props.description }</div>
+		<h3>{ title }</h3>
+		<div>{ description }</div>
 	</div>
 );
 

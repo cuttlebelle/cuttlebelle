@@ -5,8 +5,15 @@ import React from 'react';
 /**
  * The Component1 component for the header
  */
-const Component1 = ( props ) => {
-	props._storeSet({ title: props._pages[ props._ID ].title }); // getting the title from the store (to test the store)
+const Component1 = ({
+	_ID,
+	_parents,
+	_body,
+	_pages,
+	_storeSet,
+	_store
+}) => {
+	_storeSet({ title: _pages[ _ID ].title }); // getting the title from the store (to test the store)
 
 	const ulStyling = {
 		display: 'inline-block',
@@ -21,20 +28,20 @@ const Component1 = ( props ) => {
 
 	return (
 		<header>
-			<h1>{ props._store()['title'] }</h1>
+			<h1>{ _store()['title'] }</h1>
 			<div>
 				breadcrumbs:
 				<ul style={ ulStyling }>
 					{
-						props._parents.map( ( parent, i ) =>
+						_parents.map( ( parent, i ) =>
 							<li key={ i } style={ liStyling }>
-								<a href={ props._pages[ parent ].url }>{ props._pages[ parent ].title }</a>
+								<a href={ _pages[ parent ].url }>{ _pages[ parent ].title }</a>
 							</li>
 						)
 					}
 				</ul>
 			</div>
-			<div>{ props._body }</div>
+			<div>{ _body }</div>
 		</header>
 	);
 }
