@@ -4,9 +4,9 @@ Cuttlebelle
 > The react static site generator with editing in mind
 
 [![NPM](https://nodei.co/npm/cuttlebelle.png?downloads=true)](https://nodei.co/npm/cuttlebelle/)
-[![Build Status](https://travis-ci.org/dominikwilkowski/cuttlebelle.svg?branch=master)](https://travis-ci.org/dominikwilkowski/cuttlebelle)
+[![Build Status](https://travis-ci.org/cuttlebelle/cuttlebelle.svg?branch=master)](https://travis-ci.org/cuttlebelle/cuttlebelle)
 
-![Cuttlebelle files](https://raw.githubusercontent.com/dominikwilkowski/cuttlebelle/master/assets/files.gif)
+![Cuttlebelle files](https://raw.githubusercontent.com/cuttlebelle/cuttlebelle/master/assets/files.gif)
 
 ## 🔥 Why yet another static site generator?
 
@@ -324,7 +324,7 @@ Will give us this HTML
 
 ### CLI
 
-![Cuttlebelle cli](https://raw.githubusercontent.com/dominikwilkowski/cuttlebelle/master/assets/cuttlebelle.png)
+![Cuttlebelle cli](https://raw.githubusercontent.com/cuttlebelle/cuttlebelle/master/assets/cuttlebelle.png)
 
 ```shell
 cuttlebelle
@@ -345,7 +345,7 @@ cuttlebelle init
 
 #### Watch
 
-![Cuttlebelle watch](https://raw.githubusercontent.com/dominikwilkowski/cuttlebelle/master/assets/watch.png)
+![Cuttlebelle watch](https://raw.githubusercontent.com/cuttlebelle/cuttlebelle/master/assets/watch.png)
 
 You can also run the highly optimized watch while adding content or developing your layouts.
 
@@ -410,7 +410,7 @@ cuttlebelle --version
 
 #### Help
 
-![Cuttlebelle help](https://raw.githubusercontent.com/dominikwilkowski/cuttlebelle/master/assets/help.png)
+![Cuttlebelle help](https://raw.githubusercontent.com/cuttlebelle/cuttlebelle/master/assets/help.png)
 
 Of course there is also a help option. Just run it with the help flag:
 
@@ -892,10 +892,10 @@ _(_ 💡 _Please look at the coding style and work with it, not against it :smil
 
 ## Tests
 
-I got an [end-to-end test script](https://github.com/dominikwilkowski/cuttlebelle/blob/master/tests/tester.js) that compares fixtures to what cuttlebelle
-generates. In each of those folders I test for [specific things](https://github.com/dominikwilkowski/cuttlebelle/blob/master/tests/tester.js#L30) and make sure
+I got an [end-to-end test script](https://github.com/cuttlebelle/cuttlebelle/blob/master/tests/tester.js) that compares fixtures to what cuttlebelle
+generates. In each of those folders I test for [specific things](https://github.com/cuttlebelle/cuttlebelle/blob/master/tests/tester.js#L30) and make sure
 the checksum of the generated files match the fixtures. In addition to that I created as many
-[unit tests](https://github.com/dominikwilkowski/cuttlebelle/tree/master/tests/__unit__) as I can via [Jest](https://facebook.github.io/jest/).
+[unit tests](https://github.com/cuttlebelle/cuttlebelle/tree/master/tests/__unit__) as I can via [Jest](https://facebook.github.io/jest/).
 
 - `npm run test` to run all tests
 - `npm run test:end-to-end` will run the end-to-end test only
@@ -923,7 +923,7 @@ the checksum of the generated files match the fixtures. In addition to that I cr
 
 ## License
 
-Copyright (c) Dominik Wilkowski. Licensed under [GNU-GPLv3](https://raw.githubusercontent.com/dominikwilkowski/cuttlebelle/master/LICENSE).
+Copyright (c) Dominik Wilkowski. Licensed under [GNU-GPLv3](https://raw.githubusercontent.com/cuttlebelle/cuttlebelle/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**
