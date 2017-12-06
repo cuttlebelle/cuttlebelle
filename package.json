@@ -2,7 +2,7 @@
 	"name": "cuttlebelle",
 	"description": "The react static site generator that separates editing and code concerns",
 	"version": "1.0.0-alpha.33",
-	"homepage": "https://github.com/dominikwilkowski/cuttlebelle",
+	"homepage": "https://github.com/cuttlebelle/cuttlebelle",
 	"author": {
 		"name": "Dominik Wilkowski",
 		"email": "Hi@Dominik-Wilkowski.com",
@@ -17,15 +17,15 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/dominikwilkowski/cuttlebelle.git"
+		"url": "git://github.com/cuttlebelle/cuttlebelle.git"
 	},
 	"bugs": {
-		"url": "https://github.com/dominikwilkowski/cuttlebelle/issues"
+		"url": "https://github.com/cuttlebelle/cuttlebelle/issues"
 	},
 	"licenses": [
 		{
 			"type": "GPL-3.0",
-			"url": "https://github.com/dominikwilkowski/cuttlebelle/blob/master/LICENSE"
+			"url": "https://github.com/cuttlebelle/cuttlebelle/blob/master/LICENSE"
 		}
 	],
 	"engines": {
@@ -33,17 +33,14 @@
 	},
 	"scripts": {
 		"prepublish": "npm run build && npm run test",
-
 		"test": "npm run build && npm run test:end-to-end && npm run test:unit-test",
 		"test:unit-test": "jest",
 		"test:detail": "jest --coverage",
 		"test:watch": "jest --watch --coverage",
 		"test:end-to-end": "node tests/tester.js",
-
 		"build": "npm run build:js",
 		"build:js": "babel src --out-dir dist --presets=es2015 --plugins=transform-runtime,transform-es2015-modules-commonjs",
 		"build:watch": "npm run build:js && npm run test:detail",
-
 		"watch": "npm run build && npm run test && onchange 'src/*.js' '__tests__/*.js' -- npm run build:watch"
 	},
 	"dependencies": {
