@@ -400,20 +400,31 @@ export const ParseComponent = ( component ) => {
 		ReadFile( componentPath )
 			.catch( error => reject( error ) )
 			.then( react => {
-				try {
-					resolve({
-						file: component,
-						infos: ReactDocs.parse( react ),
-					});
-				}
-				catch( error ) {
-					Log.info(`Trying to gather infos from the react component ${ Style.yellow( component ) } failed.`);
-					Log.info( error );
-
+				if( react.includes('@disable-docs') ) {
 					resolve({
 						file: component,
 						infos: {},
+						disabled: true,
 					});
+				}
+				else {
+					try {
+						resolve({
+							file: component,
+							infos: ReactDocs.parse( react ),
+							disabled: false,
+						});
+					}
+					catch( error ) {
+						Log.info(`Trying to gather infos from the react component ${ Style.yellow( component ) } failed.`);
+						Log.info( error );
+
+						resolve({
+							file: component,
+							infos: {},
+							disabled: false,
+						});
+					}
 				}
 			}
 		);
@@ -438,12 +449,12 @@ export const BuildPropsYaml = ( object ) => {
 			required: `<span class="cuttlebelle-flag cuttlebelle-flag--optional">Optional</span>`,
 			default: ( value ) => `<span class="cuttlebelle-flag cuttlebelle-flag--default">default: <span class="cuttlebelle-flag__value">${ value }</span></span>`,
 		};
-		const disabled = object.infos.description ? object.infos.description.includes('@disable-docs') : false;
+
 		let props = {};
 		let yaml = `<span class="cuttlebelle-yaml-line">layout: ${ object.file.slice( 0, -3 ) }</span>\n`;
 		let _hasBody = false;
 
-		if( object.infos.props && !disabled ) {
+		if( object.infos.props && !object.disabled ) {
 			Object.keys( object.infos.props ).map( propKey => {
 				const prop = object.infos.props[ propKey ];
 				let example;
@@ -478,7 +489,7 @@ export const BuildPropsYaml = ( object ) => {
 			file: object.file,
 			infos: object.infos,
 			props,
-			disabled,
+			disabled: object.disabled,
 			yaml: <div dangerouslySetInnerHTML={ { __html: yaml } } />,
 		})
 	});

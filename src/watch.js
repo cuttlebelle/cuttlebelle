@@ -319,7 +319,7 @@ export const UpdateAll = ( startTime ) => {
 	const allComponents = Object.keys( require.cache ).filter( ( key ) => key.startsWith( SETTINGS.get().folder.code ) );
 
 	allComponents.map( ( component ) => {
-		delete require.cache[ component ]; //cache busting
+		delete require.cache[ component ]; // cache busting
 	});
 
 	PreRender()
