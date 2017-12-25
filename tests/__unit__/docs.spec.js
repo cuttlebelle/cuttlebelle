@@ -72,32 +72,9 @@ test('BuildPropsYaml() - Parse examples without props correctly', () => {
 		file: props.file,
 		infos: props.infos,
 		props: {},
-		disabled: false,
+		disabled: undefined,
 		yaml: <div dangerouslySetInnerHTML={ {
 			__html: `<span class="cuttlebelle-yaml-line">layout: somefile</span>\n`
-		} } />,
-	};
-
-	return BuildPropsYaml( props ).then( data => {
-		expect( data ).toMatchObject( outcome );
-	});
-});
-
-
-test('BuildPropsYaml() - Ignore components that have docs disabled', () => {
-	const props = {
-		file: 'another/file.js',
-		infos: {
-			description: 'something somthing @disable-docs\n something',
-		},
-	};
-	const outcome = {
-		file: props.file,
-		infos: props.infos,
-		props: {},
-		disabled: true,
-		yaml: <div dangerouslySetInnerHTML={ {
-			__html: `<span class="cuttlebelle-yaml-line">layout: another/file</span>\n`
 		} } />,
 	};
 
@@ -129,7 +106,7 @@ test('BuildPropsYaml() - Parse string prop correctly', () => {
 		props: {
 			title: 'Headline',
 		},
-		disabled: false,
+		disabled: undefined,
 		yaml: <div dangerouslySetInnerHTML={ {
 			__html: `<span class="cuttlebelle-yaml-line">layout: file</span>\n` +
 				`<span class=\"cuttlebelle-yaml-line\">${ props.infos.props.title.description }</span>\n`
@@ -164,7 +141,7 @@ test('BuildPropsYaml() - Parse array correctly', () => {
 		props: {
 			items: [ 'one', 'two' ],
 		},
-		disabled: false,
+		disabled: undefined,
 		yaml: <div dangerouslySetInnerHTML={ {
 			__html: `<span class="cuttlebelle-yaml-line">layout: file</span>\n` +
 				`<span class=\"cuttlebelle-yaml-line\">${ props.infos.props.items.description }</span>\n`
@@ -199,7 +176,7 @@ test('BuildPropsYaml() - Parse object correctly', () => {
 		props: {
 			items: { one: 'one', two: 'two' },
 		},
-		disabled: false,
+		disabled: undefined,
 		yaml: <div dangerouslySetInnerHTML={ {
 			__html: `<span class="cuttlebelle-yaml-line">layout: file</span>\n` +
 				`<span class=\"cuttlebelle-yaml-line\">${ props.infos.props.items.description }</span>\n`
@@ -234,7 +211,7 @@ test('BuildPropsYaml() - Parse array object correctly', () => {
 		props: {
 			items: [ { one: 'one' }, { two: 'two' } ],
 		},
-		disabled: false,
+		disabled: undefined,
 		yaml: <div dangerouslySetInnerHTML={ {
 			__html: `<span class="cuttlebelle-yaml-line">layout: file</span>\n` +
 				`<span class=\"cuttlebelle-yaml-line\">${ props.infos.props.items.description }</span>\n`
@@ -269,7 +246,7 @@ test('BuildPropsYaml() - Parse body correctly', () => {
 		props: {
 			_body: MakeIpsum( 2 ),
 		},
-		disabled: false,
+		disabled: undefined,
 		yaml: <div dangerouslySetInnerHTML={ {
 			__html: `---\n<span class="cuttlebelle-yaml-line">layout: file</span>\n---\n\n` +
 				`${ Ipsum.split('.').slice(0, 4).join('.') }...`
@@ -305,7 +282,7 @@ test('BuildPropsYaml() - Parse partial node correctly', () => {
 		props: {
 			partials: MakePartials( 4 ),
 		},
-		disabled: false,
+		disabled: undefined,
 		yaml: <div dangerouslySetInnerHTML={ {
 			__html: `<span class="cuttlebelle-yaml-line">layout: file</span>\n` +
 				`<span class=\"cuttlebelle-yaml-line\">partials: ${ vocabulary[ 0 ].replacement }</span>\n`
@@ -341,7 +318,7 @@ test('BuildPropsYaml() - Parse text node correctly', () => {
 		props: {
 			text: MakeIpsum( 4 ),
 		},
-		disabled: false,
+		disabled: undefined,
 		yaml: <div dangerouslySetInnerHTML={ {
 			__html: `<span class="cuttlebelle-yaml-line">layout: file</span>\n` +
 				`<span class=\"cuttlebelle-yaml-line\">text: ${ vocabulary[ 1 ].replacement }</span>\n`

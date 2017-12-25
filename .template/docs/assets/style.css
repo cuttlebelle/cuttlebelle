@@ -130,6 +130,7 @@ a.cuttlebelle-docs__aside__headline:focus {
 }
 
 .cuttlebelle-docs__main__component__example {
+	transform: translate3d( 0, 0, 0 );
 	background-color: #fff;
 	border-color: #32ccbc;
 	white-space: normal;
