@@ -1,0 +1,19 @@
+# This is how we will construct this page; out of the below listed variables and partials.
+# Cuttlebelle recognizes partials if they end with ".md" and that their path exists inside your content folder
+
+title: Homepage        # The title of the page
+
+header:                # Our header part of the layout
+  - /_shared/header.md # This is the header and we got it from another folder we use to share partials
+
+main:                  # Our main part of the layout
+  - body.md            # This partial is located inside the same folder as this index.yml
+
+footer:                # Our footer part of the layout
+  - /_shared/footer.md # Another reused partial from our _shared folder
+
+# You can pass in many more options to your layout here,
+# things like a theme variable or a localization string.
+
+# All variables declared in the index.yml are accessible
+# inside each partial via props._pages[ props.ID ]

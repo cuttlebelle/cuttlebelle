@@ -208,6 +208,10 @@ export const RequireBabelfy = ( source ) => {
 export const RenderFile = ( content, file, parent = '', rendered = [], iterator = 0 ) => {
 	Log.verbose(`Rendering file ${ Style.yellow( file ) }`);
 
+	if( parent === '' ) {
+		parent = file;
+	}
+
 	iterator ++;
 
 	if( rendered.includes( file ) ) {
@@ -225,6 +229,7 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 			FindPartial(
 				parsedBody.frontmatter,
 				Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`),
+				parent,
 				rendered,
 				iterator
 			)
@@ -285,12 +290,13 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
  *
  * @param  {object}  object   - The frontmatter object
  * @param  {string}  file     - The file path we got the frontmatter from
+ * @param  {string}  parent   - The path to the parent file
  * @param  {array}   rendered - An array of all pages rendered so far
  * @param  {integer} iterator - An iterator so we can generate unique ID keys
  *
  * @return {promise object}   - The converted frontmatter now with partials replaced with their content
  */
-export const FindPartial = ( object, file, rendered, iterator = 0 ) => {
+export const FindPartial = ( object, file, parent, rendered, iterator = 0 ) => {
 	Log.verbose(`Rendering all partials ${ Style.yellow( JSON.stringify( object ) ) }`);
 
 	return new Promise( ( resolve, reject ) => {
@@ -313,6 +319,7 @@ export const FindPartial = ( object, file, rendered, iterator = 0 ) => {
 					RenderPartial(
 						partial,
 						file,
+						parent,
 						this.path,
 						[ ...rendered ],
 						iterator
@@ -346,13 +353,14 @@ export const FindPartial = ( object, file, rendered, iterator = 0 ) => {
  *
  * @param  {string}  partial  - The partial string
  * @param  {string}  file     - The file path we got the frontmatter from
+ * @param  {string}  parent   - The path to the parent file
  * @param  {array}   path     - The path to the deep object structure of the frontmatter
  * @param  {array}   rendered - An array of all pages rendered so far
  * @param  {integer} iterator - An iterator so we can generate unique ID keys
  *
  * @return {promise object}   - An object with the path and the rendered HTML react object, format: { path, partial }
  */
-export const RenderPartial = ( partial, file, path, rendered, iterator = 0 ) => {
+export const RenderPartial = ( partial, file, parent, path, rendered, iterator = 0 ) => {
 	Log.verbose(`Testing if we can render ${ Style.yellow( partial ) } as partial`);
 
 	return new Promise( ( resolve, reject ) => {
@@ -377,7 +385,7 @@ export const RenderPartial = ( partial, file, path, rendered, iterator = 0 ) => 
 				.then( content => RenderFile(
 						content,
 						filePath.replace( SETTINGS.get().folder.content, '' ),
-						file.replace( SETTINGS.get().folder.content, '' ),
+						parent,
 						rendered,
 						iterator
 					)

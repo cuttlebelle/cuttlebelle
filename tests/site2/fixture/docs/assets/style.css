@@ -160,6 +160,7 @@ a.cuttlebelle-docs__aside__headline:focus {
 .cuttlebelle-docs__main__component__example:after {
 	background-color: #32ccbc;
 	content: 'EXAMPLE';
+	z-index: 10;
 }
 
 .cuttlebelle-docs__main__component__html:after {

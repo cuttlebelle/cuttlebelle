@@ -56,8 +56,17 @@ const SETTINGS = {
 			empty: false,
 		},
 		{
-			name: 'Test4: testing deep nesting, nav and deep partial conversion',
+			name: 'Test4: testing partial deep nesting, nav and deep partial conversion',
 			folder: 'site4',
+			script: {
+				options: [],
+			},
+			compare: 'site/',
+			empty: false,
+		},
+		{
+			name: 'Test5: testing deep folder for content, code and assets',
+			folder: 'site5',
 			script: {
 				options: [],
 			},

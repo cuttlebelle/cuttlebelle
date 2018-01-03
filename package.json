@@ -1,8 +1,8 @@
 {
 	"name": "cuttlebelle",
 	"description": "The react static site generator that separates editing and code concerns",
-	"version": "1.0.0-alpha.34",
-	"homepage": "https://github.com/cuttlebelle/cuttlebelle",
+	"version": "1.0.0-alpha.35",
+	"homepage": "http://cuttlebelle.com",
 	"author": {
 		"name": "Dominik Wilkowski",
 		"email": "Hi@Dominik-Wilkowski.com",

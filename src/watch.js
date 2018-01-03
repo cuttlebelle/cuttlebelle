@@ -206,10 +206,13 @@ export const UpdateChange = ( path, history, _doEverything = false ) => {
 export const UpdateAssets = ( startTime ) => {
 	Log.verbose(`Only doing assets changes`);
 
+	let assetsLocation = SETTINGS.get().folder.assets.split( Path.sep );
+	assetsLocation = Path.normalize(`${ SETTINGS.get().folder.site }/${ assetsLocation[ assetsLocation.length - 2 ] }/`);
+
 	// copy entire assets folder again
 	RenderAssets(
 		SETTINGS.get().folder.assets,
-		Path.normalize(`${ SETTINGS.get().folder.site }/${ SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' ) }`)
+		assetsLocation
 	)
 		.catch( error => Log.error( error ) )
 		.then( () => {
