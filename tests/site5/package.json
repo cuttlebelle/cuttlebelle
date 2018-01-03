@@ -1,0 +1,11 @@
+{
+	"name": "test1",
+	"private": true,
+	"cuttlebelle": {
+		"folder": {
+			"content": "source/content/",
+			"code": "source/code/",
+			"assets": "source/assets/"
+		}
+	}
+}
