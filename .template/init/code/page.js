@@ -5,45 +5,44 @@ import React from 'react';
 /**
  * The page layout component
  */
-const Page = ( page ) => (
+const Page = ({ title, stylesheet, header, main, footer, script }) => (
 	<html>
 	<head>
-		<title>Cuttlebelle - { page.title }</title>
+		<title>Cuttlebelle - { title }</title>
 		<meta charSet="utf-8" />
-		<meta http-equiv="x-ua-compatible" content="ie=edge" />
+		<meta httpEquiv="x-ua-compatible" content="ie=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 		<link rel="stylesheet" href={ `/assets/css/site.css` } />
 		{
-			page.stylesheet != undefined
-				? ( <link rel="stylesheet" href={ `/assets/css/${ page.stylesheet }.css` } /> )
+			stylesheet != undefined
+				? ( <link rel="stylesheet" href={ `/assets/css/${ stylesheet }.css` } /> )
 				: null
 		}
 	</head>
 	<body>
 		<div className="top">
 			<header role="banner">
-				{ page.header }
+				{ header }
 			</header>
 
 			<main>
-				{ page.main }
+				{ main }
 			</main>
 		</div>
 
 		<footer>
-			{ page.footer }
+			{ footer }
 		</footer>
 
 		{
-			page.script != undefined
-				? ( <script rel="stylesheet" href={ `/assets/js/${ page.script }.js` } /> )
+			script != undefined
+				? ( <script rel="stylesheet" href={ `/assets/js/${ script }.js` } /> )
 				: null
 		}
 	</body>
 	</html>
 );
-
 
 Page.propTypes = {
 /**
@@ -62,8 +61,6 @@ Page.propTypes = {
 	footer: PropTypes.node.isRequired,
 };
 
-
 Page.defaultProps = {};
-
 
 export default Page;

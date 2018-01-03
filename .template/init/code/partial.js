@@ -7,12 +7,11 @@ import React from 'react';
  *
  * @disable-docs
  */
-const Partial = ( page ) => (
+const Partial = ({ _body }) => (
 	<div className="textwrapper">
-		{ page._body }
+		{ _body }
 	</div>
 );
-
 
 Partial.propTypes = {
 	/**
@@ -21,8 +20,6 @@ Partial.propTypes = {
 	_body: PropTypes.node.isRequired,
 };
 
-
 Partial.defaultProps = {};
-
 
 export default Partial;
