@@ -563,7 +563,7 @@ export const ParseExample = ( example ) => {
 			if( typeof exampleVar === 'object' ) {
 				// TODO
 			}
-			else if( typeof exampleVar === 'string' && exampleVar.includes(`(${ command.name })`) ) {
+			else if( typeof exampleVar === 'string' && exampleVar.includes(`(${ command.name })(`) ) {
 				const partials = exampleVar.split(`(${ command.name })(`);
 				const amount = parseInt( partials[ 1 ].slice( 0, -1 ) );
 
