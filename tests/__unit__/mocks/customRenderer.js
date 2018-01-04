@@ -1,15 +1,13 @@
-const Marked = require(`marked`);
+module.exports = exports = function renderer({ Marked, _ID }) {
 
-const renderer = new Marked.Renderer();
+	Marked.heading = ( text, level ) => {
+		return `<h${ level }>!${ text }!</h${ level }>`;
+	};
 
-renderer.heading = ( text, level ) => {
-	return `<h${ level }>!${ text }!</h${ level }>`;
+	Marked.preparse = ( markdown ) => {
+		return markdown
+			.replace(/\—/g, '&mdash;');
+	};
+
+	return Marked
 };
-
-
-renderer.preparse = ( markdown ) => {
-	return markdown
-		.replace(/\—/g, '&mdash;');
-};
-
-module.exports = renderer;

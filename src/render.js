@@ -219,8 +219,32 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 	}
 	else {
 		return new Promise( ( resolve, reject ) => {
-			let parsedBody = ParseContent( content, file ); // parsing out front matter for this file
 			const ID = parent.length > 0 ? Path.dirname( parent ) : Path.dirname( file ); // the ID of this page is the folder in which it exists
+
+			// to get the parents we just look at the path
+			let parents = ID.split('/').map( ( item, i ) => {
+				return ID.split('/').splice( 0, ID.split('/').length - i ).join('/');
+			});
+
+			// we add the homepage to the parents root
+			if( ID !== SETTINGS.get().folder.index ) {
+				parents.push( SETTINGS.get().folder.index )
+			}
+
+			parents = parents.reverse(); // gotta have it the right way around
+
+			// prepare some common props that will go into the custom markdown renderer and the react renderer
+			const defaultProps = {
+				_ID: ID,
+				_parents: parents,
+				_storeSet: Store.set,
+				_store: Store.get,
+				_nav: Nav.get(),
+				_relativeURL: RelativeURL,
+			};
+
+			// parsing out front matter for this file
+			let parsedBody = ParseContent( content, file, { _pages: Pages.get(), ...defaultProps }, );
 
 			rendered.push( file ); // keeping track of all files we render to avoid circular dependencies
 
@@ -251,29 +275,14 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 				// keeping track of all pages per layout will make the watch better
 				Layouts.set( ID, parsedBody.frontmatter.layout );
 
-				// to get the parents we just look at the path
-				const parents = ID.split('/').map( ( item, i ) => {
-					return ID.split('/').splice( 0, ID.split('/').length - i ).join('/');
-				});
-
-				// we add the homepage to the parents root
-				if( ID !== SETTINGS.get().folder.index ) {
-					parents.push( SETTINGS.get().folder.index )
-				}
-
 				// and off we go into the react render machine
 				let pageHTML = RenderReact(
 					Path.normalize(`${ SETTINGS.get().folder.code }/${ parsedBody.frontmatter.layout }`),
 					{
-						_ID: ID,
-						_parents: parents.reverse(),
-						_storeSet: Store.set,
-						_store: Store.get,
 						_pages: Pages.get(),
-						_nav: Nav.get(),
 						_parseMD: ( markdown ) => <div key={`${ ID }-${ iterator }-md`} dangerouslySetInnerHTML={ { __html: ParseMD( markdown ) } } />,
-						_relativeURL: RelativeURL,
 						_body: <div key={`${ ID }-${ iterator }`} dangerouslySetInnerHTML={ { __html: parsedBody.body } } />,
+						...defaultProps,
 						...parsedBody.frontmatter
 					}
 				);
