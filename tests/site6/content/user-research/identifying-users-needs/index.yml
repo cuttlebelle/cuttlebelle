@@ -1,0 +1,41 @@
+pagetitle: Understanding users and their needs
+weight: 30
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - meeting-heading.md
+  - meeting.md
+  - what-head.md
+  - what.md
+  - design-head.md
+  - design.md
+  - how-to-head.md
+  - how-to.md
+  - who-to-head.md
+  - who-to.md
+  - research-wide-head.md
+  - research-wide.md
+  - specify-targets.md
+  - make-inclusive-head.md
+  - make-inclusive.md
+  - diversity.md
+  - non-digital-head.md
+  - non-digital.md
+  - share-head.md
+  - share.md
+  - writing-needs.md
+  - validating-head.md
+  - validating.md
+  - show-head.md
+  - show.md
+  - dashboard.md
+  - link-needs-head.md
+  - link-needs.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

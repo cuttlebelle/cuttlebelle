@@ -1,0 +1,27 @@
+pagetitle: Consent forms for user research
+weight: 60
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - meeting-head.md
+  - meeting.md
+  - get-consent-head.md
+  - get-consent.md
+  - crafting-consent-form-head.md
+  - crafting-consent-form.md
+  - using-consent-form-head.md
+  - using-consent-form.md
+  - incentive-receipts-head.md
+  - incentive-receipts.md
+  - safe-personal-information-head.md
+  - safe-personal-information.md
+  - share-their-story-head.md
+  - share-their-story.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

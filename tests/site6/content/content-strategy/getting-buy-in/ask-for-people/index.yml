@@ -1,0 +1,20 @@
+pagetitle: Ask for people
+description: Ask senior management for the right number of people to improve your content.
+weight: 30
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - calculate-activities-head.md
+  - calculate-activities.md
+  - number-of-people-head.md
+  - number-of-people.md
+  - skills-you-need-head.md
+  - skills-you-need.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

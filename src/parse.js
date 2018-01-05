@@ -32,10 +32,11 @@ import { Log, Style } from './helper';
  *
  * @param  {string} content - The content of a partial with or without front matter
  * @param  {string} file    - The path of the file to determine what extension this is
+ * @param  {string} props   - An object of all props being passed to the markdown renderer, optional
  *
  * @return {object}         - An object with parsed out front matter and it’s parsed yaml and the body. format: { frontmatter: {}, body: '' }
  */
-export const ParseContent = ( content, file ) => {
+export const ParseContent = ( content, file, props = {} ) => {
 	Log.verbose(`Parsing content for ${ Style.yellow( file ) }`);
 
 	if( typeof content === 'string' ) {
@@ -52,11 +53,11 @@ export const ParseContent = ( content, file ) => {
 			const bodyParts = content.split('---\n');
 
 			parsedBody.frontmatter = bodyParts[1] ? ParseYaml( bodyParts[1], file ) : {};
-			parsedBody.body = ParseMD( bodyParts.slice( 2 ).join('---\n'), file );
+			parsedBody.body = ParseMD( bodyParts.slice( 2 ).join('---\n'), file, props );
 		}
 		else {                                   // in all other cases (markdown without frontmatter)
 			parsedBody.frontmatter = {};
-			parsedBody.body = ParseMD( content, file );
+			parsedBody.body = ParseMD( content, file, props );
 		}
 
 		return parsedBody;
@@ -72,10 +73,11 @@ export const ParseContent = ( content, file ) => {
  *
  * @param  {string} markdown - The markdown string
  * @param  {string} file     - The file where this markdown comes from for error handling
+ * @param  {string} props    - An object of all props for the custom renderer
  *
  * @return {string}          - HTML rendered from the given markdown
  */
-export const ParseMD = ( markdown, file ) => {
+export const ParseMD = ( markdown, file, props ) => {
 	if( typeof markdown === 'string' ) {
 
 		let renderer = new Marked.Renderer();
@@ -84,7 +86,8 @@ export const ParseMD = ( markdown, file ) => {
 			const filePath = Path.normalize(`${ process.cwd() }/${ SETTINGS.get().site.markdownRenderer }`);
 
 			try {
-				renderer = require( filePath );
+				const customRenderer = require( filePath );
+				renderer = customRenderer({ Marked: new Marked.Renderer(), ...props });
 			}
 			catch( error ) {
 				Log.error(`Using the custom renderer for markdown caused an error at ${ Style.yellow( filePath ) }`);

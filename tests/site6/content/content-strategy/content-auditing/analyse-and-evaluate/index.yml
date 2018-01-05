@@ -1,0 +1,24 @@
+pagetitle: Analyse and evaluate
+description: Analyse and evaluate your content for accuracy, relevancy, quality and performance.
+weight: 50
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md             # Analyse and evaluate
+  - sections.md
+  - prioritise-head.md
+  - prioritise.md
+  - current-complete-head.md          # Is it current, accurate and complete?
+  - current-complete.md
+  - quality-head.md          # Content quality check
+  - quality.md
+  - check-data-head.md          # Checking the data
+  - check-data.md
+  - tools-head.md          # Tools
+  - tools.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

@@ -1,0 +1,20 @@
+pagetitle: Review your IA
+weight: 30
+description: Conduct a review and research other related websites before you begin to develop your IA.
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - conduct-content-audit-head.md
+  - conduct-content-audit.md
+  - check-analytics-head.md
+  - check-analytics.md
+  - research-other-examples-head.md
+  - research-other-examples.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

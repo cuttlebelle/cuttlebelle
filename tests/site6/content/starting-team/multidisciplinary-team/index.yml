@@ -1,0 +1,25 @@
+pagetitle: Multidisciplinary team
+weight: 50
+hidden: false
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - meeting-head.md
+  - meeting.md
+  - benefits-head.md
+  - benefits.md
+  - easier-head.md
+  - easier.md
+  - start-head.md
+  - start.md
+  - mindset-head.md
+  - mindset.md
+  - tshape.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

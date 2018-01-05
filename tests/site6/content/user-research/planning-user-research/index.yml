@@ -1,0 +1,23 @@
+pagetitle: Planning user research
+weight: 40
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - meeting-head.md
+  - meeting.md
+  - think-head.md
+  - think.md
+  - plan-head.md
+  - plan.md
+  - share-head.md
+  - share.md
+  - where-head.md
+  - where.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

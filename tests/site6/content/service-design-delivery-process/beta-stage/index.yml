@@ -1,0 +1,34 @@
+pagetitle: Beta stage: building and testing the service
+weight: 50
+hidden: false
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - meeting-head.md
+  - meeting.md
+  - team-head.md
+  - team.md
+  - what-head.md
+  - what.md
+  - how-work-head.md
+  - how-work.md
+  - releasing-head.md
+  - releasing.md
+  - measuring-head.md
+  - measuring.md
+  - how-long-head.md
+  - how-long.md
+  - finished-head.md
+  - finished.md
+  - live-head.md
+  - live.md
+  - case-head.md
+  - case.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

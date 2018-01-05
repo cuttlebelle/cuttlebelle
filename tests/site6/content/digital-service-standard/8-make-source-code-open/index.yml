@@ -1,0 +1,19 @@
+pagetitle: 8. Make source code open
+weight: 80
+childnav1lvl: true
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - guidance-head.md
+  - guidance.md
+  - reading-head.md
+  - reading.md
+  #- cstudies-section.md
+  #- cstudies.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

@@ -1,0 +1,24 @@
+pagetitle: Define your goal
+description: Define the goal and scope for your content so you are clear about what you’re getting buy-in for.
+weight: 10
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - find-the-why-head.md
+  - find-the-why.md
+  - start-small-think-agile-head.md
+  - start-small-think-agile.md
+  - start-user-needs-head.md
+  - start-user-needs.md
+  - fit-content-strategy-business-plan-head.md
+  - fit-content-strategy-business-plan.md
+  - use-metrics-and-research-head.md
+  - use-metrics-and-research.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

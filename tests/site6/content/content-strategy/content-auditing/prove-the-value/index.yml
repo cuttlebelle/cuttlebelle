@@ -1,0 +1,24 @@
+pagetitle: Prove the value
+description: Prove the value of a content audit by showing the return on investment of good content.
+weight: 10
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md             # Prove the value
+  - sections.md
+  - team-benefits-head.md          # Benefits of a content audit
+  - team-benefits.md
+  - goals-agencies-head.md          # Align your strategy with agency priorities
+  - goals-agencies.md
+  - inefficiencies-head.md          # Show the costs and inefficiencies
+  - inefficiencies.md
+  - benchmark-head.md          # Compare yours with similar government sites
+  - benchmark.md
+  - user-feedback-head.md          # Get direct user feedback to build empathy with the users
+  - user-feedback.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

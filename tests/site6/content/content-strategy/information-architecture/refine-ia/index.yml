@@ -1,0 +1,13 @@
+pagetitle: Refine your IA
+weight: 80
+description: Review the results of your testing and fix issues that need to be addressed.
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

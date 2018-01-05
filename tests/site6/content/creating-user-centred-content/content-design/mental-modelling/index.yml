@@ -1,0 +1,20 @@
+pagetitle: Mental modelling
+weight: 30
+theme: blue
+description: A mental model maps a user’s thoughts and behaviours as they navigate a website or access information.
+header:
+- /_shared/globalheader.md
+- /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - benefits-head.md
+  - benefits.md
+  - how-to-create-mental-model-head.md
+  - how-to-create-mental-model.md
+  - top-tip.md
+  - resources-head.md
+  - resources.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

@@ -1,0 +1,17 @@
+pagetitle: 10. Test the service
+weight: 100
+childnav1lvl: true
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - reading-head.md
+  - reading.md
+  #- cstudies-section.md
+  #- cstudies.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

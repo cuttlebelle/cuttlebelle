@@ -1,0 +1,14 @@
+pagetitle: Information architecture
+weight: 10
+hidden: true
+theme: blue
+description: Practical guidance for government agencies about developing information architecture for websites.
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - information-architecture-articles.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

@@ -1,0 +1,26 @@
+pagetitle: Simple ways to check content
+description: Quick and easy ways to check your web content for errors, readability, searchability and accessibility.
+weight: 10
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - readability-head.md
+  - readability.md
+  - accessibility-head.md
+  - accessibility.md
+  - searchability-head.md
+  - searchability.md
+  - critiques-head.md
+  - critiques.md
+  - resources-head.md
+  - resources.md
+  - cases-head.md
+  - cases.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

@@ -1,0 +1,20 @@
+pagetitle: Top tasks
+weight: 40
+theme: blue
+description: A website’s top tasks are the top 5 or 10 tasks users want to complete on your website.
+header:
+- /_shared/globalheader.md
+- /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - benefits-head.md
+  - benefits.md
+  - how-to-list-top-tasks-head.md
+  - how-to-list-top-tasks.md
+  - top-tip.md
+  - resources-head.md
+  - resources.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

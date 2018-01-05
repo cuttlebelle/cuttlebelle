@@ -1,0 +1,18 @@
+pagetitle: Creating user-centred content
+description: Create content that your users will find valuable and easy to use.
+weight: 40
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - header.md
+main:
+  - category-sections.md
+  - why.md
+  - when-head.md
+  - when.md
+  - how-head.md
+  - how.md
+  - /content-strategy/support.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

@@ -1,0 +1,21 @@
+pagetitle: Content design
+weight: 10
+theme: blue
+description: Content design is about creating user-centred content.
+header:
+- /_shared/globalheader.md
+- /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - why-head.md
+  - content-design-skills.md
+  - how-head.md
+  - how.md
+  - methods-head.md
+  - methods.md
+  - resources-head.md
+  - resources.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

@@ -1,0 +1,23 @@
+pagetitle: Publishing content
+description: Web publishers/producers prepare and check the usability of content in the CMS platform and publish it live.
+weight: 90
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - why-head.md
+  - why.md
+  - workflow-head.md
+  - workflow.md
+  - tools-head.md
+  - tools.md
+  - skills-head.md
+  - skills.md
+  - typical-tasks-head.md
+  - typical-tasks.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

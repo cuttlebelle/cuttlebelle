@@ -1,0 +1,39 @@
+pagetitle: Alpha stage: testing hypotheses
+weight: 40
+hidden: false
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - TOC.md
+  - meeting-head.md
+  - meeting.md
+  - team-head.md
+  - team.md
+  - what-head.md
+  - what.md
+  - register-head.md
+  - reigster.md
+  - metrics-head.md
+  - metrics.md
+  - activities-head.md
+  - activities.md
+  - test-head.md
+  - test.md
+  - mvp-image.md
+  - finished-head.md
+  - finished.md
+  - beta-head.md
+  - beta.md
+  - not-move-on-head.md
+  - not-move-on.md
+  - new-alpha-head.md
+  - new-alpha.md
+  - case-head.md
+  - case.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

@@ -1,0 +1,18 @@
+pagetitle: Governing content
+description: 100 characters per line, extending from two to three lines. Use keywords.
+weight: 70
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - header.md
+main:
+  - category-sections.md
+  - intro.md
+  - when-head.md
+  - when.md
+  - how-head.md
+  - how-cards.md
+  - support.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

@@ -1,0 +1,26 @@
+pagetitle: Plan your audit
+description: Plan your content audit by defining the purpose of your website and your goal.
+weight: 20
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md             # Plan your audit
+  - sections.md
+  - section1.md          # Purpose of the website
+  - textblock1.md
+  - section2.md          # Articulate a goal
+  - textblock2.md
+  - section3.md          # Decide on scope and type of content audit
+  - textblock3.md
+  - how-long-head.md
+  - how-long.md
+  - section4.md          # Define your scope and prioritise
+  - textblock4.md
+  - section5.md          # Create a project plan
+  - textblock5.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

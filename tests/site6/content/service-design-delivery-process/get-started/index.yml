@@ -1,0 +1,25 @@
+pagetitle: Getting started with the service design and delivery process
+weight: 40
+hidden: false
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - meeting-heading.md
+  - meeting.md
+  - user-needs-image-old.md
+  - user-needs-image-new.md
+  - stages-head.md
+  - stages.md
+  - diamond-image.md
+  - support-decision-makers-head.md
+  - support-decision-makers.md
+  - deliver-quickly-reduce-risk-head.md
+  - deliver-quickly-reduce-risk.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

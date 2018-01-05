@@ -1,0 +1,18 @@
+pagetitle: Urgent content requests
+weight: 10
+theme: blue
+description: What are the minimum quality checks when content is urgent.
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - fixed-deadlines-head.md
+  - fixed-deadlines.md
+  - important-not-urgent-head.md
+  - important-not-urgent.md
+  - urgent-content-requests-articles.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

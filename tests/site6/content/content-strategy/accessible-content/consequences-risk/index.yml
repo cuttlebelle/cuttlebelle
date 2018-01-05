@@ -1,0 +1,18 @@
+pagetitle: Consequences and risk
+description: Agencies risk being reported to the Human Rights Commission and attracting negative media attention when they fail to conform with accessibility.
+weight: 20
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - current-policy-head.md
+  - current-policy.md
+  - wcag-head.md
+  - wcag.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md
