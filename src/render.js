@@ -280,7 +280,7 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 					Path.normalize(`${ SETTINGS.get().folder.code }/${ parsedBody.frontmatter.layout }`),
 					{
 						_pages: Pages.get(),
-						_parseMD: ( markdown ) => <div key={`${ ID }-${ iterator }-md`} dangerouslySetInnerHTML={ { __html: ParseMD( markdown ) } } />,
+						_parseMD: ( markdown, file, props ) => <div key={`${ ID }-${ iterator }-md`} dangerouslySetInnerHTML={ { __html: ParseMD( markdown, file, props ) } } />,
 						_body: <div key={`${ ID }-${ iterator }`} dangerouslySetInnerHTML={ { __html: parsedBody.body } } />,
 						...defaultProps,
 						...parsedBody.frontmatter
