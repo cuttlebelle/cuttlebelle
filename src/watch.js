@@ -250,7 +250,7 @@ export const UpdateContent = ( startTime, path, page ) => {
 		.then( HTML => {
 				const newPath = Path.normalize(`${ SETTINGS.get().folder.site }/${ page === SETTINGS.get().folder.homepage ? '' : page }/index.html`);
 
-				CreateFile( newPath, HTML ).catch( error => reject( error ) );
+				CreateFile( newPath, SETTINGS.get().site.doctype + HTML ).catch( error => reject( error ) );
 
 				Progress.tick();
 
