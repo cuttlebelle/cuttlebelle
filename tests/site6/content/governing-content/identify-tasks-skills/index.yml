@@ -1,0 +1,17 @@
+pagetitle: Identify tasks and skills
+description: An activity to explore how to improve your content quality. Identify content tasks and skills in your agency.
+weight: 10
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - why-explore-tasks-skills-head.md
+  - why-explore-tasks-skills.md
+  - facilitators-notes-head.md
+  - facilitators-notes.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

@@ -1,0 +1,26 @@
+pagetitle: Test content with users
+description: How to test and check your content is easy to read and use.
+weight: 20
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - task-head.md
+  - task.md
+  - highlighter-head.md
+  - highlighter.md
+  - cloze-head.md
+  - cloze.md
+  - live-head.md
+  - live.md
+  - act-head.md
+  - act.md
+  - resources-head.md
+  - resources03.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

@@ -1,0 +1,28 @@
+pagetitle: Tips to improve accessibility
+description: Differentiate between your legacy PDFs (or other documents) and focus on making sure any new content is accessible.
+weight: 40
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - consider-accessibility-from-start-head.md
+  - consider-accessibility-from-start.md
+  - large-reports-head.md
+  - large-reports.md
+  - retrofitting-accessibility-head.md
+  - retrofitting-accessibility.md
+  - pushback-pdfs-head.md
+  - pushback-pdfs.md
+  - legacy-content-head.md
+  - legacy-content.md
+  - update-accessibility-statement-head.md
+  - update-accessibility-statement.md
+  - accessibility-resources-head.md
+  - accessibility-resources.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

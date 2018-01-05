@@ -1,0 +1,13 @@
+pagetitle: Identify your stakeholders
+weight: 20
+description: Identify and track who owns each piece of content and what you need to check with them.
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

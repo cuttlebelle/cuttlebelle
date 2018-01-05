@@ -1,0 +1,26 @@
+pagetitle: Action your audit
+description: Report your content audit findings and action your audit.
+weight: 60
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md             # Action your audit
+  - sections.md
+  - action-data-head.md          # Action the data
+  - action-data.md
+  - report-findings-head.md          # Report your findings
+  - report-findings.md
+  - section3.md          # Delete content
+  - textblock3.md
+  - section4.md          # Archive content
+  - textblock4.md
+  - section5.md          # Rewrite content
+  - textblock5.md
+  - section6.md          # Maintain content
+  - textblock6.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

@@ -1,0 +1,20 @@
+pagetitle: IA tools and techniques
+weight: 90
+description: Here are some tools and techniques which can help when developing your IA.
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - card-sorting-head.md
+  - card-sorting.md
+  - visualise-your-ia-head.md
+  - visualise-your-ia.md
+  - ab-testing-head.md
+  - ab-testing.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

@@ -1,0 +1,19 @@
+pagetitle: Paying incentives for user research
+weight: 70
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - meeting-head.md
+  - meeting.md
+  - if-head.md
+  - if.md
+  - what-to-pay-head.md
+  - what-to-pay.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

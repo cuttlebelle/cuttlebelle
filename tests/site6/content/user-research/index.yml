@@ -1,0 +1,19 @@
+pagetitle: User research
+weight: 10
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - header.md
+main:
+  - sections.md
+  - why.md
+  - when-head.md
+  - when.md
+  - how-head.md
+  - guides.md
+  - cstudies-section.md
+  - cstudies.md
+  - /_shared/support-service-design.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

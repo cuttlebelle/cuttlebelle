@@ -1,0 +1,24 @@
+pagetitle: Digital capability of the team
+weight: 20
+hidden: false
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - toc.md
+  - meeting-standard-head.md
+  - meeting-standard.md
+  - how-deliver-head.md
+  - how-deliver.md
+  - finding-people-head.md
+  - finding-people.md
+  - high-capability-head.md
+  - high-capability.md
+  - helping-teams-head.md
+  - helping-teams.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

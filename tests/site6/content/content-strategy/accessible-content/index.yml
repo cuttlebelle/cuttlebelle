@@ -1,0 +1,14 @@
+pagetitle: Accessible content
+description: The people who most need government services and information often find them the hardest to use. Think about creating content that is accessible for everyone from the start.
+weight: 10
+hidden: true
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - accessible-content-articles.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

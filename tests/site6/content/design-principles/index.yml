@@ -1,0 +1,33 @@
+pagetitle: Design principles
+weight: 20
+layout: layout/topic
+theme: blue
+hidden: true
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - start-with-needs-head.md
+  - start-with-needs.md
+  - do-less-head.md
+  - do-less.md
+  - design-data-head.md
+  - design-data.md
+  - hard-work-make-simple-head.md
+  - hard-work-make-simple.md
+  - iterate-head.md
+  - iterate.md
+  - for-everyone-head.md
+  - for-everyone.md
+  - understand-context-head.md
+  - understand-context.md
+  - build-digital-services-head.md
+  - build-digital-services.md
+  - consistent-not-uniform-head.md
+  - consistent-not-uniform.md
+  - make-things-open-head.md
+  - make-things-open.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

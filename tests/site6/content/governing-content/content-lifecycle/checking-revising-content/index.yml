@@ -1,0 +1,23 @@
+pagetitle: Checking and revising content
+description: Involve the right people and expertise to check and test content quality before revising and sending for final sign-off.
+weight: 60
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - why-head.md
+  - why.md
+  - workflow-head.md
+  - workflow.md
+  - templates-head.md
+  - templates.md
+  - skills-head.md
+  - skills.md
+  - typical-tasks-head.md
+  - typical-tasks.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

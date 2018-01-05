@@ -1,0 +1,19 @@
+pagetitle: Assign accountability and ownership
+description: Govern content to help everyone know who is accountable according to their expertise.
+weight: 10
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - leaders-head.md
+  - leaders.md
+  - doers-head.md
+  - doers.md
+  - specialists-head.md
+  - specialists.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

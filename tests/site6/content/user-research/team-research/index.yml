@@ -1,0 +1,21 @@
+pagetitle: Involve the team in research
+weight: 10
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md             # Synthesizing user research
+  - sections.md
+  - meeting-head.md
+  - meeting.md
+  - everyone-head.md          # Meeting the Digital Service Standard
+  - everyone.md
+  - how-head.md
+  - how.md
+  - case-head.md
+  - case.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

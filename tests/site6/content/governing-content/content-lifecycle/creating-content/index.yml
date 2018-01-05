@@ -1,0 +1,22 @@
+pagetitle: Creating content
+description: Start the process of creating content by guiding authors in how to write for plain English and web standards.
+weight: 30
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - why-head.md
+  - why.md
+  - workflow-process-head.md
+  - workflow-process.md
+  - tools-template-head.md
+  - tools-template.md
+  - skills-head.md
+  - skills.md
+  - typical-tasks-head.md
+  - typical-tasks.md
+footer:
+  - /_shared/footer.md

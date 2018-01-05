@@ -1,0 +1,12 @@
+pagetitle: Content sign-off brief
+weight: 80
+theme: blue
+hidden: false
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - template.md
+footer:
+  - /_shared/footer.md

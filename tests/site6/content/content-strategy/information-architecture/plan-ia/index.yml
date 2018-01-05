@@ -1,0 +1,20 @@
+pagetitle: Plan your IA
+weight: 20
+description: Make sure you link your plan to any existing communications plans and digital strategies.
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - identify-user-needs-head.md
+  - identify-user-needs.md
+  - list-special-content-requirements-head.md
+  - list-special-content-requirements.md
+  - list-business-requirements-head.md
+  - list-business-requirements.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

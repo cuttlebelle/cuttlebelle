@@ -1,0 +1,20 @@
+pagetitle: Pair writing
+weight: 50
+theme: blue
+description: Pair writing is creating content side-by-side with a subject matter expert.
+header:
+- /_shared/globalheader.md
+- /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - benefits-head.md
+  - benefits.md
+  - how-to-pair-write-head.md
+  - how-to-pair-write.md
+  - top-tip.md
+  - resources-head.md
+  - resources.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

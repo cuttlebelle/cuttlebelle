@@ -1,0 +1,50 @@
+pagetitle: Discovery stage: exploring the problem
+weight: 30
+hidden: false
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - toc.md
+  - meeting-head.md
+  - meeting.md
+  - get-ready-head.md
+  - get-ready.md
+  - what-to-do-head.md
+  - what-to-do.md
+  - kick-off-head.md
+  - kick-off.md
+  - contextual-research-head.md
+  - contextual-research.md
+  - create-artefacts-head.md
+  - create-artefacts.md
+  - user-journey-map-head.md
+  - user-journey-map.md
+  - group-pain-head.md
+  - group-pain.md
+  - prioritise-pain-head.md
+  - prioritise-pain.md
+  - hypotheses-head.md
+  - hypotheses.md
+  - document-process-head.md
+  - document-process.md
+  - how-long-head.md
+  - how-long.md
+  - measure-performance-head.md
+  - measure-performance.md
+  - moving-to-alpha-head.md
+  - moving-to-alpha.md
+  - stopping-head.md
+  - stopping.md
+  - case-head.md
+  - dta-blog.md
+  - case.md
+  - gds-blog.md
+  - case-uk.md
+  - /_shared/feedback.md
+
+footer:
+  - /_shared/footer-gds.md

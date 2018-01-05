@@ -1,0 +1,26 @@
+pagetitle: How user research changes during design and delivery
+weight: 100
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md             # Changes
+  - sections.md
+  - meeting-heading.md
+  - meeting.md
+  - discovery-head.md          # User research in Discovery
+  - discovery.md
+  - empathy.md
+  - alpha-head.md          # User research in Alpha
+  - alpha.md
+  - beta-head.md          # User research in Beta
+  - beta.md
+  - live-head.md          # Researching your service once it's live
+  - live.md
+  - case-head.md
+  - case.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

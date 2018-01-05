@@ -1,0 +1,28 @@
+pagetitle: Roles
+weight: 10
+hidden: false
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - toc.md
+  - meeting-standard-head.md
+  - meeting-standard.md
+  - roles-needs-head.md
+  - roles-needs.md
+  - self-organise-head.md
+  - self-organise.md
+  - levels-experience-head.md
+  - levels-experience.md
+  - each-role-head.md
+  - each-role.md
+  - some-for-part-head.md
+  - some-for-part.md
+  - cstudies-head.md
+  - cstudies.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

@@ -1,0 +1,22 @@
+pagetitle: Scope of the Digital Service Standard
+weight: 150
+childnav1lvl: true
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - toc.md
+  - transactional-head.md
+  - transactional.md
+  - information-head.md
+  - information.md
+  - moratorium-head.md
+  - moratorium.md
+  - not-apply-head.md
+  - not-apply.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

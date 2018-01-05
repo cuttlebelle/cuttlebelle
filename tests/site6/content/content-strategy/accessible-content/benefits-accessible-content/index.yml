@@ -1,0 +1,18 @@
+pagetitle: Benefits of accessible content
+description: Find out the benefits to both our community and government when we make our content accessible.
+weight: 10
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - benefits-community-head.md
+  - benefits-community.md
+  - benefits-government-head.md
+  - benefits-government.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

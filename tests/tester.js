@@ -73,6 +73,15 @@ const SETTINGS = {
 			compare: 'site/',
 			empty: false,
 		},
+		{
+			name: 'Test6: complex example of a real world site',
+			folder: 'site6',
+			script: {
+				options: [],
+			},
+			compare: 'site/',
+			empty: false,
+		},
 	],
 };
 

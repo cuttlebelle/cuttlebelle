@@ -1,0 +1,23 @@
+pagetitle: Archive and record content
+weight: 40
+description: Find out what you need to keep and for how long, for both business and Commonwealth records.
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - find-out-head.md
+  - find-out.md
+  - archiving-comm-head.md
+  - archiving-comm.md
+  - archiving-comm02.md
+  - archiving-comm-callout.md
+  - archiving-comm03.md
+  - archiving-business-head.md
+  - archiving-business.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

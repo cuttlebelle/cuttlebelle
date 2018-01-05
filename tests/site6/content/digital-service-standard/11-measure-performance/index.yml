@@ -1,0 +1,21 @@
+pagetitle: 11. Measure performance
+weight: 110
+childnav1lvl: true
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - how-head.md
+  - how.md
+  - guidance-head.md
+  - guidance.md
+  - reading-head.md
+  - reading.md
+  #- cstudies-section.md
+  #- cstudies.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

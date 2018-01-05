@@ -1,0 +1,26 @@
+pagetitle: Engage your stakeholders
+description: Find your stakeholders and maintain good relationships throughout your content audit.
+weight: 30
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md             # Get agreement
+  - sections.md
+  - section1.md          # Engage your stakeholders
+  - textblock1.md
+  - section2.md          # Show the costs and inefficiencies
+  - textblock2.md
+  - section3.md          # Compare yours with similar government sites
+  - textblock3.md
+  - section4.md          # Get direct user feedback to build empathy with the users
+  - textblock4.md
+  - section5.md          # Get direct user feedback to build empathy with the users
+  - textblock5.md
+  - section6.md          # Get direct user feedback to build empathy with the users
+  - textblock6.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

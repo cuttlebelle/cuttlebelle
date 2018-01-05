@@ -1,0 +1,16 @@
+pagetitle: Content production template
+weight: 40
+description: Use the content production template to prepare, write and check for quality content.
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - using-head.md
+  - using.md
+  - resources-cards-head.md
+  - resources-cards.md
+footer:
+  - /_shared/footer.md

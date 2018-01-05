@@ -1,0 +1,17 @@
+pagetitle: Content governance models
+description: Understand how mature your content processes are to know which content governance model to apply in your agency.
+weight: 10
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - content-maturity-levels-head.md
+  - content-maturity-levels.md
+  - types-content-governance-head.md
+  - types-content-governance.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

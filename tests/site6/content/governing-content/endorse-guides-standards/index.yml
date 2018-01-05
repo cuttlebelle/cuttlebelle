@@ -1,0 +1,17 @@
+pagetitle: Endorse guides and standards
+description: The guidelines your agency should apply and the standards you must meet.
+weight: 10
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - guidelines-head.md
+  - guidelines.md
+  - standards-head.md
+  - standards.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

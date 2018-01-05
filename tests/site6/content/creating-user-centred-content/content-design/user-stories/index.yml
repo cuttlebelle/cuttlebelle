@@ -1,0 +1,22 @@
+pagetitle: User stories
+description: A user story describes a user need as they interact with services and information.
+weight: 10
+theme: blue
+header:
+- /_shared/globalheader.md
+- /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - benefits-head.md
+  - benefits.md
+  - how-to-create-user-stories-head.md
+  - how-to-create-user-stories.md
+  - jobstories-head.md
+  - jobstories.md
+  - top-tip.md
+  - resources-head.md
+  - resources.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

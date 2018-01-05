@@ -1,0 +1,32 @@
+pagetitle: Analysing user research
+weight: 90
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - meeting-head.md
+  - meeting.md
+  - plan-head.md
+  - plan.md
+  - when-head.md
+  - when.md
+  - extract-head.md
+  - extract.md
+  - sort-head.md
+  - sort.md
+  - affinity.md
+  - determine-head.md
+  - determine.md
+  - insights.md
+  - decide-head.md
+  - decide.md
+  - share-head.md
+  - share.md
+  - shareback.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer-gds.md

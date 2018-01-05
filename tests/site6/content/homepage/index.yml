@@ -1,0 +1,17 @@
+pagetitle: Homepage
+theme: dark
+description: Guides to help teams build and run government services that meet user needs.
+header:
+  - /_shared/globalheader.md
+  - header.md
+main:
+  - dss.md
+  - categories-head.md
+  - categories.md
+  - commontools-head.md
+  - commontools.md
+  - cstudies-section.md
+  - cstudies.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

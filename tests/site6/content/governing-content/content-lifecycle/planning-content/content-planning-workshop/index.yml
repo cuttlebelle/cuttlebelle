@@ -1,0 +1,19 @@
+pagetitle: Content planning workshop
+description: Run a content planning workshop with your team. Explore what your users and business owners expect from your content.
+weight: 20
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - why-head.md
+  - why.md
+  - start-head.md
+  - start.md
+  - facilitator-head.md
+  - facilitator.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

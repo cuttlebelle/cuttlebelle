@@ -1,0 +1,20 @@
+pagetitle: Ask for budget
+description: Ask for budget by showing the return on investment of content improvement.
+weight: 40
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - prove-the-value-head.md
+  - prove-the-value.md
+  - talk-about-risk-head.md
+  - talk-about-risk.md
+  - when-ask-budget-head.md
+  - when-ask-budget.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

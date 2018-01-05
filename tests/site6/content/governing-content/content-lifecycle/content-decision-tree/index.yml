@@ -1,0 +1,15 @@
+pagetitle: Content decision tree
+description: A guide to help you decide if your content is right or ready to publish
+weight: 50
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - image.md
+  - longtext-head.md
+  - longtext.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md

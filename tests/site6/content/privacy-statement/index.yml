@@ -1,0 +1,11 @@
+pagetitle: Privacy statement
+weight: 50
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - body.md
+footer:
+  - /_shared/footer.md

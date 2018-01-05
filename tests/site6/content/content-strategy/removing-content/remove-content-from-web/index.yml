@@ -1,0 +1,29 @@
+pagetitle: Remove content from the web
+weight: 50
+description: Steps to follow to remove content from your website, after you’ve archived it.
+layout: layout/topic
+theme: blue
+header:
+  - /_shared/globalheader.md
+  - /_shared/header.md
+main:
+  - intro.md
+  - sections.md
+  - set-up-head.md
+  - set-up.md
+  - set-up-callout.md
+  - using-404.md
+  - remove-links-head.md
+  - remove-links.md
+  - remove-links-callout.md
+  - change-ia-head.md
+  - change-ia.md
+  - agree-head.md
+  - agree.md
+  - deletion-head.md
+  - deletion.md
+  - dns-head.md
+  - dns.md
+  - /_shared/feedback.md
+footer:
+  - /_shared/footer.md
