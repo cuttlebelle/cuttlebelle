@@ -31,12 +31,12 @@ import { Log, Style } from './helper';
  * Parsing the content of a file into an object
  *
  * @param  {string} content - The content of a partial with or without front matter
- * @param  {string} file    - The path of the file to determine what extension this is
+ * @param  {string} file    - The path of the file to determine what extension this is, optional, default: 'partial.md'
  * @param  {string} props   - An object of all props being passed to the markdown renderer, optional
  *
  * @return {object}         - An object with parsed out front matter and it’s parsed yaml and the body. format: { frontmatter: {}, body: '' }
  */
-export const ParseContent = ( content, file, props = {} ) => {
+export const ParseContent = ( content, file = 'partial.md', props = {} ) => {
 	Log.verbose(`Parsing content for ${ Style.yellow( file ) }`);
 
 	if( typeof content === 'string' ) {
