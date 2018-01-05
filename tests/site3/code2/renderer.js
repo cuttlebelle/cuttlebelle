@@ -1,4 +1,4 @@
-module.exports = exports = function renderer({ Marked, _ID }) {
+module.exports = exports = function renderer({ Marked, _ID, _relativeURL }) {
 
 	const headingLevels = {
 		1: 'display-1',
@@ -22,6 +22,17 @@ module.exports = exports = function renderer({ Marked, _ID }) {
 		return `<h${ level }${ headingLevels[ display ] ? ` class="${ headingLevels[ display ] }"` : `` }>${ text }</h${ level }>`;
 	};
 
+	Marked.link = ( href, title, text ) => {
+		let attr = '';
+		if( href.startsWith('http://') || href.startsWith('https://') ) {
+			attr = ` rel="external"`;
+		}
+		else if( !href.startsWith('#') && typeof _relativeURL === 'function' ) {
+			href = _relativeURL( href, _ID );
+		}
+
+		return `<a href="${ href }"${ title ? ` title="${ title }"` : '' }${ attr }>${ text }</a>`;
+	};
 
 	Marked.preparse = ( markdown ) => {
 		return markdown
