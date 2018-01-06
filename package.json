@@ -1,7 +1,7 @@
 {
 	"name": "cuttlebelle",
 	"description": "The react static site generator that separates editing and code concerns",
-	"version": "1.0.0-alpha.38",
+	"version": "1.0.0-alpha.40",
 	"homepage": "http://cuttlebelle.com",
 	"author": {
 		"name": "Dominik Wilkowski",
@@ -32,12 +32,13 @@
 		"node": ">=6"
 	},
 	"scripts": {
-		"prepublish": "npm run build && npm run test",
+		"prepublish": "npm run test && npm run man",
 		"test": "npm run build && npm run test:end-to-end && npm run test:unit-test",
 		"test:unit-test": "jest",
 		"test:detail": "jest --coverage",
 		"test:watch": "jest --watch --coverage",
 		"test:end-to-end": "node tests/tester.js",
+		"man": "cd man && marked-man --version 'v1.0.0-alpha.39' --manual 'Cuttlebelle Help' --section 1 man.md > cuttlebelle.1",
 		"build": "npm run build:js",
 		"build:js": "babel src --out-dir dist --presets=es2015 --plugins=transform-runtime,transform-es2015-modules-commonjs",
 		"build:watch": "npm run build:js && npm run test:detail",
@@ -73,6 +74,7 @@
 		"copy-dir": "^0.3.0",
 		"dirsum": "^0.1.1",
 		"jest-cli": "^22.0.4",
+		"marked-man": "^0.2.1",
 		"onchange": "^3.3.0",
 		"replace-in-file": "^3.1.0"
 	},
@@ -103,11 +105,15 @@
 		".template/*",
 		"dist/*",
 		"assets/*",
+		"man/*",
 		".babelrc"
 	],
 	"main": "dist/index.js",
 	"bin": {
 		"cuttlebelle": "./dist/index.js"
+	},
+	"directories": {
+		"man": "man"
 	},
 	"license": "GPL-3.0"
 }

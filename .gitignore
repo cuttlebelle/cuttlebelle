@@ -16,3 +16,4 @@ tests/*/site2/*
 dist/*
 coverage/*
 tests/*/docs/*
+man/cuttlebelle.1

@@ -65,7 +65,7 @@ ${ padding }  ${ Style.bold(`watch`) }         - Start to watch the content and 
 ${ padding }                - Shortcut: ${ Style.yellow( Style.bold(`-w`) ) }
 ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle watch`) ) }
 
-${ padding }  ${ Style.bold(`--no-generate`) } - Disable generation of all pages, best in combination with watch.
+${ padding }  ${ Style.bold(`--no-generate`) } - Disable generation of all pages, best in combination with watch
 ${ padding }                - Shortcut: ${ Style.yellow( Style.bold(`-n`) ) }
 ${ padding }  ${ Style.gray(`$`) } ${ Style.yellow( Style.bold(`cuttlebelle watch --no-generate`) ) }
 
