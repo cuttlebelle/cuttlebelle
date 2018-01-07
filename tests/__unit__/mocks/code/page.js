@@ -35,7 +35,7 @@ const Page = ( page ) => (
 				- _pages: { JSON.stringify( page._pages ) }
 				- _nav: { JSON.stringify( page._nav ) }
 				- _store: { page._storeSet({ test: 'done' }) }{ JSON.stringify( page._store() ) }
-				- _relativeURL: { page._relativeURL( page._pages[ page._ID ].url, '/anotherpage/' ) }
+				- _relativeURL: { page._relativeURL( page._pages[ page._ID ]._url, '/anotherpage/' ) }
 				- _parseMD: { page._parseMD(`# headline\n\n**bold** yay!`) }
 			</main>
 		</div>

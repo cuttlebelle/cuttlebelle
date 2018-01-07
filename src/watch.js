@@ -33,11 +33,9 @@ import Fs from 'fs';
 import { RenderFile, RenderAllPages, RenderAssets, PreRender } from './render';
 import { ConvertHrtime, Log, Style } from './helper';
 import { ReadFile, CreateFile } from './files';
-import { GetLayout, GetContent } from './site';
+import { GetLayout } from './site';
 import { SETTINGS } from './settings.js';
 import { Progress } from './progress';
-import { Pages } from './pages';
-import { Nav } from './nav';
 
 
 /**

@@ -27,7 +27,7 @@ const Navigation = ({
 							{
 								_displayItem
 									? <NavigationItem
-											href={ relativeURL( pages[ pageID ].url, ID ) }
+											href={ relativeURL( pages[ pageID ]._url, ID ) }
 											title={ pages[ pageID ].title }
 											thisPage={ pageID === ID }
 											itemClass={ itemClass }
@@ -59,7 +59,7 @@ const Navigation = ({
 					if( _displayItem ) {
 						return <li className={ itemClass } key={ i }>
 							<NavigationItem
-								href={ relativeURL( pages[ page ].url, ID ) }
+								href={ relativeURL( pages[ page ]._url, ID ) }
 								title={ pages[ page ].title }
 								thisPage={ page === ID }
 								itemClass={ itemClass }

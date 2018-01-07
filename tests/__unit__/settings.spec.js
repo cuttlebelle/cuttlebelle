@@ -56,23 +56,23 @@ test('SETTINGS.get() - The default settings are correct', () => {
 			},
 			pagesProp: {
 				page1: {
-					url: '/page1',
+					_url: '/page1',
 					title: 'Page 1',
 				},
 				page2: {
-					url: '/page2',
+					_url: '/page2',
 					title: 'Page 2',
 				},
 				'page2/nested': {
-					url: '/page2/nested',
+					_url: '/page2/nested',
 					title: 'Nested in page 2',
 				},
 				page3: {
-					url: '/page3',
+					_url: '/page3',
 					title: 'Page 3',
 				},
 				index: {
-					url: '/',
+					_url: '/',
 					title: 'Homepage',
 				},
 			},
@@ -123,23 +123,23 @@ test('SETTINGS.set() - Not setting anything will merge default correctly', () =>
 			},
 			pagesProp: {
 				page1: {
-					url: '/page1',
+					_url: '/page1',
 					title: 'Page 1',
 				},
 				page2: {
-					url: '/page2',
+					_url: '/page2',
 					title: 'Page 2',
 				},
 				'page2/nested': {
-					url: '/page2/nested',
+					_url: '/page2/nested',
 					title: 'Nested in page 2',
 				},
 				page3: {
-					url: '/page3',
+					_url: '/page3',
 					title: 'Page 3',
 				},
 				index: {
-					url: '/',
+					_url: '/',
 					title: 'Homepage',
 				},
 			},
@@ -190,23 +190,23 @@ test('SETTINGS.set() - An empty object as settings folder will merge default cor
 			},
 			pagesProp: {
 				page1: {
-					url: '/page1',
+					_url: '/page1',
 					title: 'Page 1',
 				},
 				page2: {
-					url: '/page2',
+					_url: '/page2',
 					title: 'Page 2',
 				},
 				'page2/nested': {
-					url: '/page2/nested',
+					_url: '/page2/nested',
 					title: 'Nested in page 2',
 				},
 				page3: {
-					url: '/page3',
+					_url: '/page3',
 					title: 'Page 3',
 				},
 				index: {
-					url: '/',
+					_url: '/',
 					title: 'Homepage',
 				},
 			},
@@ -261,23 +261,23 @@ test('SETTINGS.set() - Prevent cwd from being set', () => {
 			},
 			pagesProp: {
 				page1: {
-					url: '/page1',
+					_url: '/page1',
 					title: 'Page 1',
 				},
 				page2: {
-					url: '/page2',
+					_url: '/page2',
 					title: 'Page 2',
 				},
 				'page2/nested': {
-					url: '/page2/nested',
+					_url: '/page2/nested',
 					title: 'Nested in page 2',
 				},
 				page3: {
-					url: '/page3',
+					_url: '/page3',
 					title: 'Page 3',
 				},
 				index: {
-					url: '/',
+					_url: '/',
 					title: 'Homepage',
 				},
 			},
@@ -341,23 +341,23 @@ test('SETTINGS.set() - Set settings correctly', () => {
 			},
 			pagesProp: {
 				page1: {
-					url: '/page1',
+					_url: '/page1',
 					title: 'Page 1',
 				},
 				page2: {
-					url: '/page2',
+					_url: '/page2',
 					title: 'Page 2',
 				},
 				'page2/nested': {
-					url: '/page2/nested',
+					_url: '/page2/nested',
 					title: 'Nested in page 2',
 				},
 				page3: {
-					url: '/page3',
+					_url: '/page3',
 					title: 'Page 3',
 				},
 				index: {
-					url: '/',
+					_url: '/',
 					title: 'Homepage',
 				},
 			},

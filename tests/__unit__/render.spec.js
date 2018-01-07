@@ -74,46 +74,46 @@ test('RenderReact() - Render react components correctly', () => {
 		},
 		_pages: {
 			index: {
-				url: '/',
+				_url: '/',
 				title: 'Homepage',
 				main: ['dfsfsdf', 'partial1.md', '/shared/component2.md'],
 				aside: 'partial2.md',
 				test: { test: [Object] }
 			},
-			page1: { url: '/page1', title: 'Page 1', main: ['dfsfsdf'] },
+			page1: { _url: '/page1', title: 'Page 1', main: ['dfsfsdf'] },
 			'page1/subpage1': {
-				url: '/page1/subpage1',
+				_url: '/page1/subpage1',
 				title: 'Subpage 1',
 				main: ['partial1.md', 'partial2.md']
 			},
 			'page1/subpage2': {
-				url: '/page1/subpage2',
+				_url: '/page1/subpage2',
 				title: 'Subpage 2',
 				main: 'ysdyasdyasydad'
 			},
 			'page1/subpage3': {
-				url: '/page1/subpage3',
+				_url: '/page1/subpage3',
 				title: 'Subpage 3',
 				main: 'ysdyasdyasydad'
 			},
-			'page1/subpage4': { url: '/page1/subpage4', title: 'Subpage 4', main: 'Yay!' },
+			'page1/subpage4': { _url: '/page1/subpage4', title: 'Subpage 4', main: 'Yay!' },
 			'page1/subpage4/subsubpage1': {
-				url: '/page1/subpage4/subsubpage1',
+				_url: '/page1/subpage4/subsubpage1',
 				title: 'SubSubpage 1',
 				main: ['partial1.md', 'partial2.md']
 			},
 			'page1/subpage4/subsubpage2': {
-				url: '/page1/subpage4/subsubpage2',
+				_url: '/page1/subpage4/subsubpage2',
 				title: 'SubSubpage 2',
 				main: 'ysdyasdyasydad'
 			},
 			'page1/subpage4/subsubpage3': {
-				url: '/page1/subpage4/subsubpage3',
+				_url: '/page1/subpage4/subsubpage3',
 				title: 'SubSubpage 3',
 				main: 'ysdyasdyasydad'
 			},
 			page2: {
-				url: '/page2',
+				_url: '/page2',
 				title: 'Page 2',
 				main: ['partial1.md', '/shared/component2.md', 'partial2.md']
 			}
@@ -165,8 +165,8 @@ footer:
 			'- _ID: subpage' +
 			'- _parents: [&quot;index&quot;,&quot;subpage&quot;]' +
 			'- _body: <div></div>' +
-			'- _pages: {&quot;subpage&quot;:{&quot;url&quot;:&quot;/subpage&quot;,&quot;title&quot;:&quot;Title&quot;,&quot;header&quot;:[&quot;Header&quot;]' +
-			',&quot;main&quot;:[&quot;Hello world&quot;],&quot;footer&quot;:[&quot;Footer&quot;]}}' +
+			'- _pages: {&quot;subpage&quot;:{&quot;title&quot;:&quot;Title&quot;,&quot;header&quot;:[&quot;Header&quot;]' +
+			',&quot;main&quot;:[&quot;Hello world&quot;],&quot;footer&quot;:[&quot;Footer&quot;],&quot;_url&quot;:&quot;/subpage&quot;}}' +
 			'- _nav: []' +
 			'- _store: {&quot;test&quot;:&quot;done&quot;}' +
 			'- _relativeURL: ../subpage' +
@@ -206,7 +206,8 @@ footer:
 			'- _ID: subpage' +
 			'- _parents: [&quot;index&quot;,&quot;subpage&quot;]' +
 			'- _body: <div></div>' +
-			'- _pages: {&quot;subpage&quot;:{&quot;url&quot;:&quot;/subpage&quot;,&quot;title&quot;:&quot;Title&quot;,&quot;header&quot;:[&quot;Header&quot;],&quot;main&quot;:[&quot;/nonpage/partial.md&quot;],&quot;footer&quot;:[&quot;Footer&quot;]}}' +
+			'- _pages: {&quot;subpage&quot;:{&quot;title&quot;:&quot;Title&quot;,&quot;header&quot;:[&quot;Header&quot;]' +
+			',&quot;main&quot;:[&quot;/nonpage/partial.md&quot;],&quot;footer&quot;:[&quot;Footer&quot;],&quot;_url&quot;:&quot;/subpage&quot;}}' +
 			'- _nav: []' +
 			'- _store: {&quot;test&quot;:&quot;done&quot;}' +
 			'- _relativeURL: ../subpage' +
