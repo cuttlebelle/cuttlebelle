@@ -24,7 +24,7 @@ const Homepage = ({
 
 		{
 			stylesheet
-				&& <link rel="stylesheet" href={ _relativeURL( `/assets/css/${ stylesheet }.css`, _pages[ _ID ].url ) } />
+				&& <link rel="stylesheet" href={ _relativeURL( `/assets/css/${ stylesheet }.css`, _pages[ _ID ]._url ) } />
 		}
 	</head>
 	<body>

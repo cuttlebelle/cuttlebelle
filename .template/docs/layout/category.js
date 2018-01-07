@@ -29,7 +29,7 @@ const Navigation = ({
 							{
 								typeof pages[ pageID ] != 'undefined' && _displayItem
 									? <NavigationItem
-											href={ relativeURL( pages[ pageID ].url, ID ) }
+											href={ relativeURL( pages[ pageID ]._url, ID ) }
 											title={ pages[ pageID ].title }
 											thisPage={ pageID === ID }
 											itemClass={ itemClass }
@@ -61,7 +61,7 @@ const Navigation = ({
 					if( _displayItem ) {
 						return <li className={ itemClass } key={ i }>
 							<NavigationItem
-								href={ relativeURL( pages[ page ].url, ID ) }
+								href={ relativeURL( pages[ page ]._url, ID ) }
 								title={ pages[ page ].title }
 								thisPage={ page === ID }
 								itemClass={ itemClass }
@@ -101,7 +101,7 @@ const Category = ( page ) => (
 	<body className="cuttlebelle-docs">
 		<aside className="cuttlebelle-docs__aside">
 			<div className="cuttlebelle-docs__wrapper">
-				<a className="cuttlebelle-docs__aside__headline" href={ page._relativeURL( '../', page._pages[ page._ID ].url ) }>Documentation</a>
+				<a className="cuttlebelle-docs__aside__headline" href={ page._relativeURL( '../', page._pages[ page._ID ]._url ) }>Documentation</a>
 				<Navigation nav={ page._nav } pages={ page._pages } ID={ page._ID } relativeURL={ page._relativeURL } />
 			</div>
 		</aside>

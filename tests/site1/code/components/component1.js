@@ -35,7 +35,7 @@ const Component1 = ({
 					{
 						_parents.map( ( parent, i ) =>
 							<li key={ i } style={ liStyling }>
-								<a href={ _pages[ parent ].url }>{ _pages[ parent ].title }</a>
+								<a href={ _pages[ parent ]._url }>{ _pages[ parent ].title }</a>
 							</li>
 						)
 					}

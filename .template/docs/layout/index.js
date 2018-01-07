@@ -29,7 +29,7 @@ const Navigation = ({
 							{
 								typeof pages[ pageID ] != 'undefined' && _displayItem
 									? <NavigationItem
-											href={ relativeURL( pages[ pageID ].url, ID ) }
+											href={ relativeURL( pages[ pageID ]._url, ID ) }
 											title={ pages[ pageID ].title }
 											thisPage={ pageID === ID }
 											itemClass={ itemClass }
@@ -61,7 +61,7 @@ const Navigation = ({
 					if( _displayItem ) {
 						return <li className={ itemClass } key={ i }>
 							<NavigationItem
-								href={ relativeURL( pages[ page ].url, ID ) }
+								href={ relativeURL( pages[ page ]._url, ID ) }
 								title={ pages[ page ].title }
 								thisPage={ page === ID }
 								itemClass={ itemClass }
@@ -110,7 +110,7 @@ const Index = ( page ) => (
 					{
 						page._categories.map( ( category, i ) => (
 							<li key={ i } className="cuttlebelle-docs__main__list__item">
-								<a className="cuttlebelle-docs__main__list__item__wrapper" href={ page._relativeURL( page._pages[ category.ID ].url, page._ID ) }>
+								<a className="cuttlebelle-docs__main__list__item__wrapper" href={ page._relativeURL( page._pages[ category.ID ]._url, page._ID ) }>
 									<span className="cuttlebelle-docs__main__list__item__headline">{ page._pages[ category.ID ].title }</span>
 									<ul className="cuttlebelle-docs__main__list__item__components">
 										{

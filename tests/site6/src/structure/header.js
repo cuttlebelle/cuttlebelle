@@ -13,7 +13,7 @@ const Header = ( page ) => {
 	page._parents
 		.filter( parent => parent !== 'index' )
 		.map( ( parent ) => breadcrumbs.push({
-			link: ( page._pages[ parent ].url === page._pages[ page._ID ].url ? undefined : page._pages[ parent ].url ),
+			link: ( page._pages[ parent ]._url === page._pages[ page._ID ]._url ? undefined : page._pages[ parent ]._url ),
 			text: page._pages[ parent ].pagetitle,
 	}));
 

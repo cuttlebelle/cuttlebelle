@@ -17,7 +17,7 @@ const List = ({ _ID, _pages, _relativeURL, items }) => (
 					<a href={
 						link.url.startsWith('http')
 							? link.url
-							: _relativeURL( link.url, _pages[ _ID ].url )
+							: _relativeURL( link.url, _pages[ _ID ]._url )
 					}>
 						{ link.title }
 					</a>
