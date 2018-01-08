@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 
 
 /**
  * The Sections component for section text
  */
 const Sections = ({ _parseMD, headline }) => (
-	<div>
+	<Fragment>
 		{ _parseMD( headline ) }
-	</div>
+	</Fragment>
 );
 
 

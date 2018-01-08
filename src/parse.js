@@ -16,7 +16,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import Marked from 'marked';
 import React from 'react';
-import YAML from 'yamljs';
+import YAML from 'js-yaml';
 import Path from 'path';
 
 
@@ -132,7 +132,7 @@ export const ParseMD = ( markdown, file, props ) => {
 export const ParseYaml = ( yaml, file ) => {
 	if( typeof yaml === 'string' ) {
 		try {
-			return YAML.parse( yaml ) || {};
+			return YAML.safeLoad( yaml, warning => Log.error( warning ) ) || {};
 		}
 		catch( error ) {
 			Log.error(`Rendering yaml caused an error in ${ Style.yellow( file ) }`);
