@@ -1,6 +1,6 @@
 ---
 layout: nav/section
-section: Make things open: it makes things better.
+section: 'Make things open: it makes things better.'
 hidden: true
 ---
 

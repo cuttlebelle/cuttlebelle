@@ -6,7 +6,7 @@ display: 2
 level: 3
 reverse: true
 imageAlt: "Two people talking in a white filled office setting."
-caption: Caption: an example of a pop-up research session.
+caption: 'Caption: an example of a pop-up research session.'
 noBottomMargin: false
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: nav/section
-section: Start with needs: user needs, not government needs.
+section: 'Start with needs: user needs, not government needs.'
 hidden: true
 ---
 
