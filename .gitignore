@@ -13,6 +13,7 @@ lerna-debug.log
 
 tests/*/site/*
 tests/*/site2/*
+_fixture
 dist/*
 coverage/*
 tests/*/docs/*

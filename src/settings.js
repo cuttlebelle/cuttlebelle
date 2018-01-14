@@ -62,6 +62,7 @@ export const SETTINGS = {
 			index: Path.normalize(`${ __dirname }/../.template/docs/layout/index.js`),
 			category: Path.normalize(`${ __dirname }/../.template/docs/layout/category.js`),
 			IDProp: 'page2',
+			selfProp: 'body.md',
 			navProp: {
 				index: {
 					page1: 'page1',

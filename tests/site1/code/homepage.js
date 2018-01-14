@@ -7,11 +7,14 @@ import React from 'react';
  */
 const Homepage = ({
 	_ID,
+	_self,
 	_parents,
 	_pages,
 	_nav,
 	_store,
 	_relativeURL,
+	_parseYaml,
+	_parseMD,
 	stylesheet,
 	title,
 	header,
@@ -36,13 +39,16 @@ const Homepage = ({
 				<h2>All props:</h2>
 				<pre><code>
 _ID: { _ID }<hr/>
+_self: { _self }<hr/>
 _parents: { JSON.stringify( _parents ) }<hr/>
 _pages<br/>
 index: { Object.keys( _pages['index'] ).sort().join(', ') }<br/>
 index: { Object.keys( _pages['page1'] ).sort().join(', ') }<br/>
-index: { Object.keys( _pages['page1/page2'] ).sort().join(', ') }<hr/>
+index: { typeof _pages['page1/page2'] === 'object' ? Object.keys( _pages['page1/page2'] ).sort().join(', ') : null }<hr/>
 _nav: { JSON.stringify( _nav ) }<hr/>
-_store: { JSON.stringify( _store ) }<hr/>
+_store: { JSON.stringify( _store() ) }<hr/>
+_parseYaml: { JSON.stringify( _parseYaml('test:\n  - one\n  - two') ) }<hr/>
+_parseMD: { _parseMD('This is **markdown**!') }<hr/>
 				</code></pre>
 			</div>
 		</main>
@@ -57,6 +63,11 @@ Homepage.propTypes = {
 	 * stylesheet: style1
 	 */
 	stylesheet: PropTypes.string.isRequired,
+
+	/**
+	 * title: homepage
+	 */
+	title: PropTypes.string.isRequired,
 
 	/**
 	 * header: (partials)(4)

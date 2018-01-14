@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 
 
 /**
@@ -8,9 +8,9 @@ import React from 'react';
  * @disable-docs
  */
 const Partial = ({ _body }) => (
-	<div className="textwrapper">
+	<Fragment>
 		{ _body }
-	</div>
+	</Fragment>
 );
 
 Partial.propTypes = {

@@ -78,8 +78,8 @@ import Fs from 'fs';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import { RelativeURL, RenderReact, RenderAssets } from './render';
 import { ReadFile, CreateFile, RemoveDir } from './files';
-import { RenderReact, RenderAssets } from './render';
 import { ParseYaml, ParseMD } from './parse';
 import { SETTINGS } from './settings.js';
 import { Log, Style } from './helper';
@@ -328,7 +328,7 @@ export const CreateCategory = ( categories, components, css ) => {
 
 				return Path.relative(
 					Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }${ ID }`),
-					Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }/${ URL }`)
+					Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }/${ URL.replace( SETTINGS.get().site.root, '' ) }`)
 				);
 			},
 		};
@@ -370,7 +370,10 @@ export const CreateIndex = ( categories, components, css ) => {
 					ID = '.';
 				}
 
-				return Path.relative( SETTINGS.get().folder.docs, Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }/${ URL }`));
+				return Path.relative(
+					SETTINGS.get().folder.docs,
+					Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }/${ URL.replace( SETTINGS.get().site.root, '' ) }`)
+				);
 			},
 		};
 
@@ -515,18 +518,34 @@ export const BuildHTML = ( object ) => {
 
 		// let’s provide the same props a real site would have
 		object.props._ID = object.props._ID || SETTINGS.get().docs.IDProp;
+		object.props._self = object.props._self || SETTINGS.get().docs.selfProp;
 		object.props._nav = object.props._nav || SETTINGS.get().docs.navProp;
 		object.props._pages = object.props._pages || SETTINGS.get().docs.pagesProp;
-		object.props._relativeURL = object.props._relativeURL || function() { return '' };
-		object.props._parseMD = ( markdown ) => <div key={`${ object.props._ID }-md`} dangerouslySetInnerHTML={ { __html: ParseMD( markdown ) } } />;
+		object.props._relativeURL = object.props._relativeURL || RelativeURL;
 		object.props._storeSet = Store.set;
 		object.props._store = Store.get;
+		object.props._parseYaml = ( yaml, file ) => ParseYaml( yaml, file );
 
 		const parents = object.props._ID.split('/').map( ( item, i ) => {
 			return object.props._ID.split('/').splice( 0, object.props._ID.split('/').length - i ).join('/');
 		}).reverse();
 
 		object.props._parents = object.props._parents || parents;
+
+		object.props._parseMD = ( markdown ) => <div key={`${ object.props._ID }-md`} dangerouslySetInnerHTML={ { __html: ParseMD(
+			markdown,
+			object.props._self,
+			{
+				_ID: object.props._ID,
+				_self: object.props._self,
+				_parents: object.props._parents,
+				_storeSet: object.props._storeSet,
+				_store: object.props._store,
+				_nav: object.props._nav,
+				_relativeURL: object.props._relativeURL,
+				_parseYaml: object.props._parseYaml,
+			}
+		) } } />;
 
 		if( !object.disabled ) {
 			const componentPath = Path.normalize(`${ SETTINGS.get().folder.code }/${ object.file }`);

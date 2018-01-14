@@ -7,6 +7,7 @@ import React from 'react';
  */
 const Component1 = ({
 	_ID,
+	_self,
 	_pages,
 	_storeSet,
 	_store,
@@ -18,6 +19,7 @@ const Component1 = ({
 		<header>
 			<h1>{ _store()['title'] }</h1>
 			<div>{ _body }</div>
+			<p><small>{ _self }</small></p>
 		</header>
 	);
 }

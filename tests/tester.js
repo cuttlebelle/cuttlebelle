@@ -74,12 +74,21 @@ const SETTINGS = {
 			empty: false,
 		},
 		{
-			name: 'Test6: complex example of a real world site',
+			name: 'Test6: testing complex example of a real world site',
 			folder: 'site6',
 			script: {
 				options: [],
 			},
 			compare: 'site/',
+			empty: false,
+		},
+		{
+			name: 'Test7: testing docs with custom settings',
+			folder: 'site7',
+			script: {
+				options: ['docs'],
+			},
+			compare: 'docs2/',
 			empty: false,
 		},
 	],
@@ -178,6 +187,7 @@ const Delete = ( path ) => {
 	const trash = [
 		Path.normalize(`${ path }/site`),
 		Path.normalize(`${ path }/docs`),
+		Path.normalize(`${ path }/docs2`),
 		Path.normalize(`${ path }/testfolder/`),
 		Path.normalize(`${ path }/*.log.*`),
 		Path.normalize(`${ path }/assets/**/.DS_Store`),

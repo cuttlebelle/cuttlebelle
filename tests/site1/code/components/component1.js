@@ -7,6 +7,7 @@ import React from 'react';
  */
 const Component1 = ({
 	_ID,
+	_self,
 	_parents,
 	_body,
 	_pages,
@@ -40,6 +41,7 @@ const Component1 = ({
 						)
 					}
 				</ul>
+				<p><small>{ _self }</small></p>
 			</div>
 			<div>{ _body }</div>
 		</header>

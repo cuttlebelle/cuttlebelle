@@ -2,6 +2,7 @@
  *
  * Render partials or even whole pages
  *
+ * RelativeURL     - Resolve two paths relative to each other
  * RenderReact     - Render a react component to string
  * RequireBabelfy  - Require from a string and babelfy the content first
  * RenderFile      - Render a file to HTML
@@ -54,7 +55,7 @@ import Fs from 'fs';
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
-import { ParseContent, ParseMD } from './parse';
+import { ParseContent, ParseMD, ParseYaml } from './parse';
 import { GetContent, GetLayout } from './site';
 import { SETTINGS } from './settings.js';
 import { Layouts, Watch } from './watch';
@@ -236,11 +237,13 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 			// prepare some common props that will go into the custom markdown renderer and the react renderer
 			const defaultProps = {
 				_ID: ID,
+				_self: file,
 				_parents: parents,
 				_storeSet: Store.set,
 				_store: Store.get,
 				_nav: Nav.get(),
 				_relativeURL: RelativeURL,
+				_parseYaml: ( yaml, file ) => ParseYaml( yaml, file ),
 			};
 
 			// parsing out front matter for this file
@@ -280,7 +283,9 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 					Path.normalize(`${ SETTINGS.get().folder.code }/${ parsedBody.frontmatter.layout }`),
 					{
 						_pages: Pages.get(),
-						_parseMD: ( markdown, file, props = defaultProps ) => <div key={`${ ID }-${ iterator }-md`} dangerouslySetInnerHTML={ { __html: ParseMD( markdown, file, props ) } } />,
+						_parseMD: ( markdown, file, props = defaultProps ) => <div key={`${ ID }-${ iterator }-md`} dangerouslySetInnerHTML={ {
+							__html: ParseMD( markdown, file, props )
+						} } />,
 						_body: <div key={`${ ID }-${ iterator }`} dangerouslySetInnerHTML={ { __html: parsedBody.body } } />,
 						...defaultProps,
 						...parsedBody.frontmatter
