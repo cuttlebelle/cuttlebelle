@@ -1,7 +1,7 @@
 {
 	"name": "cuttlebelle",
 	"description": "The react static site generator that separates editing and code concerns",
-	"version": "1.0.0-alpha.42",
+	"version": "1.0.0-alpha.43",
 	"homepage": "http://cuttlebelle.com",
 	"author": {
 		"name": "Dominik Wilkowski",
@@ -38,7 +38,7 @@
 		"test:detail": "jest --coverage",
 		"test:watch": "jest --watch --coverage",
 		"test:end-to-end": "node tests/tester.js",
-		"man": "cd man && marked-man --version 'v1.0.0-alpha.39' --manual 'Cuttlebelle Help' --section 1 man.md > cuttlebelle.1",
+		"man": "VERSION=\"$(node -p \"require('./package.json').version\")\" && cd man && marked-man --version $VERSION --manual 'Cuttlebelle Help' --section 1 man.md > cuttlebelle.1",
 		"build": "npm run build:js",
 		"build:js": "babel src --out-dir dist --presets=es2015 --plugins=transform-runtime,transform-es2015-modules-commonjs",
 		"build:watch": "npm run build:js && npm run test:detail",
