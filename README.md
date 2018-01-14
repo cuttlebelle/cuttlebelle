@@ -626,17 +626,19 @@ _(_ 💡 _You can access the page your partial was called in via: `props._pages[
 
 A file will receive the following props:
 
-| prop name      | description                                                                           | Example                                  |
-|----------------|---------------------------------------------------------------------------------------|------------------------------------------|
-| `_ID`          | The ID of the current page                                                            | `props._ID`                              |
-| `_parents`     | An array of all parent pages IDs                                                      | `props._parents`                         |
-| `_body`        | The body of your markdown file (empty for `index.yml` files)                          | `props._body`                            |
-| `_pages`       | An object of all pages and their props; with ID as key                                | `props._pages.map()`                     |
-| `_nav`         | A nested object of your site structure                                                | `Object.keys( props._nav ).map()`        |
-| `_storeSet`    | You can set data to persist between react components by setting them with this helper | `props._storeSet({ variable: "value" })` |
-| `_store`       | To get that data just call this prop function                                         | `props._store()`                         |
-| `_relativeURL` | A helper function to make an absolute URL relative                                    | `props._relativeURL( URL, yourLocation)` |
-| `_parseMD`     | A helper function to parse markdown into HTML                                         | `props._parseMD( props.yourMarkdown )`   |
+| prop name      | description                                                                           | Example                                       |
+|----------------|---------------------------------------------------------------------------------------|-----------------------------------------------|
+| `_ID`          | The ID of the current page                                                            | `props._ID`                                   |
+| `_self`        | The relative path to the content file; can be md or yaml file                         | `props._self`                                 |
+| `_parents`     | An array of all parent pages IDs                                                      | `props._parents`                              |
+| `_body`        | The body of your markdown file (empty for `index.yml` files)                          | `props._body`                                 |
+| `_pages`       | An object of all pages and their props; with ID as key                                | `props._pages.map()`                          |
+| `_nav`         | A nested object of your site structure                                                | `Object.keys( props._nav ).map()`             |
+| `_storeSet`    | You can set data to persist between react components by setting them with this helper | `props._storeSet({ variable: "value" })`      |
+| `_store`       | To get that data just call this prop function                                         | `props._store()`                              |
+| `_relativeURL` | A helper function to make an absolute URL relative                                    | `props._relativeURL( URL, yourLocation)`      |
+| `_parseMD`     | A helper function to parse markdown into HTML                                         | `props._parseMD('Your **markdown**!')`        |
+| `_parseYaml`   | A helper function to parse yaml into an object                                        | `props._parseYaml('test:\n  - one\n  - two')` |
 
 Plus all other variables declared inside the file either as `frontmatter` or in the `yaml` files.
 
@@ -737,6 +739,7 @@ A breakdown:
                                                      # The following props are important so we
                                                      # can generate the docs example:
     "IDProp": "page2",                               # The _ID prop
+    "selfProp": "body.md",                           # The _self prop
     "navProp": {                                     # The _nav prop
       "index": {
         "page1": "page1",
