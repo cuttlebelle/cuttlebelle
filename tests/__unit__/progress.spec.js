@@ -39,12 +39,17 @@ test('Progress.display - Tick increases the amount correctly', () => {
 
 	Progress.display();
 
-	if( Size.width > 18 ) {
-		expect( process.stdout.write.mock.calls.length ).toBe( 2 );
-		expect( process.stdout.write.mock.calls[0][0] ).toBe(`\r\x1b[K`);
+	if( Size !== undefined ) {
+		if( Size.width > 18 ) {
+			expect( process.stdout.write.mock.calls.length ).toBe( 2 );
+			expect( process.stdout.write.mock.calls[0][0] ).toBe(`\r\x1b[K`);
+		}
+		else {
+			expect( process.stdout.write.mock.calls.length ).toBe( 0 );
+		}
 	}
 	else {
-		expect( process.stdout.write.mock.calls.length ).toBe( 0 );
+		expect( true ).toBe( true );
 	}
 });
 
