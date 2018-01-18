@@ -126,10 +126,12 @@ const Category = ( page ) => (
 							<h2 className="cuttlebelle-docs__main__component__name">{ component.file.replace( '.js', '' ) }</h2>
 							<div className="cuttlebelle-docs__main__component__example">{ component.component }</div>
 							<pre className="cuttlebelle-docs__main__component__yaml">{ component.yaml }</pre>
-							<details className="cuttlebelle-docs__main__component__html">
-								<summary className="cuttlebelle-docs__main__component__html__showhide">Show/Hide</summary>
-								<pre><code>{ component.html }</code></pre>
-							</details>
+							<div className="cuttlebelle-docs__main__component__html">
+								<details>
+									<summary className="cuttlebelle-docs__main__component__html__showhide">Show/Hide</summary>
+									<pre><code>{ component.html }</code></pre>
+								</details>
+							</div>
 						</div>
 					))
 				}

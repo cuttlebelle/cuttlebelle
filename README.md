@@ -700,79 +700,79 @@ See below all configuration with default values:
 
 A breakdown:
 
-```shell
-"cuttlebelle": {                  # The cuttlebelle object
-  "folder": {                     # Where we can adjust folder/file names
-    "content": "content/",        # Where does your content live?
-    "code": "code/",              # Where do your react layouts live?
-    "site": "site/",              # Where do you want to generate your static site to?
-    "docs": "docs",               # Where do you want to generate the docs to?
-    "index": "index",             # What is the name of the file we look for to generate pages?
-    "homepage": "index"           # What should the index folder be named?
+```js
+"cuttlebelle": {                  // The cuttlebelle object
+  "folder": {                     // Where we can adjust folder/file names
+    "content": "content/",        // Where does your content live?
+    "code": "code/",              // Where do your react layouts live?
+    "site": "site/",              // Where do you want to generate your static site to?
+    "docs": "docs",               // Where do you want to generate the docs to?
+    "index": "index",             // What is the name of the file we look for to generate pages?
+    "homepage": "index"           // What should the index folder be named?
   },
-  "layouts": {                    # Your layout settings
-    "page": "page",               # What is the default layout for pages?
-    "partial": "partial"          # What is the default layout for partials?
+  "layouts": {                    // Your layout settings
+    "page": "page",               // What is the default layout for pages?
+    "partial": "partial"          // What is the default layout for partials?
   },
-  "site": {                       # General settings
-    "root": "/",                  # What should cuttlebelle append to links?
-    "doctype": "<!DOCTYPE html>", # What doctype string do you want to add?
-    "redirectReact": true         # You can disable redirecting `import` calls to the locally
-                                  # installed react instance of cuttlebelle rather than your
-                                  # local folder.
-    "markdownRenderer": "",       # A path to a file that `module.exports` an Marked.Renderer()
-                                  # object. Learn more about it here:
-                                  # https://github.com/chjj/marked#renderer
-                                  # The only addition is the `preparse` key that will be run
-                                  # before we go into the markdown parsing
-    "watchTimeout": 400,          # This is the time in milliseconds the watch waits
-                                  # to detect a double saves action
-  }
-  "docs": {                                          # Docs settings
-    "root": "files/",                                # What is the root folder called where all
-                                                     # categories are generated in
-    "index": ".template/docs/layout/index.js",       # The path to the index layout file
-    "category": ".template/docs/layout/category.js", # The path to the category layout file
-                                                     # All following settings are the default props
-                                                     # each component is given for the example
+  "site": {                       // General settings
+    "root": "/",                  // What should cuttlebelle append to links?
+    "doctype": "<!DOCTYPE html>", // What doctype string do you want to add?
+    "redirectReact": true,        // You can disable redirecting `import` calls to the locally
+                                  // installed react instance of cuttlebelle rather than your
+                                  // local folder.
+    "markdownRenderer": "",       // A path to a file that `module.exports` an Marked.Renderer()
+                                  // object. Learn more about it here:
+                                  // https://github.com/chjj/marked#renderer
+                                  // The only addition is the `preparse` key that will be run
+                                  // before we go into the markdown parsing
+    "watchTimeout": 400           // This is the time in milliseconds the watch waits
+                                  // to detect a double saves action
+  },
+  "docs": {                                          // Docs settings
+    "root": "files/",                                // What is the root folder called where all
+                                                     // categories are generated in
+    "index": ".template/docs/layout/index.js",       // The path to the index layout file
+    "category": ".template/docs/layout/category.js", // The path to the category layout file
+                                                     // All following settings are the default props
+                                                     // each component is given for the example
 
-                                                     # The following props are important so we
-                                                     # can generate the docs example:
-    "IDProp": "page2",                               # The _ID prop
-    "selfProp": "body.md",                           # The _self prop
-    "navProp": {                                     # The _nav prop
+                                                     // The following props are important so we
+                                                     // can generate the docs example:
+    "IDProp": "page2",                               // The _ID prop
+    "selfProp": "body.md",                           // The _self prop
+    "navProp": {                                     // The _nav prop
       "index": {
         "page1": "page1",
         "page2": {
-          "page2/nested": "page2/nested",
+          "page2/nested": "page2/nested"
         },
-        "page3": "page3",
-      },
+        "page3": "page3"
+      }
     },
-    "pagesProp": {                                   # The _pages prop
+    "pagesProp": {                                   // The _pages prop
       "page1": {
         "_url": "/page1",
-        "title": "Page 1",
+        "title": "Page 1"
       },
       "page2": {
         "_url": "/page2",
-        "title": "Page 2",
+        "title": "Page 2"
       },
       "page2/nested": {
         "_url": "/page2/nested",
-        "title": "Nested in page 2",
+        "title": "Nested in page 2"
       },
       "page3": {
         "_url": "/page3",
-        "title": "Page 3",
+        "title": "Page 3"
       },
       "index": {
         "_url": "/",
-        "title": "Homepage",
-      },
-    },
-  },
-},
+        "title": "Homepage"
+      }
+    }
+  }
+}
 ```
 
 
