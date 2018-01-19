@@ -1,12 +1,13 @@
 Cuttlebelle
+[![Build Status](https://travis-ci.org/cuttlebelle/cuttlebelle.svg?branch=master)](https://travis-ci.org/cuttlebelle/cuttlebelle)
+[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?url=https://cuttlebelle.com&hashtags=react,reactjs,static-site-generator,jsx)
 ===========
 
-> The react static site generator with editing in mind
+**<p align="center">The react static site generator with editing in mind</p>**
 
-[![NPM](https://nodei.co/npm/cuttlebelle.png?downloads=true)](https://nodei.co/npm/cuttlebelle/)
-[![Build Status](https://travis-ci.org/cuttlebelle/cuttlebelle.svg?branch=master)](https://travis-ci.org/cuttlebelle/cuttlebelle)
+## <p align="center">[Visit our website](https://cuttlebelle.com/)</p>
 
-![Cuttlebelle files](https://raw.githubusercontent.com/cuttlebelle/cuttlebelle/master/assets/files.gif)
+[![Cuttlebelle](https://cuttlebelle.com/assets/img/cuttlebelle.jpg)](https://cuttlebelle.com/)
 
 ## 🔥 Why yet another static site generator?
 
@@ -82,6 +83,8 @@ Then run `npm run build` to run cuttlebelle.
 
 After [installing](#install) cuttlebelle, create a folders called `content` and `code` and start populating them.
 Each folder with an `index.yml` file will become an `index.html` in cuttlebelles generated pages.
+
+![Cuttlebelle files](https://raw.githubusercontent.com/cuttlebelle/cuttlebelle/master/assets/files.gif)
 
 <table>
 	<tbody>
