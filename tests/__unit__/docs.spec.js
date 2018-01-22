@@ -73,7 +73,7 @@ test('BuildPropsYaml() - Parse examples without props correctly', () => {
 		infos: props.infos,
 		props: {},
 		disabled: undefined,
-		yaml: <div dangerouslySetInnerHTML={ {
+		yaml: <cuttlebellesillywrapper dangerouslySetInnerHTML={ {
 			__html: `<span class="cuttlebelle-yaml-line">layout: somefile</span>\n`
 		} } />,
 	};
@@ -107,7 +107,7 @@ test('BuildPropsYaml() - Parse string prop correctly', () => {
 			title: 'Headline',
 		},
 		disabled: undefined,
-		yaml: <div dangerouslySetInnerHTML={ {
+		yaml: <cuttlebellesillywrapper dangerouslySetInnerHTML={ {
 			__html: `<span class="cuttlebelle-yaml-line">layout: file</span>\n` +
 				`<span class=\"cuttlebelle-yaml-line\">${ props.infos.props.title.description }</span>\n`
 		} } />,
@@ -142,7 +142,7 @@ test('BuildPropsYaml() - Parse array correctly', () => {
 			items: [ 'one', 'two' ],
 		},
 		disabled: undefined,
-		yaml: <div dangerouslySetInnerHTML={ {
+		yaml: <cuttlebellesillywrapper dangerouslySetInnerHTML={ {
 			__html: `<span class="cuttlebelle-yaml-line">layout: file</span>\n` +
 				`<span class=\"cuttlebelle-yaml-line\">${ props.infos.props.items.description }</span>\n`
 		} } />,
@@ -177,7 +177,7 @@ test('BuildPropsYaml() - Parse object correctly', () => {
 			items: { one: 'one', two: 'two' },
 		},
 		disabled: undefined,
-		yaml: <div dangerouslySetInnerHTML={ {
+		yaml: <cuttlebellesillywrapper dangerouslySetInnerHTML={ {
 			__html: `<span class="cuttlebelle-yaml-line">layout: file</span>\n` +
 				`<span class=\"cuttlebelle-yaml-line\">${ props.infos.props.items.description }</span>\n`
 		} } />,
@@ -212,7 +212,7 @@ test('BuildPropsYaml() - Parse array object correctly', () => {
 			items: [ { one: 'one' }, { two: 'two' } ],
 		},
 		disabled: undefined,
-		yaml: <div dangerouslySetInnerHTML={ {
+		yaml: <cuttlebellesillywrapper dangerouslySetInnerHTML={ {
 			__html: `<span class="cuttlebelle-yaml-line">layout: file</span>\n` +
 				`<span class=\"cuttlebelle-yaml-line\">${ props.infos.props.items.description }</span>\n`
 		} } />,
@@ -247,7 +247,7 @@ test('BuildPropsYaml() - Parse body correctly', () => {
 			_body: MakeIpsum( 2 ),
 		},
 		disabled: undefined,
-		yaml: <div dangerouslySetInnerHTML={ {
+		yaml: <cuttlebellesillywrapper dangerouslySetInnerHTML={ {
 			__html: `---\n<span class="cuttlebelle-yaml-line">layout: file</span>\n---\n\n` +
 				`${ Ipsum.split('.').slice(0, 4).join('.') }...`
 		} } />,
@@ -283,7 +283,7 @@ test('BuildPropsYaml() - Parse partial node correctly', () => {
 			partials: MakePartials( 4 ),
 		},
 		disabled: undefined,
-		yaml: <div dangerouslySetInnerHTML={ {
+		yaml: <cuttlebellesillywrapper dangerouslySetInnerHTML={ {
 			__html: `<span class="cuttlebelle-yaml-line">layout: file</span>\n` +
 				`<span class=\"cuttlebelle-yaml-line\">partials: ${ vocabulary[ 0 ].replacement }</span>\n`
 		} } />,
@@ -319,7 +319,7 @@ test('BuildPropsYaml() - Parse text node correctly', () => {
 			text: MakeIpsum( 4 ),
 		},
 		disabled: undefined,
-		yaml: <div dangerouslySetInnerHTML={ {
+		yaml: <cuttlebellesillywrapper dangerouslySetInnerHTML={ {
 			__html: `<span class="cuttlebelle-yaml-line">layout: file</span>\n` +
 				`<span class=\"cuttlebelle-yaml-line\">text: ${ vocabulary[ 1 ].replacement }</span>\n`
 		} } />,
@@ -442,17 +442,17 @@ test(`ReplaceMagic() - A string with magic partials get’s replacement`, () => 
 // MakePartials
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 test(`MakePartials() - The partials are duplicated correctly`, () => {
-	const outcome1 = <div dangerouslySetInnerHTML={ {
+	const outcome1 = <cuttlebellesillywrapper dangerouslySetInnerHTML={ {
 		__html: '<img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> '
 	} } />;
-	const outcome2 = <div dangerouslySetInnerHTML={ {
+	const outcome2 = <cuttlebellesillywrapper dangerouslySetInnerHTML={ {
 		__html: '<img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> ' +
 			'<img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> ' +
 			'<img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> ' +
 			'<img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> ' +
 			'<img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> '
 	} } />;
-	const outcome3 = <div dangerouslySetInnerHTML={ {
+	const outcome3 = <cuttlebellesillywrapper dangerouslySetInnerHTML={ {
 		__html: '<img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> ' +
 			'<img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> '
 	} } />;
@@ -467,10 +467,10 @@ test(`MakePartials() - The partials are duplicated correctly`, () => {
 // MakePartials
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 test(`MakeIpsum() - The partials are duplicated correctly`, () => {
-	const outcome1 = <div dangerouslySetInnerHTML={ {
+	const outcome1 = <cuttlebellesillywrapper dangerouslySetInnerHTML={ {
 		__html: '<p>The year 1866 was signalised by a remarkable incident, a mysterious and puzzling phenomenon, which doubtless no one has yet forgotten.</p> '
 	} } />;
-	const outcome2 = <div dangerouslySetInnerHTML={ {
+	const outcome2 = <cuttlebellesillywrapper dangerouslySetInnerHTML={ {
 		__html: '<p>The year 1866 was signalised by a remarkable incident, a mysterious and puzzling phenomenon, which doubtless no one has yet forgotten. ' +
 			'Not to mention rumours which agitated the maritime population and excited the public mind, even in the interior of continents, seafaring men were ' +
 			'particularly excited. Merchants, common sailors, captains of vessels, skippers, both of Europe and America, naval officers of all countries, and the ' +
@@ -479,7 +479,7 @@ test(`MakeIpsum() - The partials are duplicated correctly`, () => {
 			'whale.</p> <p>The facts relating to this apparition (entered in various log-books) agreed in most respects as to the shape of the object or creature ' +
 			'in question, the untiring rapidity of its movements, its surprising power of locomotion, and the peculiar life with which it seemed endowed.</p> '
 	} } />;
-	const outcome3 = <div dangerouslySetInnerHTML={ {
+	const outcome3 = <cuttlebellesillywrapper dangerouslySetInnerHTML={ {
 		__html: ParseMD(
 				`${ Ipsum }\nThe year 1866 was signalised by a remarkable incident, a mysterious and puzzling phenomenon, which doubtless no one has ` +
 				`yet forgotten.`

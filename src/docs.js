@@ -80,7 +80,7 @@ import Fs from 'fs';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { RelativeURL, RenderReact, RenderAssets } from './render';
 import { ReadFile, CreateFile, RemoveDir } from './files';
-import { ParseYaml, ParseMD } from './parse';
+import { ParseYaml, ParseMD, ParseHTML } from './parse';
 import { SETTINGS } from './settings.js';
 import { Log, Style } from './helper';
 import { GetLayout } from './site';
@@ -336,7 +336,7 @@ export const CreateCategory = ( categories, components, css ) => {
 		ReadFile( layoutPath )
 			.catch( error => reject( error ) )
 			.then( layout => RenderReact( '', props, layout ) )
-			.then( html => CreateFile( categoryPath, html ) )
+			.then( html => CreateFile( categoryPath, ParseHTML( html ) ) )
 			.then( () => resolve() );
 	});
 };
@@ -380,7 +380,7 @@ export const CreateIndex = ( categories, components, css ) => {
 		ReadFile( layoutPath )
 			.catch( error => reject( error ) )
 			.then( layout => RenderReact( '', props, layout ) )
-			.then( html => CreateFile( categoryPath, html ) )
+			.then( html => CreateFile( categoryPath, ParseHTML( html ) ) )
 			.then( () => resolve() );
 	})
 };
@@ -493,7 +493,7 @@ export const BuildPropsYaml = ( object ) => {
 			infos: object.infos,
 			props,
 			disabled: object.disabled,
-			yaml: <div dangerouslySetInnerHTML={ { __html: yaml } } />,
+			yaml: <cuttlebellesillywrapper dangerouslySetInnerHTML={ { __html: yaml } } />,
 		})
 	});
 };
@@ -532,7 +532,7 @@ export const BuildHTML = ( object ) => {
 
 		object.props._parents = object.props._parents || parents;
 
-		object.props._parseMD = ( markdown ) => <div key={`${ object.props._ID }-md`} dangerouslySetInnerHTML={ { __html: ParseMD(
+		object.props._parseMD = ( markdown ) => <cuttlebellesillywrapper key={`${ object.props._ID }-md`} dangerouslySetInnerHTML={ { __html: ParseMD(
 			markdown,
 			object.props._self,
 			{
@@ -556,8 +556,8 @@ export const BuildHTML = ( object ) => {
 			file: object.file,
 			yaml: object.yaml,
 			disabled: object.disabled,
-			html: Pretty( html ),
-			component: <div dangerouslySetInnerHTML={ { __html: html } } />,
+			html: Pretty( ParseHTML( html ) ),
+			component: <cuttlebellesillywrapper dangerouslySetInnerHTML={ { __html: html } } />,
 		})
 	});
 };
@@ -627,7 +627,7 @@ export const ReplaceMagic = ( example ) => {
 export const MakePartials = ( amount ) => {
 	const html = '<img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> '.repeat( amount );
 
-	return <div dangerouslySetInnerHTML={ { __html: html } } />
+	return <cuttlebellesillywrapper dangerouslySetInnerHTML={ { __html: html } } />
 };
 
 
@@ -655,7 +655,7 @@ export const MakeIpsum = ( amount ) => {
 
 	output = ParseMD( output ).replace(/(?:\r\n|\r|\n)/g, ' ');
 
-	return <div dangerouslySetInnerHTML={ { __html: output } } />;
+	return <cuttlebellesillywrapper dangerouslySetInnerHTML={ { __html: output } } />;
 };
 
 

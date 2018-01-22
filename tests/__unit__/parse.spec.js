@@ -8,11 +8,12 @@
  * ParseContent
  * ParseMD
  * ParseYaml
+ * ParseHTML
  *
  **************************************************************************************************************************************************************/
 
 
-import { ParseContent, ParseMD, ParseYaml } from '../../src/parse';
+import { ParseContent, ParseMD, ParseYaml, ParseHTML } from '../../src/parse';
 import { SETTINGS } from '../../src/settings';
 
 
@@ -110,4 +111,26 @@ test('ParseYaml() - Yaml is parsed', () => {
 	const content2 = `var: value`;
 	const match2 = { var: 'value' };
 	expect( ParseYaml( content2 ) ).toMatchObject( match2 );
+});
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ParseHTML
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+test('ParseHTML() - Non strings stay whatever they are', () => {
+	expect( ParseHTML( undefined ) ).toBe( undefined );
+	expect( ParseHTML( [] ) ).toEqual( expect.arrayContaining( [] ) );
+	expect( ParseHTML( {} ) ).toMatchObject( {} );
+});
+
+
+test('ParseHTML() - Clean react html up nicely', () => {
+	const content1 = ``;
+	const match1 = ``;
+	expect( ParseHTML( content1 ) ).toBe( match1 );
+
+	const content2 = `<div class="totally testing here"><cuttlebellesillywrapper>no wrappy please</cuttlebellesillywrapper>` +
+		`<cuttlebellesillywrapper></cuttlebellesillywrapper><cuttlebellesillywrapper> anywhere</cuttlebellesillywrapper></div>`;
+	const match2 = `<div class="totally testing here">no wrappy please anywhere</div>`;
+	expect( ParseHTML( content2 ) ).toBe( match2 );
 });

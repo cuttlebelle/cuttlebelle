@@ -164,13 +164,13 @@ footer:
 			'props: ' +
 			'- _ID: subpage' +
 			'- _parents: [&quot;index&quot;,&quot;subpage&quot;]' +
-			'- _body: <div></div>' +
+			'- _body: <cuttlebellesillywrapper></cuttlebellesillywrapper>' +
 			'- _pages: {&quot;subpage&quot;:{&quot;title&quot;:&quot;Title&quot;,&quot;header&quot;:[&quot;Header&quot;]' +
 			',&quot;main&quot;:[&quot;Hello world&quot;],&quot;footer&quot;:[&quot;Footer&quot;],&quot;_url&quot;:&quot;/subpage&quot;}}' +
 			'- _nav: []' +
 			'- _store: {&quot;test&quot;:&quot;done&quot;}' +
 			'- _relativeURL: ../subpage' +
-			'- _parseMD: <div><h1 id="headline">headline</h1>\n<p><strong>bold</strong> yay!</p>\n</div>' +
+			'- _parseMD: <cuttlebellesillywrapper><h1 id="headline">headline</h1>\n<p><strong>bold</strong> yay!</p>\n</cuttlebellesillywrapper>' +
 		'</main></div><footer>Footer</footer></body></html>';
 
 	return RenderFile( content, 'subpage/index.yml' ).then( result => {
@@ -201,17 +201,17 @@ footer:
 		'<meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/assets/css/site.css"/></head><body><div class="top">' +
 		'<header role="banner">Header</header>' +
 		'<main>' +
-			'<div><div class="textwrapper"><div><h1 id="test">test</h1>\n</div></div></div>' +
-			'props: ' +
+			'<cuttlebellesillywrapper><div class="textwrapper"><cuttlebellesillywrapper><h1 id="test">test</h1>\n</cuttlebellesillywrapper></div>' +
+			'</cuttlebellesillywrapper>props: ' +
 			'- _ID: subpage' +
 			'- _parents: [&quot;index&quot;,&quot;subpage&quot;]' +
-			'- _body: <div></div>' +
+			'- _body: <cuttlebellesillywrapper></cuttlebellesillywrapper>' +
 			'- _pages: {&quot;subpage&quot;:{&quot;title&quot;:&quot;Title&quot;,&quot;header&quot;:[&quot;Header&quot;]' +
 			',&quot;main&quot;:[&quot;/nonpage/partial.md&quot;],&quot;footer&quot;:[&quot;Footer&quot;],&quot;_url&quot;:&quot;/subpage&quot;}}' +
 			'- _nav: []' +
 			'- _store: {&quot;test&quot;:&quot;done&quot;}' +
 			'- _relativeURL: ../subpage' +
-			'- _parseMD: <div><h1 id="headline">headline</h1>\n<p><strong>bold</strong> yay!</p>\n</div>' +
+			'- _parseMD: <cuttlebellesillywrapper><h1 id="headline">headline</h1>\n<p><strong>bold</strong> yay!</p>\n</cuttlebellesillywrapper>' +
 		'</main></div><footer>Footer</footer></body></html>';
 
 	return RenderFile( content, 'subpage/index.yml' ).then( result => {
@@ -242,8 +242,9 @@ test('RenderPartial() - Return a rendered object for partials', () => {
 	console.log = jest.fn();
 	console.info = jest.fn();
 
-	const HTML = '{\"type\":\"div\",\"key\":\"cuttlebelleIDpartial-md-0\",\"ref\":null,\"props\":{\"dangerouslySetInnerHTML\":' +
-		'{\"__html\":\"<div class=\\\"textwrapper\\\"><div><h1 id=\\\"test\\\">test</h1>\\n</div></div>\"}},\"_owner\":null,\"_store\":{}}';
+	const HTML = '{\"type\":\"cuttlebellesillywrapper\",\"key\":\"cuttlebelleIDpartial-md-0\",\"ref\":null,\"props\":{\"dangerouslySetInnerHTML\":' +
+		'{\"__html\":\"<div class=\\\"textwrapper\\\"><cuttlebellesillywrapper><h1 id=\\\"test\\\">test</h1>\\n</cuttlebellesillywrapper></div>\"}},' +
+		'\"_owner\":null,\"_store\":{}}';
 
 	return RenderPartial( 'partial.md', Path.normalize(`${ __dirname }/mocks/content/nonpage/index.yml`), [] )
 		.then( ( result ) => {

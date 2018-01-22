@@ -5,6 +5,7 @@
  * ParseContent - Parsing the content of a file into an object
  * ParseMD      - Parsing markdown into HTML
  * ParseYaml    - Parsing yaml into an object
+ * ParseHTML    - Clean react output of any silly wrapping divs
  *
  **************************************************************************************************************************************************************/
 
@@ -145,5 +146,24 @@ export const ParseYaml = ( yaml, file ) => {
 	}
 	else {
 		return yaml;
+	}
+}
+
+
+/**
+ * Clean react output of any silly wrapping divs
+ *
+ * @param  {string} html - The HTML generated with react
+ *
+ * @return {string}      - The cleaned HTML
+ */
+export const ParseHTML = ( html ) => {
+	if( typeof html === 'string' ) {
+		return html
+			.replace(/<cuttlebellesillywrapper>/g, '')
+			.replace(/<\/cuttlebellesillywrapper>/g, '');
+	}
+	else {
+		return html;
 	}
 }
