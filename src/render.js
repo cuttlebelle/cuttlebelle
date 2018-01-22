@@ -55,7 +55,7 @@ import Fs from 'fs';
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
-import { ParseContent, ParseMD, ParseYaml } from './parse';
+import { ParseContent, ParseMD, ParseYaml, ParseHTML } from './parse';
 import { GetContent, GetLayout } from './site';
 import { SETTINGS } from './settings.js';
 import { Layouts, Watch } from './watch';
@@ -283,10 +283,10 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 					Path.normalize(`${ SETTINGS.get().folder.code }/${ parsedBody.frontmatter.layout }`),
 					{
 						_pages: Pages.get(),
-						_parseMD: ( markdown, file, props = defaultProps ) => <div key={`${ ID }-${ iterator }-md`} dangerouslySetInnerHTML={ {
+						_parseMD: ( markdown, file, props = defaultProps ) => <cuttlebellesillywrapper key={`${ ID }-${ iterator }-md`} dangerouslySetInnerHTML={ {
 							__html: ParseMD( markdown, file, props )
 						} } />,
-						_body: <div key={`${ ID }-${ iterator }`} dangerouslySetInnerHTML={ { __html: parsedBody.body } } />,
+						_body: <cuttlebellesillywrapper key={`${ ID }-${ iterator }`} dangerouslySetInnerHTML={ { __html: parsedBody.body } } />,
 						...defaultProps,
 						...parsedBody.frontmatter
 					}
@@ -412,7 +412,7 @@ export const RenderPartial = ( partial, file, parent, path, rendered, iterator =
 
 					resolve({                                                     // to resolve we need to keep track of the path of where this partial was mentioned
 						path: path,
-						partial: <div key={ ID } dangerouslySetInnerHTML={ { __html: HTML } } />,
+						partial: <cuttlebellesillywrapper key={ ID } dangerouslySetInnerHTML={ { __html: HTML } } />,
 					});
 			});
 		}
@@ -450,7 +450,8 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 						.then( HTML => {
 							const newPath = Path.normalize(`${ SETTINGS.get().folder.site }/${ page === SETTINGS.get().folder.homepage ? '' : page }/index.html`);
 
-							CreateFile( newPath, SETTINGS.get().site.doctype + HTML ).catch( error => reject( error ) );
+							CreateFile( newPath, ParseHTML( SETTINGS.get().site.doctype + HTML ) )
+								.catch( error => reject( error ) );
 
 							Progress.tick();
 					})

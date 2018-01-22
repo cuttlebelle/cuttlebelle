@@ -33,9 +33,10 @@ import Fs from 'fs';
 import { RenderFile, RenderAllPages, RenderAssets, PreRender } from './render';
 import { ConvertHrtime, Log, Style } from './helper';
 import { ReadFile, CreateFile } from './files';
-import { GetLayout } from './site';
 import { SETTINGS } from './settings.js';
 import { Progress } from './progress';
+import { ParseHTML } from './parse';
+import { GetLayout } from './site';
 
 
 /**
@@ -248,7 +249,8 @@ export const UpdateContent = ( startTime, path, page ) => {
 		.then( HTML => {
 				const newPath = Path.normalize(`${ SETTINGS.get().folder.site }/${ page === SETTINGS.get().folder.homepage ? '' : page }/index.html`);
 
-				CreateFile( newPath, SETTINGS.get().site.doctype + HTML ).catch( error => reject( error ) );
+				CreateFile( newPath, ParseHTML( SETTINGS.get().site.doctype + HTML ) )
+					.catch( error => reject( error ) );
 
 				Progress.tick();
 
