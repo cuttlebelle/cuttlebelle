@@ -238,6 +238,7 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 			const defaultProps = {
 				_ID: ID,
 				_self: file,
+				_isDocs: false,
 				_parents: parents,
 				_storeSet: Store.set,
 				_store: Store.get,
