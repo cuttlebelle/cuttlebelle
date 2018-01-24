@@ -314,6 +314,7 @@ export const CreateCategory = ( categories, components, css ) => {
 
 		const props = {
 			_ID: ID,
+			_isDocs: true,
 			_title: `Category ${ components[ 0 ].category }`,
 			_level: level,
 			_css: css,
@@ -359,6 +360,7 @@ export const CreateIndex = ( categories, components, css ) => {
 
 		const props = {
 			_ID: '/homepage/',
+			_isDocs: true,
 			_title: `Docs home`,
 			_css: css,
 			_pages: Pages.get(),
@@ -519,6 +521,7 @@ export const BuildHTML = ( object ) => {
 		// let’s provide the same props a real site would have
 		object.props._ID = object.props._ID || SETTINGS.get().docs.IDProp;
 		object.props._self = object.props._self || SETTINGS.get().docs.selfProp;
+		object.props._isDocs = true;
 		object.props._nav = object.props._nav || SETTINGS.get().docs.navProp;
 		object.props._pages = object.props._pages || SETTINGS.get().docs.pagesProp;
 		object.props._relativeURL = object.props._relativeURL || RelativeURL;
@@ -537,6 +540,7 @@ export const BuildHTML = ( object ) => {
 			object.props._self,
 			{
 				_ID: object.props._ID,
+				_isDocs: true,
 				_self: object.props._self,
 				_parents: object.props._parents,
 				_storeSet: object.props._storeSet,

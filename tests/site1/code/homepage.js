@@ -8,6 +8,7 @@ import React from 'react';
 const Homepage = ({
 	_ID,
 	_self,
+	_isDocs,
 	_parents,
 	_pages,
 	_nav,
@@ -40,6 +41,7 @@ const Homepage = ({
 				<pre><code>
 _ID: { _ID }<hr/>
 _self: { _self }<hr/>
+_isDocs: { JSON.stringify( _isDocs ) }<hr/>
 _parents: { JSON.stringify( _parents ) }<hr/>
 _pages<br/>
 index: { Object.keys( _pages['index'] ).sort().join(', ') }<br/>

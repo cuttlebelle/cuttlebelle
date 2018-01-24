@@ -633,6 +633,7 @@ A file will receive the following props:
 |----------------|---------------------------------------------------------------------------------------|-----------------------------------------------|
 | `_ID`          | The ID of the current page                                                            | `props._ID`                                   |
 | `_self`        | The relative path to the content file; can be md or yaml file                         | `props._self`                                 |
+| `_isDocs`      | A boolean value, `true` in docs context only                                          | `props._isDocs`                               |
 | `_parents`     | An array of all parent pages IDs                                                      | `props._parents`                              |
 | `_body`        | The body of your markdown file (empty for `index.yml` files)                          | `props._body`                                 |
 | `_pages`       | An object of all pages and their props; with ID as key                                | `props._pages.map()`                          |

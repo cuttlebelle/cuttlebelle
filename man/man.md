@@ -3,6 +3,8 @@ CUTTLEBELLE
 
 > Cuttlebelle - The react static site generator that separates editing and code concerns
 
+To learn more about how to make a new website with Cuttlebelle, visit [https://cuttlebelle.com](https://cuttlebelle.com)
+
 
 ## SYNOPSIS
 
@@ -13,6 +15,9 @@ CUTTLEBELLE
 
 Cuttlebelle is a react static site generator that separates editing and code concerns.
 
+## Website
+
+[https://cuttlebelle.com](https://cuttlebelle.com)
 
 ## EXAMPLES
 
@@ -87,6 +92,7 @@ Defaults:
       "index": "./../.template/docs/layout/index.js",
       "category": "./.template/docs/layout/category.js",
       "IDProp": "page2",
+      "selfProp": "body.md",
       "navProp": {
         "index": {
           "page1": "page1",
