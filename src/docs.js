@@ -453,6 +453,9 @@ export const BuildPropsYaml = ( object ) => {
 		const flags = {
 			required: `<span class="cuttlebelle-flag cuttlebelle-flag--optional">Optional</span>`,
 			default: ( value ) => `<span class="cuttlebelle-flag cuttlebelle-flag--default">default: <span class="cuttlebelle-flag__value">${ value }</span></span>`,
+			oneof: ( items ) => `<span class="cuttlebelle-flag cuttlebelle-flag--default">one of: ` +
+				items.map( item => `<span class="cuttlebelle-flag__value">${ item.value }</span>` ) +
+				`</span>`,
 		};
 
 		let props = {};
@@ -477,6 +480,10 @@ export const BuildPropsYaml = ( object ) => {
 						prop.required
 							? ''
 							: flags['required']
+						}${
+						prop.type.name === 'enum'
+							? flags['oneof']( prop.type.value )
+							: ''
 						}${
 						prop.defaultValue
 							? flags['default']( prop.defaultValue.value )
