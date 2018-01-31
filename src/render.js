@@ -98,6 +98,7 @@ export const RelativeURL = ( URL, ID ) => {
 export const RenderReact = ( componentPath, props, source = '' ) => {
 	Log.verbose(`Rendering react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.code, '' ) ) }`);
 
+	let registerObj = {};
 	try {
 		// resolving relative dependencies
 		let presetES2015 = Path.normalize(`${ __dirname }/../node_modules/babel-preset-es2015`);
@@ -120,7 +121,7 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 
 		// babelfy components
 		// we have to keep the presets and plugins close as we want to support and even encourage global installs
-		const registerObj = {
+		registerObj = {
 			presets: [
 				presetES2015,
 				presetStage0,
@@ -162,6 +163,7 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 	catch( error ) {
 		Log.error(`The react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.code, '' ) ) } had trouble rendering:`);
 		Log.error( error );
+		Log.verbose( JSON.stringify( registerObj ) );
 
 		if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if the render fails in production
 			process.exit( 1 );
@@ -180,12 +182,27 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
  * @return {object}        - The require object
  */
 export const RequireBabelfy = ( source ) => {
-
 	const registerObj = {
 		presets: [
-			'babel-preset-es2015',
-			'babel-preset-stage-0',
-			'babel-preset-react',
+			require.resolve( 'babel-preset-es2015' ),
+			require.resolve( 'babel-preset-stage-0' ),
+			require.resolve( 'babel-preset-react' ),
+		],
+		filename: 'filename.js', // mocking a filename is necessary because otherwise `babel-plugin-import-redirect` throws a warning.
+		                         // see: https://github.com/Velenir/babel-plugin-import-redirect/blob/master/src/index.js#L17
+		plugins: [
+			require.resolve( 'babel-plugin-syntax-dynamic-import' ),
+			[
+				require.resolve( 'babel-plugin-import-redirect' ),
+				{
+					root: 'testing',
+					redirect: {
+						react: require.resolve( 'react' ),
+						'prop-types': require.resolve( 'prop-types' ),
+					},
+					suppressResolveWarning: true,
+				},
+			],
 		],
 	};
 

@@ -336,7 +336,7 @@ export const CreateCategory = ( categories, components, css ) => {
 
 		ReadFile( layoutPath )
 			.catch( error => reject( error ) )
-			.then( layout => RenderReact( '', props, layout ) )
+			.then( layout => RenderReact( Path.basename( layoutPath ), props, layout ) )
 			.then( html => CreateFile( categoryPath, ParseHTML( html ) ) )
 			.then( () => resolve() );
 	});
@@ -381,7 +381,7 @@ export const CreateIndex = ( categories, components, css ) => {
 
 		ReadFile( layoutPath )
 			.catch( error => reject( error ) )
-			.then( layout => RenderReact( '', props, layout ) )
+			.then( layout => RenderReact( Path.basename( layoutPath ), props, layout ) )
 			.then( html => CreateFile( categoryPath, ParseHTML( html ) ) )
 			.then( () => resolve() );
 	})
