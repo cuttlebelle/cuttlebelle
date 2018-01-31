@@ -4,7 +4,6 @@
  *
  * RelativeURL     - Resolve two paths relative to each other
  * RenderReact     - Render a react component to string
- * RequireBabelfy  - Require from a string and babelfy the content first
  * RenderFile      - Render a file to HTML
  * FindPartial     - Iterate frontmatter and look for partials to render
  * RenderPartial   - Render a partial to HTML from the string inside frontmatter
@@ -100,57 +99,45 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 
 	let registerObj = {};
 	try {
-		// resolving relative dependencies
-		let presetES2015 = Path.normalize(`${ __dirname }/../node_modules/babel-preset-es2015`);
-		let presetStage0 = Path.normalize(`${ __dirname }/../node_modules/babel-preset-stage-0`);
-		let presetReact = Path.normalize(`${ __dirname }/../node_modules/babel-preset-react`);
-		let pluginSyntax = Path.normalize(`${ __dirname }/../node_modules/babel-plugin-syntax-dynamic-import`);
-		let pluginImport = Path.normalize(`${ __dirname }/../node_modules/babel-plugin-import-redirect`);
-		let propTypes = Path.normalize(`${ __dirname }/../node_modules/prop-types`);
-		let react = Path.normalize(`${ __dirname }/../node_modules/react`);
-
-		if( !Fs.existsSync( presetES2015 ) ) { // looks like it was installed locally
-			presetES2015 = Path.normalize(`${ __dirname }/../../babel-preset-es2015`);
-			presetStage0 = Path.normalize(`${ __dirname }/../../babel-preset-stage-0`);
-			presetReact = Path.normalize(`${ __dirname }/../../babel-preset-react`);
-			pluginSyntax = Path.normalize(`${ __dirname }/../../babel-plugin-syntax-dynamic-import`);
-			pluginImport = Path.normalize(`${ __dirname }/../../babel-plugin-import-redirect`);
-			propTypes = Path.normalize(`${ __dirname }/../../prop-types`);
-			react = Path.normalize(`${ __dirname }/../../react`);
-		}
-
 		// babelfy components
 		// we have to keep the presets and plugins close as we want to support and even encourage global installs
 		registerObj = {
 			presets: [
-				presetES2015,
-				presetStage0,
-				presetReact,
+				require.resolve( 'babel-preset-es2015' ),
+				require.resolve( 'babel-preset-stage-0' ),
+				require.resolve( 'babel-preset-react' ),
 			],
 			cache: !Watch.running, // we don’t need to cache during watch
 		};
 
+		const redirectReact = [
+			require.resolve( 'babel-plugin-syntax-dynamic-import' ),
+			[
+				require.resolve( 'babel-plugin-import-redirect' ),
+				{
+					redirect: {
+						react: require.resolve( 'react' ),
+						'prop-types': require.resolve( 'prop-types' ),
+					},
+					suppressResolveWarning: true,
+				},
+			],
+		];
+
 		// optional we redirect import statements for react to our local node_module folder
 		// so react doesn’t have to be installed separately on globally installed cuttlebelle
 		if( SETTINGS.get().site.redirectReact ) {
-			registerObj.plugins = [
-				pluginSyntax,
-				[
-					pluginImport,
-					{
-						redirect: {
-							react: react,
-							'prop-types': propTypes,
-						},
-						suppressResolveWarning: true,
-					},
-				],
-			];
+			registerObj.plugins = redirectReact;
 		}
 
 		let component;
 		if( source !== '' ) { // require from string
-			component = RequireBabelfy( source ).default;
+			registerObj.filename = 'filename.js'; // mocking a filename is necessary because otherwise `babel-plugin-import-redirect` throws a warning.
+			                                     // see: https://github.com/Velenir/babel-plugin-import-redirect/blob/master/src/index.js#L17
+			registerObj.plugins = redirectReact;
+			delete registerObj.cache;
+			const transpiledSource = require("babel-core").transform( source, registerObj );
+			component = RequireFromString( transpiledSource.code ).default;
 		}
 		else {                // require from file
 			require('babel-register')( registerObj );
@@ -171,44 +158,6 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 
 		return '';
 	}
-}
-
-
-/**
- * Require from a string and babelfy the content first
- *
- * @param  {string} source - The source code to be babelfied and required
- *
- * @return {object}        - The require object
- */
-export const RequireBabelfy = ( source ) => {
-	const registerObj = {
-		presets: [
-			require.resolve( 'babel-preset-es2015' ),
-			require.resolve( 'babel-preset-stage-0' ),
-			require.resolve( 'babel-preset-react' ),
-		],
-		filename: 'filename.js', // mocking a filename is necessary because otherwise `babel-plugin-import-redirect` throws a warning.
-		                         // see: https://github.com/Velenir/babel-plugin-import-redirect/blob/master/src/index.js#L17
-		plugins: [
-			require.resolve( 'babel-plugin-syntax-dynamic-import' ),
-			[
-				require.resolve( 'babel-plugin-import-redirect' ),
-				{
-					root: 'testing',
-					redirect: {
-						react: require.resolve( 'react' ),
-						'prop-types': require.resolve( 'prop-types' ),
-					},
-					suppressResolveWarning: true,
-				},
-			],
-		],
-	};
-
-	const transpiledSource = require("babel-core").transform( source, registerObj );
-
-	return RequireFromString( transpiledSource.code );
 }
 
 
