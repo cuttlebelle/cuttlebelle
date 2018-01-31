@@ -85,14 +85,9 @@ if( process.argv.includes('-i') || process.argv.includes('init') ) {
 
 // build docs
 if( process.argv.includes('-d') || process.argv.includes('docs') ) {
-	BuildDocs()
-		.catch( error => {
-			Log.error(`Trying to generate the docs failed.`);
-			Log.error( error );
-
-			process.exit( 1 );
-		})
-		.then( ( pages ) => {
+	(async function () {
+		try {
+			const pages = await BuildDocs();
 			const elapsedTime = process.hrtime( startTime );
 
 			Log.done(
@@ -102,20 +97,22 @@ if( process.argv.includes('-d') || process.argv.includes('docs') ) {
 			);
 
 			process.exit( 0 );
-	});
+		} catch (error) {
+			Log.error(`Trying to generate the docs failed.`);
+			Log.error( error );
+	
+			process.exit( 1 );
+		}
+	})();
 }
 
 // build site
 else {
 	// pre-render everything
-	PreRender()
-		.catch( error => {
-			Log.error(`Trying to initilize the pages failed.`);
-			Log.error( error );
+	(async function () {
+		try {
+			const { content, layout } = await PreRender();
 
-			process.exit( 1 );
-		})
-		.then( ({ content, layout }) => {
 			if( content.length === 0 ) {
 				Log.info(`Nothing to generate; consider running ${ Style.yellow(`cuttlebelle init`) } to get a clean slate.`);
 
@@ -128,31 +125,19 @@ else {
 				if( !process.argv.includes('-n') && !process.argv.includes('--no-generate') ) {
 					Log.info(`Generating pages`);
 
-					const allPromises = [];
-
 					let assetsLocation = SETTINGS.get().folder.assets.split( Path.sep );
 					assetsLocation = Path.normalize(`${ SETTINGS.get().folder.site }/${ assetsLocation[ assetsLocation.length - 2 ] }/`);
 
-					// copy all asset files to the site/ folder
-					allPromises.push(
-						RenderAssets(
-							SETTINGS.get().folder.assets,
-							assetsLocation
-						)
-					);
+					try {
+						const pages = await Promise.all([
+							RenderAssets(
+								SETTINGS.get().folder.assets,
+								assetsLocation
+							),
+							RenderAllPages( content, layout ) 
+						]);
 
-					// render all pages to site/
-					allPromises.push( RenderAllPages( content, layout ) );
-
-					Promise.all( allPromises )
-						.catch( error => {
-							Log.error(`Generating pages failed :(`);
-							Log.error( error );
-
-							process.exit( 1 );
-						})
-						.then( pages => {
-							const elapsedTime = process.hrtime( startTime );
+						const elapsedTime = process.hrtime( startTime );
 
 							Log.done(
 								`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages[ 1 ].length ) } pages ` : `No pages have been build ` }` +
@@ -164,7 +149,12 @@ else {
 							if( Watch.running ) {
 								Watch.start();
 							}
-					});
+					} catch(error) {
+						Log.error(`Generating pages failed :(`);
+						Log.error( error );
+
+						process.exit( 1 );
+					}
 				}
 				else {
 					// run watch on flag
@@ -173,7 +163,13 @@ else {
 					}
 				}
 			}
-	});
+		} catch(error) {
+			Log.error(`Trying to initilize the pages failed.`);
+			Log.error( error );
+
+			process.exit( 1 );
+		}
+	})();
 }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
