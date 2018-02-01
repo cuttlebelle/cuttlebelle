@@ -211,7 +211,7 @@ export const UpdateAssets = async ( startTime ) => {
 	// copy entire assets folder again
 	try {
 		await RenderAssets(
-			SETTINGS.get().folder.assets, 
+			SETTINGS.get().folder.assets,
 			assetsLocation
 		)
 
@@ -223,7 +223,8 @@ export const UpdateAssets = async ( startTime ) => {
 		);
 
 		browsersync.reload();
-	} catch(error) {
+	}
+	catch( error ) {
 		Log.error( error )
 	}
 };
@@ -242,8 +243,8 @@ export const UpdateContent = async ( startTime, path, page ) => {
 	const filePath = Path.normalize(`${ SETTINGS.get().folder.content }/${ page }/${ SETTINGS.get().folder.index }.yml`);
 
 	try {
-		const content = await ReadFile(filePath);
-		const HTML = await RenderFile(content, filePath.replace( SETTINGS.get().folder.content, '' ));
+		const content = await ReadFile( filePath );
+		const HTML = await RenderFile( content, filePath.replace( SETTINGS.get().folder.content, '' ) );
 		const newPath = Path.normalize(`${ SETTINGS.get().folder.site }/${ page === SETTINGS.get().folder.homepage ? '' : page }/index.html`);
 
 		await CreateFile( newPath, ParseHTML( SETTINGS.get().site.doctype + HTML ) );
@@ -259,7 +260,8 @@ export const UpdateContent = async ( startTime, path, page ) => {
 		);
 
 		browsersync.reload();
-	} catch(error) {
+	}
+	catch( error ) {
 		Log.error(`An error occured while trying to generate ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
 		Log.error( error );
 	}
@@ -283,7 +285,7 @@ export const UpdateReact = async ( startTime, path ) => {
 
 	if( Layouts.get()[ page ] ) { // render only if we have something to render
 		try {
-			const pages = await RenderAllPages(Layouts.get()[ page ], layout);
+			const pages = await RenderAllPages( Layouts.get()[ page ], layout );
 			const elapsedTime = process.hrtime( startTime );
 
 			Log.done(
@@ -292,7 +294,8 @@ export const UpdateReact = async ( startTime, path ) => {
 			);
 
 			browsersync.reload();
-		} catch(error) {
+		}
+		catch( error ) {
 			Log.error(`An error occured while trying to generate all pages`);
 			Log.error( error );
 		}
@@ -320,7 +323,7 @@ export const UpdateAll = async ( startTime ) => {
 
 	try {
 		const { content, layout } = await PreRender();
-		const pages = await RenderAllPages(content, layout);
+		const pages = await RenderAllPages( content, layout );
 		const elapsedTime = process.hrtime( startTime );
 
 		Log.done(
@@ -330,7 +333,8 @@ export const UpdateAll = async ( startTime ) => {
 		);
 
 		browsersync.reload();
-	} catch(error) {
+	}
+	catch( error ) {
 		Log.error(`Trying to initilize the pages failed.`);
 		Log.error( error );
 

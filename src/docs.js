@@ -227,24 +227,25 @@ export const GetCategoryComponents = async ( category, components ) => {
 	if( Array.isArray( components ) ) {
 		try {
 			const allComponents = await components
-				.filter(component => Path.dirname(component) === category)
+				.filter( component => Path.dirname( component ) === category )
 				.map( async component => {
 					Log.verbose(`Found component ${ Style.yellow( component ) } for categories ${ Style.yellow( category ) }`);
 
 					// Parse the component first
-					const componentData = await ParseComponent(component);
+					const componentData = await ParseComponent( component );
 					// then we build the yaml and props
-					const hydratedPropsYaml = await BuildPropsYaml(componentData);
+					const hydratedPropsYaml = await BuildPropsYaml( componentData );
 					// now we shoot it all into the HTML blender
-					const hydratedComponent = await BuildHTML(hydratedPropsYaml);
+					const hydratedComponent = await BuildHTML( hydratedPropsYaml );
 					// and finally we keep category in our return value
-					return Object.assign({}, { category }, hydratedComponent);
+					return Object.assign( {}, { category }, hydratedComponent );
 				});
 
-			const parsedComponents = await Promise.all(allComponents);
-			return Promise.resolve(parsedComponents);
-		} catch(error) {
-			return Promise.reject(error);
+			const parsedComponents = await Promise.all( allComponents );
+			return Promise.resolve( parsedComponents );
+		}
+		catch( error ) {
+			return Promise.reject( error );
 		}
 	}
 	else {
@@ -427,8 +428,9 @@ export const ParseComponent = async ( component ) => {
 				});
 			}
 		}
-	} catch(error) {
-		return Promise.reject(error);
+	}
+	catch( error ) {
+		return Promise.reject( error );
 	}
 };
 

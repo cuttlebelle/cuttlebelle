@@ -85,7 +85,7 @@ if( process.argv.includes('-i') || process.argv.includes('init') ) {
 
 // build docs
 if( process.argv.includes('-d') || process.argv.includes('docs') ) {
-	(async function () {
+	( async function () {
 		try {
 			const pages = await BuildDocs();
 			const elapsedTime = process.hrtime( startTime );
@@ -97,10 +97,11 @@ if( process.argv.includes('-d') || process.argv.includes('docs') ) {
 			);
 
 			process.exit( 0 );
-		} catch (error) {
+		}
+		catch (error) {
 			Log.error(`Trying to generate the docs failed.`);
 			Log.error( error );
-	
+
 			process.exit( 1 );
 		}
 	})();
@@ -109,7 +110,7 @@ if( process.argv.includes('-d') || process.argv.includes('docs') ) {
 // build site
 else {
 	// pre-render everything
-	(async function () {
+	( async function () {
 		try {
 			const { content, layout } = await PreRender();
 
@@ -134,22 +135,23 @@ else {
 								SETTINGS.get().folder.assets,
 								assetsLocation
 							),
-							RenderAllPages( content, layout ) 
+							RenderAllPages( content, layout )
 						]);
 
 						const elapsedTime = process.hrtime( startTime );
 
-							Log.done(
-								`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages[ 1 ].length ) } pages ` : `No pages have been build ` }` +
-								`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
-								`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
-							);
+						Log.done(
+							`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages[ 1 ].length ) } pages ` : `No pages have been build ` }` +
+							`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+							`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+						);
 
-							// run watch on flag
-							if( Watch.running ) {
-								Watch.start();
-							}
-					} catch(error) {
+						// run watch on flag
+						if( Watch.running ) {
+							Watch.start();
+						}
+					}
+					catch( error ) {
 						Log.error(`Generating pages failed :(`);
 						Log.error( error );
 
@@ -163,7 +165,8 @@ else {
 					}
 				}
 			}
-		} catch(error) {
+		}
+		catch( error ) {
 			Log.error(`Trying to initilize the pages failed.`);
 			Log.error( error );
 
