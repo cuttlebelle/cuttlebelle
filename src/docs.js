@@ -221,32 +221,31 @@ export const GetCategories = ( components ) => {
  *
  * @return {Promise object}    - The parsed components
  */
-export const GetCategoryComponents = ( category, components ) => {
+export const GetCategoryComponents = async ( category, components ) => {
 	Log.verbose(`Getting all components for categories ${ Style.yellow( category ) }`);
 
-	const allComponents = [];
-
 	if( Array.isArray( components ) ) {
-
-		return new Promise( ( resolve, reject ) => {
-
-			components.map( component => {
-				if( Path.dirname( component ) === category ) {
+		try {
+			const allComponents = await components
+				.filter(component => Path.dirname(component) === category)
+				.map( async component => {
 					Log.verbose(`Found component ${ Style.yellow( component ) } for categories ${ Style.yellow( category ) }`);
 
-					allComponents.push(
-						ParseComponent( component )                                // Parse the component first
-							.then( ( data ) => BuildPropsYaml( data ) )              // then we build the yaml and props
-							.then( ( data ) => BuildHTML( data ) )                   // now we shoot it all into the HTML blender
-							.then( data => Object.assign( {}, { category }, data ) ) // and finally we keep category in our return value
-					);
-				}
-			});
+					// Parse the component first
+					const componentData = await ParseComponent(component);
+					// then we build the yaml and props
+					const hydratedPropsYaml = await BuildPropsYaml(componentData);
+					// now we shoot it all into the HTML blender
+					const hydratedComponent = await BuildHTML(hydratedPropsYaml);
+					// and finally we keep category in our return value
+					return Object.assign({}, { category }, hydratedComponent);
+				});
 
-			Promise.all( allComponents )
-				.catch( error => reject( error ) )
-				.then( parsedComponents => resolve( parsedComponents ) );
-		});
+			const parsedComponents = await Promise.all(allComponents);
+			return Promise.resolve(parsedComponents);
+		} catch(error) {
+			return Promise.reject(error);
+		}
 	}
 	else {
 		Promise.reject(`Components must be an array, was "${ Style.yellow( typeof components ) }"`);
@@ -395,45 +394,42 @@ export const CreateIndex = ( categories, components, css ) => {
  *
  * @return {Promise object}   - The object with all gathered infos, format: { file: '', infos: {} }
  */
-export const ParseComponent = ( component ) => {
+export const ParseComponent = async ( component ) => {
 	Log.verbose(`Getting component infos from ${ Style.yellow( component ) }`);
 
-	return new Promise( ( resolve, reject ) => {
-
+	try {
 		const componentPath = Path.normalize(`${ SETTINGS.get().folder.code }/${ component }`);
+		const react = await ReadFile( componentPath );
 
-		ReadFile( componentPath )
-			.catch( error => reject( error ) )
-			.then( react => {
-				if( react.includes('@disable-docs') ) {
-					resolve({
-						file: component,
-						infos: {},
-						disabled: true,
-					});
-				}
-				else {
-					try {
-						resolve({
-							file: component,
-							infos: ReactDocs.parse( react ),
-							disabled: false,
-						});
-					}
-					catch( error ) {
-						Log.info(`Trying to gather infos from the react component ${ Style.yellow( component ) } failed.`);
-						Log.info( error );
-
-						resolve({
-							file: component,
-							infos: {},
-							disabled: false,
-						});
-					}
-				}
+		if( react.includes('@disable-docs') ) {
+			return Promise.resolve({
+				file: component,
+				infos: {},
+				disabled: true,
+			});
+		}
+		else {
+			try {
+				return Promise.resolve({
+					file: component,
+					infos: ReactDocs.parse( react ),
+					disabled: false,
+				});
 			}
-		);
-	});
+			catch( error ) {
+				Log.info(`Trying to gather infos from the react component ${ Style.yellow( component ) } failed.`);
+				Log.info( error );
+
+				return Promise.resolve({
+					file: component,
+					infos: {},
+					disabled: false,
+				});
+			}
+		}
+	} catch(error) {
+		return Promise.reject(error);
+	}
 };
 
 
