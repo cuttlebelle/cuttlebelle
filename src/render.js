@@ -79,7 +79,7 @@ export const RelativeURL = ( URL, ID ) => {
 		ID = '';
 	}
 
-	const relative = Path.relative( `${ SETTINGS.get().site.root }${ ID }`, `${ SETTINGS.get().site.root }${ URL }` );
+	const relative = Path.posix.relative( `${ SETTINGS.get().site.root }${ ID }`, `${ SETTINGS.get().site.root }${ URL }` );
 
 	return relative === '' ? '.' : relative;
 }
