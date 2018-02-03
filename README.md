@@ -39,6 +39,8 @@ javascript. **No more templating languages** that only do half of what you need.
 
 ## Install
 
+💡Tip: Cuttlebelle requires at least node 6 or higher. Tested on macOS `10.12.6`, Ubuntu `17.10` and Windows 10 `1709`.
+
 ```shell
 npm install cuttlebelle -g
 ```
