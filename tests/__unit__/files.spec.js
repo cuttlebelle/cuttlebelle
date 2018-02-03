@@ -84,7 +84,6 @@ test('ReadFile() - Cannot read file that is non existent', () => {
 
 	return ReadFile( `${ testDir }/NonExistent/test-01.txt` )
 		.then( () => {}, error => {
-			expect( error.errno ).toBe( -2 );
 			expect( error.code ).toBe( `ENOENT` );
 	});
 });
