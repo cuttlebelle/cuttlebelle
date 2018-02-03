@@ -15,7 +15,7 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import Size from 'window-size';
-import Path from 'path';
+import Path from 'upath';
 import Fs from 'fs';
 
 

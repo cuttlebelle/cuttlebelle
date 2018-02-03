@@ -14,7 +14,7 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import FsExtra from 'fs-extra';
-import Path from 'path';
+import Path from 'upath';
 import Fs from 'fs';
 
 

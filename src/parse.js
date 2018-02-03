@@ -18,7 +18,7 @@
 import Marked from 'marked';
 import React from 'react';
 import YAML from 'js-yaml';
-import Path from 'path';
+import Path from 'upath';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
