@@ -14,7 +14,7 @@
 import { CreateDir, RemoveDir } from '../../src/files';
 import { Init, CopyStuff } from '../../src/init';
 import { SETTINGS } from '../../src/settings';
-import Path from 'path';
+import Path from 'upath';
 import Fs from 'fs';
 
 
