@@ -15,7 +15,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import Path from 'path';
+import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -47,7 +47,7 @@ export const GetContent = ( folder = SETTINGS.get().folder.content, content = []
 						if( file === `${ SETTINGS.get().folder.index }.yml` ) {          // we only want the index.yml files and ignore (shared) folder
 							Log.verbose(`Found content in ${ Style.yellow( folder ) }`);
 
-							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.content.replace( SETTINGS.get().folder.cwd, '' );
+							const replaceString = Path.normalize( SETTINGS.get().folder.cwd + SETTINGS.get().folder.content.replace( SETTINGS.get().folder.cwd, '' ) );
 
 							content.push( folder.replace( replaceString, '' ) );
 						}
@@ -83,7 +83,7 @@ export const GetLayout = ( folder = SETTINGS.get().folder.code, structure = [] )
 						if( Path.extname( file ) === '.js' ) {                                // we only want js files and ignore invisible files
 							Log.verbose(`Found layout in ${ Style.yellow( Path.join( folder, file ) ) }`);
 
-							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.code.replace( SETTINGS.get().folder.cwd, '' );
+							const replaceString = Path.normalize( SETTINGS.get().folder.cwd + SETTINGS.get().folder.code.replace( SETTINGS.get().folder.cwd, '' ) );
 
 							structure.push( Path.join( folder, file ).replace( replaceString, '' ) );
 						}

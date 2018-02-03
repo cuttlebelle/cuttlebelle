@@ -13,7 +13,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import Path from 'path';
+import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -130,7 +130,7 @@ else {
 
 					const allPromises = [];
 
-					let assetsLocation = SETTINGS.get().folder.assets.split( Path.sep );
+					let assetsLocation = SETTINGS.get().folder.assets.split('/');
 					assetsLocation = Path.normalize(`${ SETTINGS.get().folder.site }/${ assetsLocation[ assetsLocation.length - 2 ] }/`);
 
 					// copy all asset files to the site/ folder

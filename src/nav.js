@@ -14,7 +14,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import Path from 'path';
+import Path from 'upath';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -35,13 +35,13 @@ import { Log, Style } from './helper';
  */
 export const ToDepth = ( source, target = {}, prefix = '' ) => {
 	if( typeof source === 'string' ) {
-		const elements = source.split( Path.sep );
-		let element = Path.normalize(`${ prefix }${ Path.sep }${ elements.shift() }`);
+		const elements = source.split('/');
+		let element = Path.normalize(`${ prefix }/${ elements.shift() }`);
 
-		if( element.startsWith( Path.sep ) ) {
+		if( element.startsWith('/') ) {
 			element = element.substring( 1 );
 		}
-		if( element.startsWith(`${ SETTINGS.get().folder.homepage }${ Path.sep }`) ) {
+		if( element.startsWith(`${ SETTINGS.get().folder.homepage }${'/'}`) ) {
 			element = element.substring( SETTINGS.get().folder.homepage.length + 1 );
 		}
 
@@ -50,7 +50,7 @@ export const ToDepth = ( source, target = {}, prefix = '' ) => {
 		if( elements.length ) {
 			target[ element ] = typeof target[ element ] === 'object' ? target[ element ] : {};
 
-			ToDepth( elements.join( Path.sep ), target[ element ], element );
+			ToDepth( elements.join('/'), target[ element ], element );
 		}
 	}
 	else {
@@ -72,7 +72,7 @@ export const ToNested = ( elements ) => {
 	if( Array.isArray( elements ) ) {
 		elements.forEach( item => {
 			if( !( item === SETTINGS.get().folder.homepage ) ) {
-				item = `${ SETTINGS.get().folder.homepage }${ Path.sep }${ item }`;
+				item = `${ SETTINGS.get().folder.homepage }/${ item }`;
 			}
 
 			ToDepth( item, nested );

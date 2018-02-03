@@ -65,6 +65,7 @@
 		"require-from-string": "^2.0.1",
 		"slugify": "^1.2.9",
 		"traverse": "^0.6.6",
+		"upath": "^1.0.2",
 		"window-size": "^1.1.0"
 	},
 	"devDependencies": {

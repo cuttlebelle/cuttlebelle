@@ -17,7 +17,7 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import FsExtra from 'fs-extra';
-import Path from 'path';
+import Path from 'upath';
 import Del from 'del';
 import Fs from 'fs';
 
@@ -93,7 +93,7 @@ export const CreateFile = ( location, content ) => {
 export const CreateDir = ( dir ) => {
 	Log.verbose(`Creating path ${ Style.yellow( dir ) }`);
 
-	const splitPath = dir.split( Path.sep );
+	const splitPath = dir.split('/');
 
 	splitPath.reduce( ( path, subPath ) => {
 		let currentPath;
@@ -128,7 +128,7 @@ export const CreateDir = ( dir ) => {
 		return currentPath;
 	}, '');
 
-	return splitPath.join( Path.sep );
+	return splitPath.join('/');
 };
 
 

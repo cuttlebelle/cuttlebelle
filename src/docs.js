@@ -71,7 +71,7 @@
 const ReactDocs = require('react-docgen');
 import Pretty from 'pretty';
 import React from 'react';
-import Path from 'path';
+import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -274,7 +274,7 @@ export const GetCss = ( folder = SETTINGS.get().folder.assets, structure = [] ) 
 						if( Path.extname( file ) === '.css' ) {                                   // we only want css files and ignore invisible files
 							Log.verbose(`Found css in ${ Style.yellow( Path.join( folder, file ) ) }`);
 
-							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' );
+							const replaceString = Path.normalize( SETTINGS.get().folder.cwd + SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' ) );
 
 							structure.push( Path.join( folder, file ).replace( replaceString, '' ) );
 						}
@@ -310,7 +310,7 @@ export const CreateCategory = ( categories, components, css ) => {
 		const layoutPath = SETTINGS.get().docs.category;
 
 		const ID = components[ 0 ].category === '.' ? `index` : components[ 0 ].category;
-		const level = ID === 'index' ? 0 : ID.split( Path.sep ).length;
+		const level = ID === 'index' ? 0 : ID.split('/').length;
 
 		const props = {
 			_ID: ID,
@@ -536,8 +536,8 @@ export const BuildHTML = ( object ) => {
 		object.props._store = Store.get;
 		object.props._parseYaml = ( yaml, file ) => ParseYaml( yaml, file );
 
-		const parents = object.props._ID.split( Path.sep ).map( ( item, i ) => {
-			return object.props._ID.split( Path.sep ).splice( 0, object.props._ID.split( Path.sep ).length - i ).join( Path.sep );
+		const parents = object.props._ID.split('/').map( ( item, i ) => {
+			return object.props._ID.split('/').splice( 0, object.props._ID.split('/').length - i ).join('/');
 		}).reverse();
 
 		object.props._parents = object.props._parents || parents;

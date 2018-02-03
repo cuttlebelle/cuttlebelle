@@ -46,7 +46,7 @@ import RequireFromString from 'require-from-string';
 import ReactDOMServer from 'react-dom/server';
 import Traverse from 'traverse';
 import React from 'react';
-import Path from 'path';
+import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -189,8 +189,8 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 			const ID = parent.length > 0 ? Path.dirname( parent ) : Path.dirname( file ); // the ID of this page is the folder in which it exists
 
 			// to get the parents we just look at the path
-			let parents = ID.split( Path.sep ).map( ( item, i ) => {
-				return ID.split( Path.sep ).splice( 0, ID.split( Path.sep ).length - i ).join( Path.sep );
+			let parents = ID.split('/').map( ( item, i ) => {
+				return ID.split('/').splice( 0, ID.split('/').length - i ).join('/');
 			});
 
 			// we add the homepage to the parents root
@@ -347,7 +347,7 @@ export const RenderPartial = ( partial, file, parent, path, rendered, iterator =
 	return new Promise( ( resolve, reject ) => {
 
 		let cwd = Path.dirname( file );                                     // we assume relative links
-		if( partial.startsWith( Path.sep ) ) {                              // unless the path starts with a slash
+		if( partial.startsWith('/') ) {                              // unless the path starts with a slash
 			cwd = SETTINGS.get().folder.content;
 		}
 		const partialPath = Path.normalize(`${ cwd }/${ partial }`);
