@@ -79,7 +79,7 @@ export const RelativeURL = ( URL, ID ) => {
 		ID = '';
 	}
 
-	const relative = Path.relative( `${ SETTINGS.get().site.root }${ ID }`, `${ SETTINGS.get().site.root }${ URL }` );
+	const relative = Path.posix.relative( `${ SETTINGS.get().site.root }${ ID }`, `${ SETTINGS.get().site.root }${ URL }` );
 
 	return relative === '' ? '.' : relative;
 }
@@ -133,7 +133,7 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 		let component;
 		if( source !== '' ) { // require from string
 			registerObj.filename = 'filename.js'; // mocking a filename is necessary because otherwise `babel-plugin-import-redirect` throws a warning.
-			                                     // see: https://github.com/Velenir/babel-plugin-import-redirect/blob/master/src/index.js#L17
+			                                      // see: https://github.com/Velenir/babel-plugin-import-redirect/blob/master/src/index.js#L17
 			registerObj.plugins = redirectReact;
 			delete registerObj.cache;
 			const transpiledSource = require("babel-core").transform( source, registerObj );
@@ -189,8 +189,8 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 			const ID = parent.length > 0 ? Path.dirname( parent ) : Path.dirname( file ); // the ID of this page is the folder in which it exists
 
 			// to get the parents we just look at the path
-			let parents = ID.split('/').map( ( item, i ) => {
-				return ID.split('/').splice( 0, ID.split('/').length - i ).join('/');
+			let parents = ID.split( Path.sep ).map( ( item, i ) => {
+				return ID.split( Path.sep ).splice( 0, ID.split( Path.sep ).length - i ).join( Path.sep );
 			});
 
 			// we add the homepage to the parents root
@@ -347,7 +347,7 @@ export const RenderPartial = ( partial, file, parent, path, rendered, iterator =
 	return new Promise( ( resolve, reject ) => {
 
 		let cwd = Path.dirname( file );                                     // we assume relative links
-		if( partial.startsWith('/') ) {                                     // unless the path starts with a slash
+		if( partial.startsWith( Path.sep ) ) {                              // unless the path starts with a slash
 			cwd = SETTINGS.get().folder.content;
 		}
 		const partialPath = Path.normalize(`${ cwd }/${ partial }`);

@@ -35,22 +35,22 @@ import { Log, Style } from './helper';
  */
 export const ToDepth = ( source, target = {}, prefix = '' ) => {
 	if( typeof source === 'string' ) {
-		const elements = source.split("/");
-		let element = Path.normalize(`${ prefix }/${ elements.shift() }`);
+		const elements = source.split( Path.sep );
+		let element = Path.normalize(`${ prefix }${ Path.sep }${ elements.shift() }`);
 
-		if( element.startsWith('/') ) {
+		if( element.startsWith( Path.sep ) ) {
 			element = element.substring( 1 );
 		}
-		if( element.startsWith(`${ SETTINGS.get().folder.homepage }/`) ) {
+		if( element.startsWith(`${ SETTINGS.get().folder.homepage }${ Path.sep }`) ) {
 			element = element.substring( SETTINGS.get().folder.homepage.length + 1 );
 		}
 
 		target[ element ] = target[ element ] || element;
 
 		if( elements.length ) {
-			target[ element ] = typeof target[ element ] === "object" ? target[ element ] : {};
+			target[ element ] = typeof target[ element ] === 'object' ? target[ element ] : {};
 
-			ToDepth( elements.join("/"), target[ element ], element );
+			ToDepth( elements.join( Path.sep ), target[ element ], element );
 		}
 	}
 	else {
@@ -72,7 +72,7 @@ export const ToNested = ( elements ) => {
 	if( Array.isArray( elements ) ) {
 		elements.forEach( item => {
 			if( !( item === SETTINGS.get().folder.homepage ) ) {
-				item = `${ SETTINGS.get().folder.homepage }/${ item }`;
+				item = `${ SETTINGS.get().folder.homepage }${ Path.sep }${ item }`;
 			}
 
 			ToDepth( item, nested );

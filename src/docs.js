@@ -268,7 +268,7 @@ export const GetCss = ( folder = SETTINGS.get().folder.assets, structure = [] ) 
 			.map(
 				file => {                                                                     // iterate over all files
 					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {              // if this is a directory we just call ourself again
-						structure = [ ...GetCss( Path.join( folder, file ), structure ) ];     // and spread the result into our array
+						structure = [ ...GetCss( Path.join( folder, file ), structure ) ];        // and spread the result into our array
 					}
 					else {
 						if( Path.extname( file ) === '.css' ) {                                   // we only want css files and ignore invisible files
@@ -310,7 +310,7 @@ export const CreateCategory = ( categories, components, css ) => {
 		const layoutPath = SETTINGS.get().docs.category;
 
 		const ID = components[ 0 ].category === '.' ? `index` : components[ 0 ].category;
-		const level = ID === 'index' ? 0 : ID.split('/').length;
+		const level = ID === 'index' ? 0 : ID.split( Path.sep ).length;
 
 		const props = {
 			_ID: ID,
@@ -327,7 +327,7 @@ export const CreateCategory = ( categories, components, css ) => {
 					ID = `.`;
 				}
 
-				return Path.relative(
+				return Path.posix.relative(
 					Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }${ ID }`),
 					Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }/${ URL.replace( SETTINGS.get().site.root, '' ) }`)
 				);
@@ -372,7 +372,7 @@ export const CreateIndex = ( categories, components, css ) => {
 					ID = '.';
 				}
 
-				return Path.relative(
+				return Path.posix.relative(
 					SETTINGS.get().folder.docs,
 					Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }/${ URL.replace( SETTINGS.get().site.root, '' ) }`)
 				);
@@ -536,8 +536,8 @@ export const BuildHTML = ( object ) => {
 		object.props._store = Store.get;
 		object.props._parseYaml = ( yaml, file ) => ParseYaml( yaml, file );
 
-		const parents = object.props._ID.split('/').map( ( item, i ) => {
-			return object.props._ID.split('/').splice( 0, object.props._ID.split('/').length - i ).join('/');
+		const parents = object.props._ID.split( Path.sep ).map( ( item, i ) => {
+			return object.props._ID.split( Path.sep ).splice( 0, object.props._ID.split( Path.sep ).length - i ).join( Path.sep );
 		}).reverse();
 
 		object.props._parents = object.props._parents || parents;
