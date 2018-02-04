@@ -32,9 +32,9 @@ const args = [
 	`man.md`,
 ];
 
-const cmd = spawnSync( 'marked-man', args, { cwd: __dirname } );
+const cmd = spawnSync( 'marked-man', args, { cwd: __dirname, encoding : 'utf8' } );
 
-if( cmd.stderr.toString().length ) {
+if( cmd.stderr ) {
 	console.log(`An error occured when executing: ${ Chalk.yellow(`marked-man ${ args.join(' ') }`) } inside: ${ Chalk.yellow( __dirname ) }`);
 	console.error( Chalk.red( cmd.stderr.toString() ) );
 
