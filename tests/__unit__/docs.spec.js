@@ -21,7 +21,7 @@
 import { Ipsum, GetCategories, GetCss, BuildPropsYaml, ParseExample, ReplaceMagic, MakePartials, MakeIpsum, vocabulary } from '../../src/docs';
 import { ParseMD } from '../../src/parse';
 import React from 'react';
-import Path from 'path';
+import Path from 'upath';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------

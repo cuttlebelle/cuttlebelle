@@ -14,7 +14,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import Path from 'path';
+import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -51,14 +51,14 @@ export const SETTINGS = {
 			partial: 'partial',
 		},
 		site: {
-			root: '/',
+			root: Path.normalize(`/`),
 			doctype: '<!DOCTYPE html>', // https://github.com/facebook/react/issues/1035
 			redirectReact: true,
 			markdownRenderer: '',
 			watchTimeout: 400,
 		},
 		docs: {
-			root: 'files/',
+			root: Path.normalize(`files/`),
 			index: Path.normalize(`${ __dirname }/../.template/docs/layout/index.js`),
 			category: Path.normalize(`${ __dirname }/../.template/docs/layout/category.js`),
 			IDProp: 'page2',

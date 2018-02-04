@@ -15,7 +15,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import Path from 'path';
+import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -36,18 +36,18 @@ import { Log, Style } from './helper';
  */
 export const GetContent = ( folder = SETTINGS.get().folder.content, content = []) => {
 	if( Fs.existsSync( folder ) ) {
-		Fs.readdirSync( folder )                                                              // starting from this level
+		Fs.readdirSync( folder )                                                 // starting from this level
 			.map(
-				file => {                                                                         // iterate over all files
-					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {                  // if this is a directory we just call ourself again
-						const result = GetContent( Path.join( folder, file ), content );              // shoot off a recursive call
-						content = [ ...result ];                                              // and spread the result into our content array
+				file => {                                                            // iterate over all files
+					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {     // if this is a directory we just call ourself again
+						const result = GetContent( Path.join( folder, file ), content ); // shoot off a recursive call
+						content = [ ...result ];                                         // and spread the result into our content array
 					}
 					else {
-						if( file === `${ SETTINGS.get().folder.index }.yml` ) {                       // we only want the index.yml files and ignore (shared) folder
+						if( file === `${ SETTINGS.get().folder.index }.yml` ) {          // we only want the index.yml files and ignore (shared) folder
 							Log.verbose(`Found content in ${ Style.yellow( folder ) }`);
 
-							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.content.replace( SETTINGS.get().folder.cwd, '' );
+							const replaceString = Path.normalize( SETTINGS.get().folder.cwd + SETTINGS.get().folder.content.replace( SETTINGS.get().folder.cwd, '' ) );
 
 							content.push( folder.replace( replaceString, '' ) );
 						}
@@ -73,17 +73,17 @@ export const GetContent = ( folder = SETTINGS.get().folder.content, content = []
  */
 export const GetLayout = ( folder = SETTINGS.get().folder.code, structure = [] ) => {
 	if( Fs.existsSync( folder ) ) {
-		Fs.readdirSync( folder )                                                          // starting from this level
+		Fs.readdirSync( folder )                                                      // starting from this level
 			.map(
-				file => {                                                                     // iterate over all files
-					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {              // if this is a directory we just call ourself again
-						structure = [ ...GetLayout( Path.join( folder, file ), structure ) ];     // and spread the result into our array
+				file => {                                                                 // iterate over all files
+					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {          // if this is a directory we just call ourself again
+						structure = [ ...GetLayout( Path.join( folder, file ), structure ) ]; // and spread the result into our array
 					}
 					else {
-						if( Path.extname( file ) === '.js' ) {                                    // we only want js files and ignore invisible files
+						if( Path.extname( file ) === '.js' ) {                                // we only want js files and ignore invisible files
 							Log.verbose(`Found layout in ${ Style.yellow( Path.join( folder, file ) ) }`);
 
-							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.code.replace( SETTINGS.get().folder.cwd, '' );
+							const replaceString = Path.normalize( SETTINGS.get().folder.cwd + SETTINGS.get().folder.code.replace( SETTINGS.get().folder.cwd, '' ) );
 
 							structure.push( Path.join( folder, file ).replace( replaceString, '' ) );
 						}

@@ -21,7 +21,7 @@ import { Progress } from '../../src/progress';
 import { SETTINGS } from '../../src/settings';
 import { Pages } from '../../src/pages';
 import React from 'react';
-import Path from 'path';
+import Path from 'upath';
 import Fs from 'fs';
 
 

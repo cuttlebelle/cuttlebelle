@@ -21,10 +21,13 @@ I needed a generator that can **separate content from code** as cleanly as possi
 [JSX](https://facebook.github.io/react/docs/introducing-jsx.html) enables a very easy templating like way to write components while still keeping the power of
 javascript. **No more templating languages** that only do half of what you need. Use javascript to write your layouts.
 
+![Cuttlebelle markdown to jsx to html](https://raw.githubusercontent.com/cuttlebelle/cuttlebelle/master/assets/conversion.png)
+
 
 ## Contents
 
 * [Install](#install)
+* [Requirements](#requirements)
 * [Getting started](#getting-started)
 * [Usage](#usage)
 * [Self-documenting](#self-documenting)
@@ -37,7 +40,31 @@ javascript. **No more templating languages** that only do half of what you need.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+## Requirements
+
+
+To use Cuttlebelle you need at least node `>= 6`.
+Cuttlebelle is being automatically tested on the below systems and node versions:
+
+| OS              | Node      |
+|-----------------|-----------|
+| `Ubuntu trusty` | Node `~6` |
+| `Ubuntu trusty` | Node `~8` |
+| `OSX`           | Node `~6` |
+| `OSX`           | Node `~8` |
+| `Windows`       | Node `~6` |
+| `Windows`       | Node `~8` |
+
+
+
+**[⬆ back to top](#contents)**
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 ## Install
+
 
 ```shell
 npm install cuttlebelle -g

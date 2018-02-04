@@ -23,7 +23,7 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import BS from 'browser-sync';
-import Path from 'path';
+import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -205,7 +205,7 @@ export const UpdateChange = ( path, history, _doEverything = false ) => {
 export const UpdateAssets = ( startTime ) => {
 	Log.verbose(`Only doing assets changes`);
 
-	let assetsLocation = SETTINGS.get().folder.assets.split( Path.sep );
+	let assetsLocation = SETTINGS.get().folder.assets.split('/');
 	assetsLocation = Path.normalize(`${ SETTINGS.get().folder.site }/${ assetsLocation[ assetsLocation.length - 2 ] }/`);
 
 	// copy entire assets folder again

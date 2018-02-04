@@ -1,0 +1,24 @@
+skip_tags: true
+
+clone_depth: 1
+
+environment:
+  matrix:
+    - nodejs_version: "8"
+    - nodejs_version: "6"
+
+matrix:
+  fast_finish: true
+
+cache:
+  - node_modules -> package-lock.json
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - npm config set loglevel warn
+  - npm install
+
+test_script:
+  - npm test
+
+build: off
