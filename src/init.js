@@ -22,8 +22,8 @@ import Fs from 'fs';
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { CopyFiles, CreateDir } from './files';
-import { SETTINGS } from './settings.js';
 import { Log, Style } from './helper';
+import { SETTINGS } from './settings';
 
 
 /**

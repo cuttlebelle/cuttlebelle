@@ -81,7 +81,7 @@ import Fs from 'fs';
 import { RelativeURL, RenderReact, RenderAssets } from './render';
 import { ReadFile, CreateFile, RemoveDir } from './files';
 import { ParseYaml, ParseMD, ParseHTML } from './parse';
-import { SETTINGS } from './settings.js';
+import { SETTINGS } from './settings';
 import { Log, Style } from './helper';
 import { GetLayout } from './site';
 import { Pages } from './pages';
