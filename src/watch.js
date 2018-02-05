@@ -33,7 +33,7 @@ import Fs from 'fs';
 import { RenderFile, RenderAllPages, RenderAssets, PreRender } from './render';
 import { ConvertHrtime, Log, Style } from './helper';
 import { ReadFile, CreateFile } from './files';
-import { SETTINGS } from './settings.js';
+import { SETTINGS } from './settings';
 import { Progress } from './progress';
 import { ParseHTML } from './parse';
 import { GetLayout } from './site';

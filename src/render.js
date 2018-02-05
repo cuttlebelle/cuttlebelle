@@ -56,13 +56,13 @@ import Fs from 'fs';
 import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
 import { ParseContent, ParseMD, ParseYaml, ParseHTML } from './parse';
 import { GetContent, GetLayout } from './site';
-import { SETTINGS } from './settings.js';
 import { Layouts, Watch } from './watch';
 import { Log, Style } from './helper';
+import { SETTINGS } from './settings';
 import { Progress } from './progress';
-import { Slug } from './helper.js';
 import { Pages } from './pages';
 import { Store } from './store';
+import { Slug } from './helper';
 import { Nav } from './nav';
 
 

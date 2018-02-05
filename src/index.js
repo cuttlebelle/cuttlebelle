@@ -20,13 +20,13 @@ import Fs from 'fs';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { ConvertHrtime, ExitHandler, Style, Log, Notify } from './helper.js';
-import { DisplayHelp, DisplayVersion, DisplayWelcome } from './cli.js';
-import { RenderAllPages, RenderAssets, PreRender } from './render.js';
-import { SETTINGS } from './settings.js';
+import { ConvertHrtime, ExitHandler, Style, Log, Notify } from './helper';
+import { DisplayHelp, DisplayVersion, DisplayWelcome } from './cli';
+import { RenderAllPages, RenderAssets, PreRender } from './render';
+import { SETTINGS } from './settings';
 import { BuildDocs } from './docs';
-import { Watch } from './watch.js';
-import { Init } from './init.js';
+import { Watch } from './watch';
+import { Init } from './init';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
