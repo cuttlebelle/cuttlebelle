@@ -132,8 +132,6 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 
 		let component;
 		if( source !== '' ) { // require from string
-			registerObj.filename = 'filename.js'; // mocking a filename is necessary because otherwise `babel-plugin-import-redirect` throws a warning.
-			                                      // see: https://github.com/Velenir/babel-plugin-import-redirect/blob/master/src/index.js#L17
 			registerObj.plugins = redirectReact;
 			delete registerObj.cache;
 			const transpiledSource = require("babel-core").transform( source, registerObj );

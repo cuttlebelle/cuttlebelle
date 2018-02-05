@@ -1,7 +1,7 @@
 {
 	"name": "cuttlebelle",
 	"description": "The react static site generator that separates editing and code concerns",
-	"version": "1.0.0-alpha.51",
+	"version": "1.0.0-alpha.52",
 	"homepage": "http://cuttlebelle.com",
 	"author": {
 		"name": "Dominik Wilkowski",
@@ -45,7 +45,7 @@
 		"watch": "npm run build && npm run test && onchange 'src/*.js' '__tests__/*.js' -- npm run build:watch"
 	},
 	"dependencies": {
-		"babel-plugin-import-redirect": "^1.1.0",
+		"babel-plugin-import-redirect": "^1.1.1",
 		"babel-preset-es2015": "^6.24.1",
 		"babel-preset-react": "^6.24.1",
 		"babel-preset-stage-0": "^6.24.1",
