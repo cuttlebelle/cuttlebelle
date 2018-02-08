@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import Partial from './partial';
 import React from 'react';
 
 
@@ -14,6 +15,9 @@ const Homepage = ({
 	_nav,
 	_store,
 	_relativeURL,
+	_parseYaml,
+	_parseReact,
+	_parseMD,
 	title,
 	stylesheet,
 	header,
@@ -44,7 +48,10 @@ index: { Object.keys( _pages['page1'] ).sort().join(', ') }<br/>
 index: { typeof _pages['page1/page2'] === 'object' ? Object.keys( _pages['page1/page2'] ).sort().join(', ') : null }<hr/>
 _nav: { JSON.stringify( _nav ) }<hr/>
 _store: { JSON.stringify( _store() ) }<hr/>
-_relativeURL: { _relativeURL( `/assets/css/style.css`, _pages[ _ID ]._url ) }
+_relativeURL: { _relativeURL( `/assets/css/style.css`, _pages[ _ID ]._url ) }<hr/>
+_parseYaml: { JSON.stringify( _parseYaml('test:\n  - one\n  - two') ) }<hr/>
+_parseMD: { _parseMD('This is **markdown**!') }<hr/>
+_parseReact: <textarea defaultValue={ _parseReact( <Partial _body="hello world" title="Title" _self="this.md" /> ) }/><hr/>
 				</code></pre>
 			</div>
 		</main>

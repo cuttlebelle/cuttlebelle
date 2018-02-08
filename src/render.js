@@ -209,6 +209,15 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 				_nav: Nav.get(),
 				_relativeURL: RelativeURL,
 				_parseYaml: ( yaml, file ) => ParseYaml( yaml, file ),
+				_parseReact: ( component ) => {
+					try {
+						return ReactDOMServer.renderToStaticMarkup( component );
+					}
+					catch( error ) {
+						Log.error(`An error occurred inside ${ Style.yellow( file ) } while running ${ Style.yellow('_renderReact') }`);
+						Log.error( error );
+					}
+				},
 			};
 
 			// parsing out front matter for this file

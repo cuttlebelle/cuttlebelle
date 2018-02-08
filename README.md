@@ -668,9 +668,10 @@ A file will receive the following props:
 | `_nav`         | A nested object of your site structure                                                | `Object.keys( props._nav ).map()`             |
 | `_storeSet`    | You can set data to persist between react components by setting them with this helper | `props._storeSet({ variable: "value" })`      |
 | `_store`       | To get that data just call this prop function                                         | `props._store()`                              |
-| `_relativeURL` | A helper function to make an absolute URL relative                                    | `props._relativeURL( URL, yourLocation)`      |
+| `_relativeURL` | A helper function to make an absolute URL relative                                    | `props._relativeURL( URL, yourLocation )`     |
 | `_parseMD`     | A helper function to parse markdown into HTML                                         | `props._parseMD('Your **markdown**!')`        |
 | `_parseYaml`   | A helper function to parse yaml into an object                                        | `props._parseYaml('test:\n  - one\n  - two')` |
+| `_parseReact`  | A helper function to parse a react component into a string                            | `props._parseReact( <Component prop="hi"/> )` |
 
 Plus all other variables declared inside the file either as `frontmatter` or in the `yaml` files.
 

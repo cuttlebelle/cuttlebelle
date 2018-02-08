@@ -68,6 +68,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import ReactDOMServer from 'react-dom/server';
 const ReactDocs = require('react-docgen');
 import Pretty from 'pretty';
 import React from 'react';
@@ -535,6 +536,15 @@ export const BuildHTML = ( object ) => {
 		object.props._storeSet = Store.set;
 		object.props._store = Store.get;
 		object.props._parseYaml = ( yaml, file ) => ParseYaml( yaml, file );
+		object.props._parseReact = ( component ) => {
+			try {
+				return ReactDOMServer.renderToStaticMarkup( component );
+			}
+			catch( error ) {
+				Log.error(`An error occurred inside ${ Style.yellow( object.file ) } while running ${ Style.yellow('_renderReact') }`);
+				Log.error( error );
+			}
+		};
 
 		const parents = object.props._ID.split('/').map( ( item, i ) => {
 			return object.props._ID.split('/').splice( 0, object.props._ID.split('/').length - i ).join('/');
@@ -555,6 +565,7 @@ export const BuildHTML = ( object ) => {
 				_nav: object.props._nav,
 				_relativeURL: object.props._relativeURL,
 				_parseYaml: object.props._parseYaml,
+				_parseReact: object.props._parseReact,
 			}
 		) } } />;
 
