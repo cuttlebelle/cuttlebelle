@@ -46,7 +46,7 @@ import RequireFromString from 'require-from-string';
 import ReactDOMServer from 'react-dom/server';
 import Traverse from 'traverse';
 import React from 'react';
-import Path from 'path';
+import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -56,13 +56,13 @@ import Fs from 'fs';
 import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
 import { ParseContent, ParseMD, ParseYaml, ParseHTML } from './parse';
 import { GetContent, GetLayout } from './site';
-import { SETTINGS } from './settings.js';
 import { Layouts, Watch } from './watch';
 import { Log, Style } from './helper';
+import { SETTINGS } from './settings';
 import { Progress } from './progress';
-import { Slug } from './helper.js';
 import { Pages } from './pages';
 import { Store } from './store';
+import { Slug } from './helper';
 import { Nav } from './nav';
 
 
@@ -79,7 +79,7 @@ export const RelativeURL = ( URL, ID ) => {
 		ID = '';
 	}
 
-	const relative = Path.relative( `${ SETTINGS.get().site.root }${ ID }`, `${ SETTINGS.get().site.root }${ URL }` );
+	const relative = Path.posix.relative( `${ SETTINGS.get().site.root }${ ID }`, `${ SETTINGS.get().site.root }${ URL }` );
 
 	return relative === '' ? '.' : relative;
 }
@@ -132,8 +132,6 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 
 		let component;
 		if( source !== '' ) { // require from string
-			registerObj.filename = 'filename.js'; // mocking a filename is necessary because otherwise `babel-plugin-import-redirect` throws a warning.
-			                                     // see: https://github.com/Velenir/babel-plugin-import-redirect/blob/master/src/index.js#L17
 			registerObj.plugins = redirectReact;
 			delete registerObj.cache;
 			const transpiledSource = require("babel-core").transform( source, registerObj );
@@ -211,6 +209,15 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 				_nav: Nav.get(),
 				_relativeURL: RelativeURL,
 				_parseYaml: ( yaml, file ) => ParseYaml( yaml, file ),
+				_parseReact: ( component ) => {
+					try {
+						return ReactDOMServer.renderToStaticMarkup( component );
+					}
+					catch( error ) {
+						Log.error(`An error occurred inside ${ Style.yellow( file ) } while running ${ Style.yellow('_renderReact') }`);
+						Log.error( error );
+					}
+				},
 			};
 
 			// parsing out front matter for this file
@@ -347,7 +354,7 @@ export const RenderPartial = ( partial, file, parent, path, rendered, iterator =
 	return new Promise( ( resolve, reject ) => {
 
 		let cwd = Path.dirname( file );                                     // we assume relative links
-		if( partial.startsWith('/') ) {                                     // unless the path starts with a slash
+		if( partial.startsWith('/') ) {                              // unless the path starts with a slash
 			cwd = SETTINGS.get().folder.content;
 		}
 		const partialPath = Path.normalize(`${ cwd }/${ partial }`);

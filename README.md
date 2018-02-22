@@ -1,5 +1,6 @@
 Cuttlebelle
-[![Build Status](https://travis-ci.org/cuttlebelle/cuttlebelle.svg?branch=master)](https://travis-ci.org/cuttlebelle/cuttlebelle)
+[![Build Status Travis](https://travis-ci.org/cuttlebelle/cuttlebelle.svg?branch=master)](https://travis-ci.org/cuttlebelle/cuttlebelle)
+[![Build Status Appveyor](https://ci.appveyor.com/api/projects/status/github/cuttlebelle/cuttlebelle?branch=master&svg=true)](https://ci.appveyor.com/project/cuttlebelle/cuttlebelle)
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?url=https://cuttlebelle.com&hashtags=react,reactjs,static-site-generator,jsx)
 ===========
 
@@ -21,10 +22,13 @@ I needed a generator that can **separate content from code** as cleanly as possi
 [JSX](https://facebook.github.io/react/docs/introducing-jsx.html) enables a very easy templating like way to write components while still keeping the power of
 javascript. **No more templating languages** that only do half of what you need. Use javascript to write your layouts.
 
+![Cuttlebelle markdown to jsx to html](https://raw.githubusercontent.com/cuttlebelle/cuttlebelle/master/assets/conversion.png)
+
 
 ## Contents
 
 * [Install](#install)
+* [Requirements](#requirements)
 * [Getting started](#getting-started)
 * [Usage](#usage)
 * [Self-documenting](#self-documenting)
@@ -37,7 +41,31 @@ javascript. **No more templating languages** that only do half of what you need.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+## Requirements
+
+
+To use Cuttlebelle you need at least node `>= 6`.
+Cuttlebelle is being automatically tested on the below systems and node versions:
+
+| OS              | Node      |
+|-----------------|-----------|
+| `Ubuntu trusty` | Node `~6` |
+| `Ubuntu trusty` | Node `~8` |
+| `OSX`           | Node `~6` |
+| `OSX`           | Node `~8` |
+| `Windows`       | Node `~6` |
+| `Windows`       | Node `~8` |
+
+
+
+**[⬆ back to top](#contents)**
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 ## Install
+
 
 ```shell
 npm install cuttlebelle -g
@@ -640,9 +668,10 @@ A file will receive the following props:
 | `_nav`         | A nested object of your site structure                                                | `Object.keys( props._nav ).map()`             |
 | `_storeSet`    | You can set data to persist between react components by setting them with this helper | `props._storeSet({ variable: "value" })`      |
 | `_store`       | To get that data just call this prop function                                         | `props._store()`                              |
-| `_relativeURL` | A helper function to make an absolute URL relative                                    | `props._relativeURL( URL, yourLocation)`      |
+| `_relativeURL` | A helper function to make an absolute URL relative                                    | `props._relativeURL( URL, yourLocation )`     |
 | `_parseMD`     | A helper function to parse markdown into HTML                                         | `props._parseMD('Your **markdown**!')`        |
 | `_parseYaml`   | A helper function to parse yaml into an object                                        | `props._parseYaml('test:\n  - one\n  - two')` |
+| `_parseReact`  | A helper function to parse a react component into a string                            | `props._parseReact( <Component prop="hi"/> )` |
 
 Plus all other variables declared inside the file either as `frontmatter` or in the `yaml` files.
 

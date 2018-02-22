@@ -68,10 +68,11 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import ReactDOMServer from 'react-dom/server';
 const ReactDocs = require('react-docgen');
 import Pretty from 'pretty';
 import React from 'react';
-import Path from 'path';
+import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -81,7 +82,7 @@ import Fs from 'fs';
 import { RelativeURL, RenderReact, RenderAssets } from './render';
 import { ReadFile, CreateFile, RemoveDir } from './files';
 import { ParseYaml, ParseMD, ParseHTML } from './parse';
-import { SETTINGS } from './settings.js';
+import { SETTINGS } from './settings';
 import { Log, Style } from './helper';
 import { GetLayout } from './site';
 import { Pages } from './pages';
@@ -268,13 +269,13 @@ export const GetCss = ( folder = SETTINGS.get().folder.assets, structure = [] ) 
 			.map(
 				file => {                                                                     // iterate over all files
 					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {              // if this is a directory we just call ourself again
-						structure = [ ...GetCss( Path.join( folder, file ), structure ) ];     // and spread the result into our array
+						structure = [ ...GetCss( Path.join( folder, file ), structure ) ];        // and spread the result into our array
 					}
 					else {
 						if( Path.extname( file ) === '.css' ) {                                   // we only want css files and ignore invisible files
 							Log.verbose(`Found css in ${ Style.yellow( Path.join( folder, file ) ) }`);
 
-							const replaceString = SETTINGS.get().folder.cwd + SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' );
+							const replaceString = Path.normalize( SETTINGS.get().folder.cwd + SETTINGS.get().folder.assets.replace( SETTINGS.get().folder.cwd, '' ) );
 
 							structure.push( Path.join( folder, file ).replace( replaceString, '' ) );
 						}
@@ -327,7 +328,7 @@ export const CreateCategory = ( categories, components, css ) => {
 					ID = `.`;
 				}
 
-				return Path.relative(
+				return Path.posix.relative(
 					Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }${ ID }`),
 					Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }/${ URL.replace( SETTINGS.get().site.root, '' ) }`)
 				);
@@ -372,7 +373,7 @@ export const CreateIndex = ( categories, components, css ) => {
 					ID = '.';
 				}
 
-				return Path.relative(
+				return Path.posix.relative(
 					SETTINGS.get().folder.docs,
 					Path.normalize(`${ SETTINGS.get().folder.docs }/${ SETTINGS.get().docs.root }/${ URL.replace( SETTINGS.get().site.root, '' ) }`)
 				);
@@ -533,6 +534,15 @@ export const BuildHTML = ( object ) => {
 		object.props._storeSet = Store.set;
 		object.props._store = Store.get;
 		object.props._parseYaml = ( yaml, file ) => ParseYaml( yaml, file );
+		object.props._parseReact = ( component ) => {
+			try {
+				return ReactDOMServer.renderToStaticMarkup( component );
+			}
+			catch( error ) {
+				Log.error(`An error occurred inside ${ Style.yellow( object.file ) } while running ${ Style.yellow('_renderReact') }`);
+				Log.error( error );
+			}
+		};
 
 		const parents = object.props._ID.split('/').map( ( item, i ) => {
 			return object.props._ID.split('/').splice( 0, object.props._ID.split('/').length - i ).join('/');
@@ -553,6 +563,7 @@ export const BuildHTML = ( object ) => {
 				_nav: object.props._nav,
 				_relativeURL: object.props._relativeURL,
 				_parseYaml: object.props._parseYaml,
+				_parseReact: object.props._parseReact,
 			}
 		) } } />;
 
@@ -565,7 +576,7 @@ export const BuildHTML = ( object ) => {
 			file: object.file,
 			yaml: object.yaml,
 			disabled: object.disabled,
-			html: Pretty( ParseHTML( html ) ),
+			html: Pretty( ParseHTML( html ) ).replace(/\r?\n/g, "\n"),
 			component: <cuttlebellesillywrapper dangerouslySetInnerHTML={ { __html: html } } />,
 		})
 	});
@@ -622,7 +633,7 @@ export const ReplaceMagic = ( example ) => {
 		parsedExample = parsedExample.replace( regex, command.replacement );
 	});
 
-	return parsedExample;
+	return parsedExample.replace(/\r?\n/g, "\n");
 };
 
 
@@ -662,7 +673,7 @@ export const MakeIpsum = ( amount ) => {
 		output += `${ sentences[ i ] }.`;
 	};
 
-	output = ParseMD( output ).replace(/(?:\r\n|\r|\n)/g, ' ');
+	output = ParseMD( output ).replace(/(?:\r\n|\r|\n)/g, ' ').replace(/\r?\n/g, "\n");
 
 	return <cuttlebellesillywrapper dangerouslySetInnerHTML={ { __html: output } } />;
 };
@@ -682,6 +693,6 @@ export const vocabulary = [
 	{
 		name: 'text',
 		func: MakeIpsum,
-		replacement: `${ Ipsum.slice(0, 53) }...`,
+		replacement: `${ Ipsum.slice( 0, 53 ).replace(/\r?\n/g, "\n") }...`,
 	},
 ];

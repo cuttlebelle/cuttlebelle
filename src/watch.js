@@ -23,7 +23,7 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import BS from 'browser-sync';
-import Path from 'path';
+import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -33,7 +33,7 @@ import Fs from 'fs';
 import { RenderFile, RenderAllPages, RenderAssets, PreRender } from './render';
 import { ConvertHrtime, Log, Style } from './helper';
 import { ReadFile, CreateFile } from './files';
-import { SETTINGS } from './settings.js';
+import { SETTINGS } from './settings';
 import { Progress } from './progress';
 import { ParseHTML } from './parse';
 import { GetLayout } from './site';
@@ -205,7 +205,7 @@ export const UpdateChange = ( path, history, _doEverything = false ) => {
 export const UpdateAssets = async ( startTime ) => {
 	Log.verbose(`Only doing assets changes`);
 
-	let assetsLocation = SETTINGS.get().folder.assets.split( Path.sep );
+	let assetsLocation = SETTINGS.get().folder.assets.split('/');
 	assetsLocation = Path.normalize(`${ SETTINGS.get().folder.site }/${ assetsLocation[ assetsLocation.length - 2 ] }/`);
 
 	// copy entire assets folder again

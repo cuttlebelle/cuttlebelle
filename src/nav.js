@@ -14,14 +14,14 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import Path from 'path';
+import Path from 'upath';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { SETTINGS } from './settings.js';
 import { Log, Style } from './helper';
+import { SETTINGS } from './settings';
 
 
 /**
@@ -35,22 +35,22 @@ import { Log, Style } from './helper';
  */
 export const ToDepth = ( source, target = {}, prefix = '' ) => {
 	if( typeof source === 'string' ) {
-		const elements = source.split("/");
+		const elements = source.split('/');
 		let element = Path.normalize(`${ prefix }/${ elements.shift() }`);
 
 		if( element.startsWith('/') ) {
 			element = element.substring( 1 );
 		}
-		if( element.startsWith(`${ SETTINGS.get().folder.homepage }/`) ) {
+		if( element.startsWith(`${ SETTINGS.get().folder.homepage }${'/'}`) ) {
 			element = element.substring( SETTINGS.get().folder.homepage.length + 1 );
 		}
 
 		target[ element ] = target[ element ] || element;
 
 		if( elements.length ) {
-			target[ element ] = typeof target[ element ] === "object" ? target[ element ] : {};
+			target[ element ] = typeof target[ element ] === 'object' ? target[ element ] : {};
 
-			ToDepth( elements.join("/"), target[ element ], element );
+			ToDepth( elements.join('/'), target[ element ], element );
 		}
 	}
 	else {

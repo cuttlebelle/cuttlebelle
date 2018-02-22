@@ -18,14 +18,14 @@
 import Marked from 'marked';
 import React from 'react';
 import YAML from 'js-yaml';
-import Path from 'path';
+import Path from 'upath';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { SETTINGS } from './settings.js';
 import { Log, Style } from './helper';
+import { SETTINGS } from './settings';
 
 
 /**
