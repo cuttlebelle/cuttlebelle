@@ -5,6 +5,7 @@
  * Init      - Check if you already have folders in the current directory
  * CopyStuff - Copy folders into the working directory
  *
+ * @flow
  **************************************************************************************************************************************************************/
 
 'use strict';
@@ -29,7 +30,7 @@ import { SETTINGS } from './settings';
 /**
  * Check if you already have folders in the current directory
  */
-export const Init = () => {
+export const Init = () /*: void */ => {
 	Log.info(`Creating pages for you`);
 
 	const _hasContent = Fs.existsSync( SETTINGS.get().folder.content );
@@ -66,7 +67,7 @@ export const Init = () => {
  *
  * @param  {string} folder - The name of the folder
  */
-export const CopyStuff = ( folder ) => {
+export const CopyStuff = ( folder /*: string */ ) /*: void */ => {
 	const source = Path.normalize(`${ __dirname }/../.template/init/${ folder }`);
 	const destination = SETTINGS.get().folder[ folder ];
 
