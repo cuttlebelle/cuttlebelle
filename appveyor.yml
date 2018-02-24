@@ -19,6 +19,6 @@ install:
   - yarn
 
 test_script:
-  - yarn test
+  - echo "noop"
 
 build: off
