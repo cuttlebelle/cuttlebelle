@@ -202,29 +202,31 @@ export const UpdateChange = ( path, history, _doEverything = false ) => {
  *
  * @param  {array} startTime - The Hrtime array
  */
-export const UpdateAssets = ( startTime ) => {
+export const UpdateAssets = async ( startTime ) => {
 	Log.verbose(`Only doing assets changes`);
 
 	let assetsLocation = SETTINGS.get().folder.assets.split('/');
 	assetsLocation = Path.normalize(`${ SETTINGS.get().folder.site }/${ assetsLocation[ assetsLocation.length - 2 ] }/`);
 
 	// copy entire assets folder again
-	RenderAssets(
-		SETTINGS.get().folder.assets,
-		assetsLocation
-	)
-		.catch( error => Log.error( error ) )
-		.then( () => {
+	try {
+		await RenderAssets(
+			SETTINGS.get().folder.assets,
+			assetsLocation
+		)
 
-			const elapsedTime = process.hrtime( startTime );
+		const elapsedTime = process.hrtime( startTime );
 
-			Log.done(
-				`Successfully built ${ Style.yellow('assets') } folder to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
-				`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
-			);
+		Log.done(
+			`Successfully built ${ Style.yellow('assets') } folder to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+			`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+		);
 
-			browsersync.reload();
-	});
+		browsersync.reload();
+	}
+	catch( error ) {
+		Log.error( error )
+	}
 };
 
 
@@ -235,38 +237,34 @@ export const UpdateAssets = ( startTime ) => {
  * @param  {string} path      - The path of the changed file
  * @param  {string} page      - The path to the page attached to the changed content
  */
-export const UpdateContent = ( startTime, path, page ) => {
+export const UpdateContent = async ( startTime, path, page ) => {
 	Log.verbose(`Only doing content changes`);
 
 	const filePath = Path.normalize(`${ SETTINGS.get().folder.content }/${ page }/${ SETTINGS.get().folder.index }.yml`);
 
-	ReadFile( filePath )
-		.catch( error => {
-			Log.error(`An error occured while trying to generate ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
-			Log.error( error );
-		})
-		.then( content => RenderFile( content, filePath.replace( SETTINGS.get().folder.content, '' ) ) )
-		.then( HTML => {
-				const newPath = Path.normalize(`${ SETTINGS.get().folder.site }/${ page === SETTINGS.get().folder.homepage ? '' : page }/index.html`);
+	try {
+		const content = await ReadFile( filePath );
+		const HTML = await RenderFile( content, filePath.replace( SETTINGS.get().folder.content, '' ) );
+		const newPath = Path.normalize(`${ SETTINGS.get().folder.site }/${ page === SETTINGS.get().folder.homepage ? '' : page }/index.html`);
 
-				CreateFile( newPath, ParseHTML( SETTINGS.get().site.doctype + HTML ) )
-					.catch( error => reject( error ) );
+		await CreateFile( newPath, ParseHTML( SETTINGS.get().site.doctype + HTML ) );
 
-				Progress.tick();
+		Progress.tick();
 
-				return newPath.replace( SETTINGS.get().folder.cwd, '' );
-		})
-		.then( page => {
-			const elapsedTime = process.hrtime( startTime );
+		const page = newPath.replace( SETTINGS.get().folder.cwd, '' );
+		const elapsedTime = process.hrtime( startTime );
 
-			Log.done(
-				`Successfully built ${ Style.yellow( page ) } ` +
-				`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
-			);
+		Log.done(
+			`Successfully built ${ Style.yellow( page ) } ` +
+			`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+		);
 
-			browsersync.reload();
-		}
-	);
+		browsersync.reload();
+	}
+	catch( error ) {
+		Log.error(`An error occured while trying to generate ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
+		Log.error( error );
+	}
 };
 
 
@@ -276,7 +274,7 @@ export const UpdateContent = ( startTime, path, page ) => {
  * @param  {array}  startTime - The Hrtime array
  * @param  {string} path      - The path of the changed file
  */
-export const UpdateReact = ( startTime, path ) => {
+export const UpdateReact = async ( startTime, path ) => {
 	Log.verbose(`Only doing react changes`);
 
 	const page = path.replace( SETTINGS.get().folder.code, '' ).replace( '.js', '' );
@@ -286,23 +284,21 @@ export const UpdateReact = ( startTime, path ) => {
 	const layout = GetLayout();
 
 	if( Layouts.get()[ page ] ) { // render only if we have something to render
+		try {
+			const pages = await RenderAllPages( Layouts.get()[ page ], layout );
+			const elapsedTime = process.hrtime( startTime );
 
-		RenderAllPages( Layouts.get()[ page ], layout )
-			.catch( error => {
-				Log.error(`An error occured while trying to generate all pages`);
-				Log.error( error );
-			})
-			.then( pages => {
-				const elapsedTime = process.hrtime( startTime );
+			Log.done(
+				`Successfully built ${ Style.yellow( pages.length ) } pages to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+				`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+			);
 
-				Log.done(
-					`Successfully built ${ Style.yellow( pages.length ) } pages to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
-					`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
-				);
-
-				browsersync.reload();
-			}
-		);
+			browsersync.reload();
+		}
+		catch( error ) {
+			Log.error(`An error occured while trying to generate all pages`);
+			Log.error( error );
+		}
 	}
 	else {
 		Log.info(`No pages were found to be attached to ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }.`);
@@ -316,7 +312,7 @@ export const UpdateReact = ( startTime, path ) => {
  *
  * @param  {array} startTime - The Hrtime array
  */
-export const UpdateAll = ( startTime ) => {
+export const UpdateAll = async ( startTime ) => {
 
 	// remove babel register components from require cache
 	const allComponents = Object.keys( require.cache ).filter( ( key ) => key.startsWith( SETTINGS.get().folder.code ) );
@@ -325,36 +321,25 @@ export const UpdateAll = ( startTime ) => {
 		delete require.cache[ component ]; // cache busting
 	});
 
-	PreRender()
-		.catch( error => {
-			Log.error(`Trying to initilize the pages failed.`);
-			Log.error( error );
+	try {
+		const { content, layout } = await PreRender();
+		const pages = await RenderAllPages( content, layout );
+		const elapsedTime = process.hrtime( startTime );
 
-			process.exit( 1 );
-		})
-		.then( ({ content, layout }) => {
+		Log.done(
+			`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages.length ) } pages ` : `No pages have been build ` }` +
+			`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+			`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+		);
 
-			RenderAllPages( content, layout )
-				.catch( error => {
-					Log.error(`Generating pages failed :(`);
-					Log.error( error );
+		browsersync.reload();
+	}
+	catch( error ) {
+		Log.error(`Trying to initilize the pages failed.`);
+		Log.error( error );
 
-					process.exit( 1 );
-				})
-				.then( pages => {
-					const elapsedTime = process.hrtime( startTime );
-
-					Log.done(
-						`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages.length ) } pages ` : `No pages have been build ` }` +
-						`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
-						`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
-					);
-
-					browsersync.reload();
-				}
-			);
-		}
-	);
+		process.exit( 1 );
+	}
 };
 
 
