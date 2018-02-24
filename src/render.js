@@ -103,9 +103,15 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 		// we have to keep the presets and plugins close as we want to support and even encourage global installs
 		registerObj = {
 			presets: [
-				require.resolve( 'babel-preset-es2015' ),
-				require.resolve( 'babel-preset-stage-0' ),
 				require.resolve( 'babel-preset-react' ),
+				[
+					require.resolve( 'babel-preset-env' ), 
+					{
+						targets: {
+							node: 'current'
+						}
+					}
+				]
 			],
 			cache: !Watch.running, // we don’t need to cache during watch
 		};

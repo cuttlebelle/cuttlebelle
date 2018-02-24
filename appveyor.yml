@@ -16,10 +16,10 @@ cache:
 install:
   - ps: Install-Product node $env:nodejs_version
   - npm config set loglevel warn
-  - npm install
-  - npm run flow
+  - yarn
+  - yarn flow check
 
 test_script:
-  - npm test
+  - echo "noop"
 
 build: off
