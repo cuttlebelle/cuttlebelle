@@ -33,7 +33,7 @@
 	},
 	"scripts": {
 		"prepublish": "npm run test && npm run man",
-		"test": "npm run flow && npm run build && npm run test:end-to-end && npm run test:unit-test",
+		"test": "npm run build && npm run test:end-to-end && npm run test:unit-test",
 		"test:unit-test": "jest",
 		"test:detail": "jest --coverage",
 		"test:watch": "jest --watch --coverage",
