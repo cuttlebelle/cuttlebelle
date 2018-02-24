@@ -1,7 +1,7 @@
 {
 	"name": "cuttlebelle",
 	"description": "The react static site generator that separates editing and code concerns",
-	"version": "1.0.0-alpha.53",
+	"version": "1.0.0-alpha.54",
 	"homepage": "http://cuttlebelle.com",
 	"author": {
 		"name": "Dominik Wilkowski",
@@ -33,7 +33,7 @@
 	},
 	"scripts": {
 		"prepublish": "npm run test && npm run man",
-		"test": "npm run build && npm run test:end-to-end && npm run test:unit-test",
+		"test": "npm run flow && npm run build && npm run test:end-to-end && npm run test:unit-test",
 		"test:unit-test": "jest",
 		"test:detail": "jest --coverage",
 		"test:watch": "jest --watch --coverage",
