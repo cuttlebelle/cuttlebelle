@@ -42,7 +42,8 @@
 		"build": "npm run build:js",
 		"build:js": "babel src --out-dir dist",
 		"build:watch": "npm run build:js && npm run test:detail",
-		"watch": "npm run build && npm run test && onchange 'src/*.js' '__tests__/*.js' -- npm run build:watch"
+		"watch": "npm run build && npm run test && onchange 'src/*.js' '__tests__/*.js' -- npm run build:watch",
+		"flow": "flow check"
 	},
 	"dependencies": {
 		"babel-plugin-import-redirect": "^1.1.1",
@@ -76,6 +77,7 @@
 		"chalk": "^2.3.0",
 		"copy-dir": "^0.3.0",
 		"dirsum": "^0.1.1",
+		"flow-bin": "^0.66.0",
 		"jest-cli": "^22.0.4",
 		"marked-man": "^0.2.1",
 		"onchange": "^3.3.0",

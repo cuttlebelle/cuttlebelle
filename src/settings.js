@@ -6,6 +6,7 @@
  * SETTINGS.get - Getting our settings
  * SETTINGS.set - Merge with default settings
  *
+ * @flow
  **************************************************************************************************************************************************************/
 
 'use strict';
@@ -22,6 +23,43 @@ import Fs from 'fs';
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { Log, Style } from './helper';
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Types
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*::
+export type Settings = {
+	folder: {
+		cwd: string,
+		content: string,
+		code: string,
+		assets: string,
+		site: string,
+		docs: string,
+		index: string,
+		homepage: string
+	},
+	layouts: {
+		page: string,
+		partial: string
+	},
+	site: {
+		root: string,
+		doctype: string,
+		redirectReact: boolean,
+		markdownRenderer: string,
+		watchTimeout: number
+	},
+	docs: {
+		root: string,
+		index: string,
+		category: string,
+		selfProp: string,
+		IDProp: string
+	}
+}
+*/
 
 
 /**
@@ -103,7 +141,7 @@ export const SETTINGS = {
 	 *
 	 * @return {object} - The settings object
 	 */
-	get: () => {
+	get: ()/*: Settings */ => {
 		return SETTINGS.defaults;
 	},
 
@@ -115,7 +153,7 @@ export const SETTINGS = {
 	 *
 	 * @return {object}               - Our new settings
 	 */
-	set: ( localSettings ) => {
+	set: ( localSettings /*: Settings */ )/*: Settings */ => {
 		Log.verbose(`Merging default setting with`);
 		Log.verbose( Style.yellow( JSON.stringify( localSettings ) ) );
 
