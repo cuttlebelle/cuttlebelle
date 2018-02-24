@@ -10,6 +10,7 @@
  * Notify.info   - Notify the system
  * ExitHandler   - Handle exiting of program
  *
+ * @flow
  **************************************************************************************************************************************************************/
 
 'use strict';
@@ -37,7 +38,7 @@ import { Watch } from './watch';
  *
  * @return {string}      - Slugified string
  */
-export const Slug = ( text ) => {
+export const Slug = ( text /*: string */ ) /*: string */ => {
 	if( typeof text === 'string' ) {
 		Slugify.extend({
 			'.': '-',
@@ -75,7 +76,7 @@ export const Slug = ( text ) => {
  *
  * @param {array} elapsedTime - The elapsed time started and stopped with process.hrtime
  */
-export const ConvertHrtime = ( elapsedTime ) => {
+export const ConvertHrtime = ( elapsedTime/*: number[] | number */ ) /*: number | string */ => {
 	if( Array.isArray( elapsedTime ) ) {
 		return ( elapsedTime[ 0 ] + ( elapsedTime[ 1 ] / 1e9 ) ).toFixed( 3 );
 	}
@@ -102,7 +103,7 @@ export const Style = {
 	 *
 	 * @return {string}       - The escaped text
 	 */
-	parse: ( text, start, end = `39m` ) => {
+	parse: ( text /*: string */, start /*: string */, end /*: string */ = `39m` ) /*: string */ => {
 		if( text !== undefined ) {
 			const replace = new RegExp( `\\u001b\\[${ end }`, 'g' ); // find any resets so we can nest styles
 
@@ -120,16 +121,16 @@ export const Style = {
 	 *
 	 * @return {string}      - The string with opening and closing ansi escape color codes
 	 */
-	black: text => Style.parse( text, `30m` ),
-	red: text => Style.parse( text, `31m` ),
-	green: text => Style.parse( text, `32m` ),
-	yellow: text => Style.parse( text, `33m` ),
-	blue: text => Style.parse( text, `34m` ),
-	magenta: text => Style.parse( text, `35m` ),
-	cyan: text => Style.parse( text, `36m` ),
-	white: text => Style.parse( text, `37m` ),
-	gray: text => Style.parse( text, `90m` ),
-	bold: text => Style.parse( text, `1m`, `22m` ),
+	black: (text /*: string */) /*: string */ => Style.parse( text, `30m` ),
+	red: (text /*: string */) /*: string */ => Style.parse( text, `31m` ),
+	green: (text /*: string */) /*: string */ => Style.parse( text, `32m` ),
+	yellow: (text /*: string */) /*: string */ => Style.parse( text, `33m` ),
+	blue: (text /*: string */) /*: string */ => Style.parse( text, `34m` ),
+	magenta: (text /*: string */) /*: string */ => Style.parse( text, `35m` ),
+	cyan: (text /*: string */) /*: string */ => Style.parse( text, `36m` ),
+	white: (text /*: string */) /*: string */ => Style.parse( text, `37m` ),
+	gray: (text /*: string */) /*: string */ => Style.parse( text, `90m` ),
+	bold: (text /*: string */) /*: string */ => Style.parse( text, `1m`, `22m` ),
 
 };
 
@@ -152,7 +153,7 @@ export const Log = {
 	 *
 	 * @param  {string} text - The text you want to log
 	 */
-	welcome: ( text ) => {
+	welcome: ( text /*: string */ ) /*: void */ => {
 		if( !Log.output ) {   // if we haven’t printed anything yet
 			Log.space();        // only then we add an empty line on the top
 		}
@@ -169,7 +170,7 @@ export const Log = {
 	 *
 	 * @param  {string} text - The text you want to log with the error
 	 */
-	error: ( text ) => {
+	error: ( text /*: string */ ) /*: void */ => {
 		if( !Log.output ) {   // if we haven’t printed anything yet
 			Log.space();        // only then we add an empty line on the top
 		}
@@ -188,7 +189,7 @@ export const Log = {
 	 *
 	 * @param  {string}  text - The text you want to log
 	 */
-	info: ( text ) => {
+	info: ( text /*: string */ ) /*: void */ => {
 		if( !Log.output ) {
 			Log.space();
 		}
@@ -204,7 +205,7 @@ export const Log = {
 	 *
 	 * @param  {string}  text - The text you want to log
 	 */
-	ok: ( text ) => {
+	ok: ( text /*: string */ ) /*: void */ => {
 		if( !Log.output ) {
 			Log.space();
 		}
@@ -220,7 +221,7 @@ export const Log = {
 	 *
 	 * @param  {string}  text - The text you want to log
 	 */
-	done: ( text ) => {
+	done: ( text /*: string */ ) /*: void */ => {
 		if( !Log.output ) {
 			Log.space();
 		}
@@ -240,7 +241,7 @@ export const Log = {
 	 *
 	 * @param  {string}  text - The text you want to log
 	 */
-	verbose: ( text ) => {
+	verbose: ( text /*: string */ ) /*: void */ => {
 		if( Log.verboseMode ) {
 			if( !Log.output ) {
 				Log.space();
@@ -254,7 +255,7 @@ export const Log = {
 	/**
 	 * Add some space to the output
 	 */
-	space: () => {
+	space: () /*: void */ => {
 		console.log(`\n`);
 	},
 };
@@ -273,7 +274,7 @@ export const Notify = {
 	 *
 	 * @param  {string}  text - The text you want to pop up
 	 */
-	info: ( text ) => {
+	info: ( text /*: string */ ) /*: void */ => {
 		if( !Notify.silent && Watch.running ) {
 			const notifyText = typeof text === 'object' ? JSON.stringify( text ) : text;
 
@@ -293,7 +294,7 @@ export const Notify = {
  * @param {null}   exiting - null for bind
  * @param {object} error   - Object to distinguish between closing events
  */
-export const ExitHandler = ( exiting, error ) => {
+export const ExitHandler = ( exiting /*: { withoutSpace: boolean } */, error /*: string */ ) => {
 	if( error && error !== 1 ) {
 		try {              // try using our pretty output
 			Log.error( error );

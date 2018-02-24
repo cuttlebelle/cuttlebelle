@@ -8,6 +8,7 @@
  * RemoveDir  - Removing folders and all it’s sub folders
  * CopyFiles  - Copy a folder
  *
+ * @flow
  **************************************************************************************************************************************************************/
 
 'use strict';
@@ -35,7 +36,7 @@ import { Log, Style } from './helper';
  *
  * @return {promise object}  - The content of the file
  */
-export const ReadFile = ( location ) => {
+export const ReadFile = ( location /*: string */ ) /*: Promise<string | Error> */ => {
 	return new Promise( ( resolve, reject ) => {
 		Fs.readFile( location, `utf8`, ( error, content ) => {
 			if( error ) {
@@ -62,7 +63,7 @@ export const ReadFile = ( location ) => {
  *
  * @return {promise object}  - Boolean true for 👍 || string error for 👎
  */
-export const CreateFile = ( location, content ) => {
+export const CreateFile = ( location /*: string */, content /*: string */ ) /*: Promise<Error | boolean> */ => {
 	CreateDir( Path.dirname( location ) );
 
 	return new Promise( ( resolve, reject ) => {
@@ -90,7 +91,7 @@ export const CreateFile = ( location, content ) => {
  *
  * @return {string}     - The path that was just worked at
  */
-export const CreateDir = ( dir ) => {
+export const CreateDir = ( dir /*: string */ ) /*: string */ => {
 	Log.verbose(`Creating path ${ Style.yellow( dir ) }`);
 
 	const splitPath = dir.split('/');
@@ -137,7 +138,7 @@ export const CreateDir = ( dir ) => {
  *
  * @param  {array} dir      - An array of all folders to be removed
  */
-export const RemoveDir = ( dir ) => {
+export const RemoveDir = ( dir /*: string[] */ ) => {
 	try {
 		Del.sync( dir );
 		Log.verbose(`Removed ${ Style.yellow( JSON.stringify( dir ) ) } folder`)
@@ -156,14 +157,14 @@ export const RemoveDir = ( dir ) => {
  *
  * @return {promise object}     - Resolved once completed
  */
-export const CopyFiles = ( source, destination ) => {
+export const CopyFiles = ( source /*: string */, destination /*: string */ ) /*: Promise<?Error> */ => {
 	Log.verbose(`Copy folder from ${ Style.yellow( source ) } to ${ Style.yellow( destination ) }`);
 
 	return new Promise( ( resolve, reject ) => {
 		RemoveDir([ destination ]); // remove destination first
 
 		if( Fs.existsSync( source ) ) {
-			FsExtra.copy( source, destination, ( error ) => {
+			FsExtra.copy( source, destination, ( error /*: Error */ ) => {
 				if( error ) {
 					reject( error );
 				}

@@ -8,6 +8,7 @@
  * Progress.display  - Display current progress
  * Progress.finished - Clear progress display
  *
+ * @flow
  **************************************************************************************************************************************************************/
 
 'use strict';
@@ -40,7 +41,7 @@ export const Progress = {
 	 *
 	 * @param  {integer} amount - The amount of pages we have to get through
 	 */
-	set: ( amount ) => {
+	set: ( amount /*: number */ ) /*: void */ => {
 		Progress.todo = amount;
 	},
 
@@ -48,7 +49,7 @@ export const Progress = {
 	/**
 	 * Tick off one page
 	 */
-	tick: ( width ) => {
+	tick: ( width /*: number */) /*: void */ => {
 		Progress.done ++;
 
 		Progress.display( width );
@@ -58,7 +59,7 @@ export const Progress = {
 	/**
 	 * Display current progress
 	 */
-	display: ( width ) => {
+	display: ( width /*: ?number */ ) /*: void */ => {
 		if( !width || width === undefined ) {
 			width = Size ? Size.width : 0;
 		}
@@ -87,7 +88,7 @@ export const Progress = {
 	/**
 	 * Clear progress display
 	 */
-	clear: () => {
+	clear: () /*: void */ => {
 		process.stdout.write('\r\x1b[K'); // reset cursor
 	},
 };
