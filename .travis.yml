@@ -6,3 +6,6 @@ os:
 node_js:
   - "8"
   - "6"
+# Tests are run on the prepublish hook which fires after install
+# No need to run tests twice.
+script: echo "noop"
