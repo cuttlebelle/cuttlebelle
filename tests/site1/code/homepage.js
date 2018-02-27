@@ -22,7 +22,8 @@ const Homepage = ({
 	title,
 	header,
 	main,
-	footer
+	footer,
+	...rest
 }) => (
 	<html>
 	<head>

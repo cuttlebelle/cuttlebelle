@@ -105,13 +105,18 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 			presets: [
 				require.resolve( 'babel-preset-react' ),
 				[
-					require.resolve( 'babel-preset-env' ), 
+					require.resolve( 'babel-preset-env' ),
 					{
 						targets: {
 							node: 'current'
 						}
 					}
 				]
+			],
+			plugins: [
+				require.resolve( 'babel-plugin-transform-es2015-modules-commonjs' ),
+				require.resolve( 'babel-plugin-transform-object-rest-spread' ),
+				require.resolve( 'babel-plugin-transform-runtime' ),
 			],
 			cache: !Watch.running, // we don’t need to cache during watch
 		};
@@ -133,12 +138,12 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 		// optional we redirect import statements for react to our local node_module folder
 		// so react doesn’t have to be installed separately on globally installed cuttlebelle
 		if( SETTINGS.get().site.redirectReact ) {
-			registerObj.plugins = redirectReact;
+			registerObj.plugins.push( redirectReact );
 		}
 
 		let component;
 		if( source !== '' ) { // require from string
-			registerObj.plugins = redirectReact;
+			registerObj.plugins.push( redirectReact );
 			delete registerObj.cache;
 			const transpiledSource = require("babel-core").transform( source, registerObj );
 			component = RequireFromString( transpiledSource.code ).default;
