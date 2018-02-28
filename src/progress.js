@@ -69,15 +69,17 @@ export const Progress = {
 			const padding = 13;
 
 			if( width > padding ) {
-				const maxWidth = width - ( padding * 2 ) - 2;
+				const ENDBITS = 2; // those -> ┤ and ├
+				const maxWidth = width - ( padding * 2 ) - ENDBITS;
 				const currentWidth = Math.ceil( maxWidth * ( progress / 100 ) );
-				const whitespace = maxWidth - currentWidth;
-
+				const whitespace = maxWidth - currentWidth > -1
+					? maxWidth - currentWidth
+					: 0;
 
 				Progress.clear();
 				process.stdout.write(`${ ' '.repeat( padding ) }┤${ Style.gray('▓').repeat( currentWidth ) }${ ' '.repeat( whitespace ) }├`);
 
-				if( progress === 100 ) {
+				if( progress >= 100 ) {
 					Progress.clear();
 				}
 			}
