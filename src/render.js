@@ -138,14 +138,14 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 		// optional we redirect import statements for react to our local node_module folder
 		// so react doesn’t have to be installed separately on globally installed cuttlebelle
 		if( SETTINGS.get().site.redirectReact ) {
-			registerObj.plugins.push( redirectReact );
+			registerObj.plugins = [ ...registerObj.plugins, ...redirectReact ];
 		}
 
 		let component;
 		if( source !== '' ) { // require from string
-			registerObj.plugins.push( redirectReact );
+			registerObj.plugins = [ ...registerObj.plugins, ...redirectReact ];
 			delete registerObj.cache;
-			const transpiledSource = require("babel-core").transform( source, registerObj );
+			const transpiledSource = require('babel-core').transform( source, registerObj );
 			component = RequireFromString( transpiledSource.code ).default;
 		}
 		else {                // require from file
