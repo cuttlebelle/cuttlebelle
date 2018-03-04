@@ -37,7 +37,7 @@ const Page = ({ title, stylesheet, header, main, footer, script, _relativeURL, _
 
 		{
 			script != undefined
-				? ( <script rel="stylesheet" href={ _relativeURL( `/assets/js/${ script }.js`, _ID ) } /> )
+				? ( <script src={ _relativeURL( `/assets/js/${ script }.js`, _ID ) } /> )
 				: null
 		}
 	</body>
