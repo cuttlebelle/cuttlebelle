@@ -1,32 +1,13 @@
-import PropTypes from 'prop-types';
+//@flow
 import React from 'react';
 import List from './list';
 
-
-/**
- * The Component2 component for the footer
- */
-const Component2 = ({ background, links }) => {
-	const backgroundStyle = {
-		backgroundColor: background,
-		padding: '1em',
-		marginTop: '3em',
-	};
-
-	return (
-		<footer style={ backgroundStyle }>
-			<List items={ links } />
-		</footer>
-	);
+type Link = {
+	title: string,
+	url: string
 }
 
-
-Component2.propTypes = {
-	/**
-	 * background: '#ccc' # a CSS color here
-	 */
-	background: PropTypes.string.isRequired,
-
+type Component2Props = {
 	/**
 	 * links:
 	 *   - title: Homepage
@@ -42,9 +23,29 @@ Component2.propTypes = {
 	 *   - title: About me
 	 *     url: https://en.wikipedia.org/wiki/Alan_Turing
 	 */
-	links: PropTypes.array.isRequired,
-};
+	links: Link[],
+	/**
+	 * background: '#ccc' # a CSS color here
+	 */
+	background: string,
+}
 
+/**
+ * The Component2 component for the footer
+ */
+const Component2 = ({ background, links }: Component2Props) => {
+	const backgroundStyle = {
+		backgroundColor: background,
+		padding: '1em',
+		marginTop: '3em',
+	};
+
+	return (
+		<footer style={ backgroundStyle }>
+			<List items={ links } />
+		</footer>
+	);
+}
 
 Component2.defaultProps = {};
 

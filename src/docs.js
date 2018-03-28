@@ -477,13 +477,15 @@ export const BuildPropsYaml = ( object ) => {
 					_hasBody = true;
 				}
 				else {
+					let propType = prop.type || prop.flowType;
+
 					yaml += `<span class="cuttlebelle-yaml-line">${
 						prop.required
 							? ''
 							: flags['required']
 						}${
-						prop.type.name === 'enum'
-							? flags['oneof']( prop.type.value )
+						['enum', 'union'].includes(propType.name)
+							? flags['oneof']( propType.value || propType.elements )
 							: ''
 						}${
 						prop.defaultValue
