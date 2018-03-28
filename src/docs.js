@@ -455,7 +455,7 @@ export const BuildPropsYaml = ( object ) => {
 			required: `<span class="cuttlebelle-flag cuttlebelle-flag--optional">Optional</span>`,
 			default: ( value ) => `<span class="cuttlebelle-flag cuttlebelle-flag--default">default: <span class="cuttlebelle-flag__value">${ value }</span></span>`,
 			oneof: ( items ) => `<span class="cuttlebelle-flag cuttlebelle-flag--default">one of: ` +
-				items.map( item => `<span class="cuttlebelle-flag__value">${ item.value }</span>` ) +
+				items.map( item => `<span class="cuttlebelle-flag__value">${ item.value || item.name }</span>` ) +
 				`</span>`,
 		};
 

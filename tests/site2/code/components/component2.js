@@ -9,6 +9,10 @@ type Link = {
 
 type Component2Props = {
 	/**
+	 * background: '#ccc' # a CSS color here
+	 */
+	background: string,
+	/**
 	 * links:
 	 *   - title: Homepage
 	 *     url: /
@@ -23,11 +27,7 @@ type Component2Props = {
 	 *   - title: About me
 	 *     url: https://en.wikipedia.org/wiki/Alan_Turing
 	 */
-	links: Link[],
-	/**
-	 * background: '#ccc' # a CSS color here
-	 */
-	background: string,
+	links: Link[]
 }
 
 /**
