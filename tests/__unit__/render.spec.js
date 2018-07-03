@@ -334,9 +334,9 @@ test('RenderAssets() - Copy all nested assets files to its destination', () => {
 });
 
 
-test('RenderAssets() - Cannot copy files from non existent directory', () => {
+test('RenderAssets() - Copying non existent directory will create an empty folder in the destination', () => {
 	return RenderAssets( Path.normalize(`${ __dirname }/mocks/assets/NonExistent-Dir/`), `${ testDir }/NonExistent/` )
 		.then( () => {
-			expect( Fs.existsSync( `${ testDir }/NonExistent/` ) ).toEqual( false );
+			expect( Fs.existsSync( `${ testDir }/NonExistent/` ) ).toEqual( true );
 	});
 });
