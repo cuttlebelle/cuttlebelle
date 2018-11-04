@@ -154,7 +154,11 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 			component = require( componentPath ).default;
 		}
 
-		return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
+        if ( props.noreact ) {
+            return component(props);
+        }
+
+        return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
 	}
 	catch( error ) {
 		Log.error(`The react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.code, '' ) ) } had trouble rendering:`);
@@ -433,9 +437,20 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 						.catch( error => reject( error ) )
 						.then( content => RenderFile( content, filePath.replace( SETTINGS.get().folder.content, '' ) ) )
 						.then( HTML => {
-							const newPath = Path.normalize(`${ SETTINGS.get().folder.site }/${ page === SETTINGS.get().folder.homepage ? '' : page }/index.html`);
 
-							CreateFile( newPath, ParseHTML( SETTINGS.get().site.doctype + HTML ) )
+                            let { doctype, dest } = Pages.get()[page];
+
+                            if( doctype === undefined ) {
+                                doctype = SETTINGS.get().site.doctype;
+                            }
+
+                            if( dest === undefined ) {
+                                dest = ( page === SETTINGS.get().folder.homepage ? '' : page ) + '/index.html';
+                            }
+
+							const newPath = Path.normalize(`${ SETTINGS.get().folder.site }/${dest}`);
+
+							CreateFile( newPath, ParseHTML( doctype + HTML ) )
 								.catch( error => reject( error ) );
 
 							Progress.tick();
