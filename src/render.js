@@ -154,7 +154,11 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 			component = require( componentPath ).default;
 		}
 
-		return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
+        if ( props.noreact ) {
+            return component(props);
+        }
+
+        return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
 	}
 	catch( error ) {
 		Log.error(`The react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.code, '' ) ) } had trouble rendering:`);
