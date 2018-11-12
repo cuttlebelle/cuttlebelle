@@ -295,7 +295,7 @@ export const Notify = {
  * @param {object} error   - Object to distinguish between closing events
  */
 export const ExitHandler = ( exiting /*: { withoutSpace: boolean } */, error /*: string */ ) => {
-	if( error && error !== 1 ) {
+	if( error && parseInt( error ) !== 1 ) {
 		try {              // try using our pretty output
 			Log.error( error );
 		}
