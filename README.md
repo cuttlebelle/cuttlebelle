@@ -1,6 +1,5 @@
 Cuttlebelle
 [![Build Status Travis](https://travis-ci.org/cuttlebelle/cuttlebelle.svg?branch=master)](https://travis-ci.org/cuttlebelle/cuttlebelle)
-[![Build Status Appveyor](https://ci.appveyor.com/api/projects/status/github/cuttlebelle/cuttlebelle?branch=master&svg=true)](https://ci.appveyor.com/project/cuttlebelle/cuttlebelle)
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?url=https://cuttlebelle.com&hashtags=react,reactjs,static-site-generator,jsx)
 ===========
 

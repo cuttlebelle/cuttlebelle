@@ -33,20 +33,19 @@
  - matchme
  - matchme</span>
 </pre><div class="cuttlebelle-docs__main__component__html"><details><summary class="cuttlebelle-docs__main__component__html__showhide">Show/Hide</summary><pre><code>&lt;html&gt;
-
   &lt;head&gt;
     &lt;title&gt;&lt;/title&gt;
   &lt;/head&gt;
-
   &lt;body&gt;
     &lt;main&gt;
       &lt;div&gt;&lt;/div&gt;
       &lt;div&gt;
-        &lt;h2&gt;All props:&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;_ID: page2&lt;hr/&gt;_self: body.md&lt;hr/&gt;_isDocs: true&lt;hr/&gt;_parents: [&amp;quot;page2&amp;quot;]&lt;hr/&gt;_pages&lt;br/&gt;index: _url, title&lt;br/&gt;index: _url, title&lt;br/&gt;index: &lt;hr/&gt;_nav: {&amp;quot;index&amp;quot;:{&amp;quot;page1&amp;quot;:&amp;quot;page1&amp;quot;,&amp;quot;page2&amp;quot;:{&amp;quot;page2/nested&amp;quot;:&amp;quot;page2/nested&amp;quot;},&amp;quot;page3&amp;quot;:&amp;quot;page3&amp;quot;}}&lt;hr/&gt;_store: {&amp;quot;title&amp;quot;:&amp;quot;Page 2&amp;quot;}&lt;hr/&gt;_relativeURL: ../assets/css/style.css&lt;hr/&gt;_parseYaml: {&amp;quot;test&amp;quot;:[&amp;quot;one&amp;quot;,&amp;quot;two&amp;quot;]}&lt;hr/&gt;_parseMD: &lt;p&gt;This is &lt;strong&gt;markdown&lt;/strong&gt;!&lt;/p&gt;
-&lt;hr/&gt;_parseReact: &lt;textarea&gt;&amp;lt;article&amp;gt;&amp;lt;h2&amp;gt;Title&amp;lt;/h2&amp;gt;&amp;lt;div&amp;gt;hello world&amp;lt;/div&amp;gt;&amp;lt;/article&amp;gt;&lt;/textarea&gt;&lt;hr/&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+        &lt;h2&gt;All props:&lt;/h2&gt;
+        &lt;pre&gt;&lt;code&gt;_ID: page2&lt;hr&gt;_self: body.md&lt;hr&gt;_isDocs: true&lt;hr&gt;_parents: [&amp;quot;page2&amp;quot;]&lt;hr&gt;_pages&lt;br&gt;index: _url, title&lt;br&gt;index: _url, title&lt;br&gt;index: &lt;hr&gt;_nav: {&amp;quot;index&amp;quot;:{&amp;quot;page1&amp;quot;:&amp;quot;page1&amp;quot;,&amp;quot;page2&amp;quot;:{&amp;quot;page2/nested&amp;quot;:&amp;quot;page2/nested&amp;quot;},&amp;quot;page3&amp;quot;:&amp;quot;page3&amp;quot;}}&lt;hr&gt;_store: {&amp;quot;title&amp;quot;:&amp;quot;Page 2&amp;quot;}&lt;hr&gt;_relativeURL: ../assets/css/style.css&lt;hr&gt;_parseYaml: {&amp;quot;test&amp;quot;:[&amp;quot;one&amp;quot;,&amp;quot;two&amp;quot;]}&lt;hr&gt;_parseMD: &lt;p&gt;This is &lt;strong&gt;markdown&lt;/strong&gt;!&lt;/p&gt;
+&lt;hr&gt;_parseReact: &lt;textarea&gt;&amp;lt;article&amp;gt;&amp;lt;h2&amp;gt;Title&amp;lt;/h2&amp;gt;&amp;lt;div&amp;gt;hello world&amp;lt;/div&amp;gt;&amp;lt;/article&amp;gt;&lt;/textarea&gt;&lt;hr&gt;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
     &lt;/main&gt;
   &lt;/body&gt;
-
 &lt;/html&gt;</code></pre></details></div></div><div id="page" class="cuttlebelle-docs__main__component"><h2 class="cuttlebelle-docs__main__component__name">page</h2><div class="cuttlebelle-docs__main__component__example"><html><head><title>Page title</title><link rel="stylesheet" href="/assets/css/style1.css"/></head><body><main><h1>Page title</h1><div><img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> <img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> <img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> <img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> </div></main></body></html></div><pre class="cuttlebelle-docs__main__component__yaml"><span class="cuttlebelle-yaml-line">layout: page</span>
 <span class="cuttlebelle-yaml-line">title: Page title  # if not given, it takes the title from the current page</span>
 <span class="cuttlebelle-yaml-line"><span class="cuttlebelle-flag cuttlebelle-flag--optional">Optional</span>stylesheet: style1</span>
@@ -55,12 +54,10 @@
   - partial2.md
   - partial3.md</span>
 </pre><div class="cuttlebelle-docs__main__component__html"><details><summary class="cuttlebelle-docs__main__component__html__showhide">Show/Hide</summary><pre><code>&lt;html&gt;
-
   &lt;head&gt;
     &lt;title&gt;Page title&lt;/title&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;/assets/css/style1.css&quot; /&gt;
   &lt;/head&gt;
-
   &lt;body&gt;
     &lt;main&gt;
       &lt;h1&gt;Page title&lt;/h1&gt;
@@ -68,10 +65,10 @@
         &lt;img src=&quot;http://via.placeholder.com/700x100?text=partial&quot; class=&quot;cuttlebelle-partial&quot; /&gt;
         &lt;img src=&quot;http://via.placeholder.com/700x100?text=partial&quot; class=&quot;cuttlebelle-partial&quot; /&gt;
         &lt;img src=&quot;http://via.placeholder.com/700x100?text=partial&quot; class=&quot;cuttlebelle-partial&quot; /&gt;
-        &lt;img src=&quot;http://via.placeholder.com/700x100?text=partial&quot; class=&quot;cuttlebelle-partial&quot; /&gt; &lt;/div&gt;
+        &lt;img src=&quot;http://via.placeholder.com/700x100?text=partial&quot; class=&quot;cuttlebelle-partial&quot; /&gt;
+      &lt;/div&gt;
     &lt;/main&gt;
   &lt;/body&gt;
-
 &lt;/html&gt;</code></pre></details></div></div><div id="partial" class="cuttlebelle-docs__main__component"><h2 class="cuttlebelle-docs__main__component__name">partial</h2><div class="cuttlebelle-docs__main__component__example"><article><h2>Partial title</h2><div><img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> <img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> <img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> <img src="http://via.placeholder.com/700x100?text=partial" class="cuttlebelle-partial" /> </div></article></div><pre class="cuttlebelle-docs__main__component__yaml">---
 <span class="cuttlebelle-yaml-line">layout: partial</span>
 <span class="cuttlebelle-yaml-line"><span class="cuttlebelle-flag cuttlebelle-flag--optional">Optional</span>title: Partial title</span>
@@ -89,5 +86,6 @@ in its movements than a whale...</pre><div class="cuttlebelle-docs__main__compon
     &lt;img src=&quot;http://via.placeholder.com/700x100?text=partial&quot; class=&quot;cuttlebelle-partial&quot; /&gt;
     &lt;img src=&quot;http://via.placeholder.com/700x100?text=partial&quot; class=&quot;cuttlebelle-partial&quot; /&gt;
     &lt;img src=&quot;http://via.placeholder.com/700x100?text=partial&quot; class=&quot;cuttlebelle-partial&quot; /&gt;
-    &lt;img src=&quot;http://via.placeholder.com/700x100?text=partial&quot; class=&quot;cuttlebelle-partial&quot; /&gt; &lt;/div&gt;
+    &lt;img src=&quot;http://via.placeholder.com/700x100?text=partial&quot; class=&quot;cuttlebelle-partial&quot; /&gt;
+  &lt;/div&gt;
 &lt;/article&gt;</code></pre></details></div></div></div></main></body></html>
