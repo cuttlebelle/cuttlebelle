@@ -7,9 +7,8 @@ os:
 node_js:
   - "8"
   - "6"
-before_script:
-  - bash
-  - yarn flow
+before_install: bash
+before_script: yarn flow
 # Tests are run on the prepublish hook which fires after install
 # No need to run tests twice.
 script: echo "noop"
