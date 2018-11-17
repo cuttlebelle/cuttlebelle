@@ -195,8 +195,7 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 	}
 	else {
 		return new Promise( ( resolve, reject ) => {
-			const ID = parent.length > 0 ? Path.dirname( parent ) : Path.dirname( file ); // the ID of this page is the folder in which it exists
-			// const ID = path.normalize( parent.length > 0 ? Path.dirname( parent ) : Path.dirname( file ) ); // the ID of this page is the folder in which it exists
+			const ID = Path.normalize( parent.length > 0 ? Path.dirname( parent ) : Path.dirname( file ) ); // the ID of this page is the folder in which it exists
 
 			// to get the parents we just look at the path
 			let parents = ID.split('/').map( ( item, i ) => {
