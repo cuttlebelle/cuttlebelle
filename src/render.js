@@ -425,7 +425,7 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 		return new Promise( ( resolve, reject ) => {
 			const allPages = [];
 
-			content.forEach( page => {
+			content.forEach( page => { // replace with progress.nextTick()
 				const filePath = Path.normalize(`${ SETTINGS.get().folder.content }/${ page }/${ SETTINGS.get().folder.index }.yml`);
 
 				allPages.push(
