@@ -46,7 +46,6 @@ import RequireFromString from 'require-from-string';
 import ReactDOMServer from 'react-dom/server';
 import Traverse from 'traverse';
 import React from 'react';
-import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -56,13 +55,14 @@ import Fs from 'fs';
 import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
 import { ParseContent, ParseMD, ParseYaml, ParseHTML } from './parse';
 import { GetContent, GetLayout } from './site';
-import { Layouts, Watch } from './watch';
 import { Log, Style } from './helper';
+import { Layouts, Watch } from './watch';
 import { SETTINGS } from './settings';
 import { Progress } from './progress';
 import { Pages } from './pages';
 import { Store } from './store';
 import { Slug } from './helper';
+import { Path } from './path';
 import { Nav } from './nav';
 
 

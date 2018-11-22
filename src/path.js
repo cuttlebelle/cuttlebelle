@@ -1,7 +1,10 @@
 /***************************************************************************************************************************************************************
  *
- * Setting and retaining store data
+ * Path wrapper
  *
+ * Path - Wrapping the path standard lib to unify directory separators
+ *
+ * @flow
  **************************************************************************************************************************************************************/
 
 'use strict';
@@ -10,41 +13,21 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import BasePath from 'path';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { Log, Style } from './helper';
 
 
 /**
- * Handel and retain store information
+ * Wrapping the path standard lib to unify directory separators
  *
  * @type {Object}
  */
-export const Store = {
-	all: {},
-
-
-	/**
-	 * Set store infos
-	 *
-	 * @param  {object} data - Data to be merged with Store.all
-	 */
-	set: ( data ) => {
-		Log.verbose(`Setting store to ${ Style.yellow( JSON.stringify( data ) ) }`);
-
-		Store.all = Object.assign( {}, Store.all, data );
-	},
-
-
-	/**
-	 * Get store data
-	 *
-	 * @return {object} - The store data
-	 */
-	get: () => {
-		return Store.all;
-	},
+export const Path = {
+	...BasePath.posix,
+	sep: '/',
+	normalize: input => BasePath.posix.normalize( input ).replace(/\//g, '/'),
 };

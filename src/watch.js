@@ -23,7 +23,6 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import BS from 'browser-sync';
-import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -37,6 +36,7 @@ import { SETTINGS } from './settings';
 import { Progress } from './progress';
 import { ParseHTML } from './parse';
 import { GetLayout } from './site';
+import { Path } from './path';
 
 
 /**

@@ -72,7 +72,6 @@ import ReactDOMServer from 'react-dom/server';
 const ReactDocs = require('react-docgen');
 import Pretty from 'prettify-html';
 import React from 'react';
-import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -87,6 +86,7 @@ import { Log, Style } from './helper';
 import { GetLayout } from './site';
 import { Pages } from './pages';
 import { Store } from './store';
+import { Path } from './path';
 import { Nav } from './nav';
 
 

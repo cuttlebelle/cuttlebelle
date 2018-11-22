@@ -20,8 +20,8 @@ import { CreateDir, RemoveDir } from '../../src/files';
 import { Progress } from '../../src/progress';
 import { SETTINGS } from '../../src/settings';
 import { Pages } from '../../src/pages';
+import { Path } from '../../src/path';
 import React from 'react';
-import Path from 'upath';
 import Fs from 'fs';
 
 

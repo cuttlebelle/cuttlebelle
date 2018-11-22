@@ -15,7 +15,6 @@
 
 
 import { CreateFile, CreateDir, CopyFiles, ReadFile, RemoveDir } from '../../src/files';
-import Log from '../../src/helper';
 import Fs from 'fs';
 
 
