@@ -29,5 +29,5 @@ import BasePath from 'path';
 export const Path = {
 	...BasePath.posix,
 	sep: '/',
-	normalize: input => BasePath.posix.normalize( input ).replace(/\//g, '/'),
+	normalize: input => BasePath.posix.normalize( input.replace(/\//g, '/') ).replace(/\//g, '/'),
 };
