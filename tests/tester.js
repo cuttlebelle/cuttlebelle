@@ -12,12 +12,12 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // DEPENDENCIES
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+const Path = require('./../dist/path.js').default.Path;
 const Replace = require('replace-in-file');
 const Spawn = require('child_process');
 const Copydir = require('copy-dir');
 const Dirsum = require('dirsum');
 const Chalk = require('chalk');
-const Path = require('path');
 const Del = require('del');
 const Fs = require(`fs`);
 
