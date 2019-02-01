@@ -97,63 +97,76 @@ export const RelativeURL = ( URL, ID ) => {
 export const RenderReact = ( componentPath, props, source = '' ) => {
 	Log.verbose(`Rendering react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.code, '' ) ) }`);
 
-	let registerObj = {};
-	try {
-		// babelfy components
-		// we have to keep the presets and plugins close as we want to support and even encourage global installs
-		registerObj = {
-			presets: [
-				require.resolve( 'babel-preset-react' ),
-				[
-					require.resolve( 'babel-preset-env' ),
-					{
-						targets: {
-							node: 'current'
-						}
-					}
-				]
-			],
-			plugins: [
-				require.resolve( 'babel-plugin-transform-es2015-modules-commonjs' ),
-				require.resolve( 'babel-plugin-transform-object-rest-spread' ),
-				require.resolve( 'babel-plugin-transform-runtime' ),
-			],
-			cache: !Watch.running, // we don’t need to cache during watch
-		};
-
-		const redirectReact = [
-			require.resolve( 'babel-plugin-syntax-dynamic-import' ),
+	// babelfy components
+	// we have to keep the presets and plugins close as we want to support and even encourage global installs
+	const registerObj = {
+		presets: [
+			require.resolve( '@babel/preset-react' ),
 			[
-				require.resolve( 'babel-plugin-import-redirect' ),
+				require.resolve( '@babel/preset-env' ),
 				{
-					redirect: {
-						react: require.resolve( 'react' ),
-						'prop-types': require.resolve( 'prop-types' ),
-					},
-					suppressResolveWarning: true,
+					targets: {
+						node: 'current'
+					}
+				}
+			]
+		],
+		plugins: [
+			require.resolve( 'babel-plugin-transform-es2015-modules-commonjs' ),
+			require.resolve( '@babel/plugin-proposal-object-rest-spread' ),
+			require.resolve( '@babel/plugin-transform-runtime' ),
+		],
+		cache: !Watch.running, // we don’t need to cache during watch
+	};
+
+	const redirectReact = [
+		require.resolve( '@babel/plugin-syntax-dynamic-import' ),
+		[
+			require.resolve( 'babel-plugin-import-redirect' ),
+			{
+				redirect: {
+					react: require.resolve( 'react' ),
+					'prop-types': require.resolve( 'prop-types' ),
 				},
-			],
-		];
+				suppressResolveWarning: true,
+			},
+		],
+	];
 
-		// optional we redirect import statements for react to our local node_module folder
-		// so react doesn’t have to be installed separately on globally installed cuttlebelle
-		if( SETTINGS.get().site.redirectReact ) {
-			registerObj.plugins = [ ...registerObj.plugins, ...redirectReact ];
-		}
+	// optional we redirect import statements for react to our local node_module folder
+	// so react doesn’t have to be installed separately on globally installed cuttlebelle
+	if( SETTINGS.get().site.redirectReact || source !== '' ) {
+		registerObj.plugins = [ ...registerObj.plugins, ...redirectReact ];
+	}
 
-		let component;
+	let component;
+	delete registerObj.cache;
+
+	try {
 		if( source !== '' ) { // require from string
-			registerObj.plugins = [ ...registerObj.plugins, ...redirectReact ];
-			delete registerObj.cache;
-			const transpiledSource = require('babel-core').transform( source, registerObj );
+			registerObj.filename = 'path/to/file'; // bug in babel https://github.com/yahoo/babel-plugin-react-intl/issues/156
+			const transpiledSource = require('@babel/core').transformSync( source, registerObj );
 			component = RequireFromString( transpiledSource.code ).default;
 		}
 		else {                // require from file
-			require('babel-register')( registerObj );
+			require('@babel/register')( registerObj );
 
 			component = require( componentPath ).default;
 		}
+	}
+	catch( error ) {
+		Log.error(`Babel failed for ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.code, '' ) ) }:`);
+		Log.error( error );
+		Log.verbose( JSON.stringify( registerObj ) );
 
+		if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if the render fails in production
+			process.exit( 1 );
+		}
+
+		return '';
+	}
+
+	try {
 		return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
 	}
 	catch( error ) {

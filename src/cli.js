@@ -39,7 +39,7 @@ const pkg = require('../package.json');
 export const DisplayHelp = () => {
 	const maxLength = 80;
 	const paddingSize = Math.max( 0, Math.floor( ( Size.width - maxLength ) / 2 ) );
-	const padding = String.repeat(` `, paddingSize );
+	const padding = ` `.repeat( paddingSize );
 
 	Log.space();
 	console.log(`
