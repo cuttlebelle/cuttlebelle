@@ -49,7 +49,30 @@ test('RelativeURL() - Resolve two URLs to a relative path', () => {
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // RenderReact
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-test('RenderReact() - Render react components correctly', () => {
+test('RenderReact() - Render react components from source correctly', () => {
+	const file1 = Path.normalize(`${ __dirname }/mocks/doesnotexist`);
+	const props1 = { title: 'Hello', _body: 'World!' };
+	const jsx = `
+		import React from "react";
+
+		export default ( page ) => (
+			<main>
+				<h1>{ page.title }</h1>
+				<div>{ page.title } { page._body }</div>
+			</main>
+		);`;
+	const HTML1 = '<main><h1>Hello</h1><div>Hello World!</div></main>';
+	expect( RenderReact( file1, props1, jsx ) ).toBe( HTML1 );
+});
+
+test('RenderReact() - Render react components from file correctly', () => {
+	const file1 = Path.normalize(`${ __dirname }/mocks/react1`);
+	const props1 = { title: 'Hello', _body: 'World!' };
+	const HTML1 = '<article><h2>Hello</h2><div>World!</div></article>';
+	expect( RenderReact( file1, props1 ) ).toBe( HTML1 );
+});
+
+test('RenderReact() - Render cuttlebelle react from file components correctly', () => {
 	const file1 = Path.normalize(`${ __dirname }/mocks/react1`);
 	const props1 = { title: 'Hello', _body: 'World!' };
 	const HTML1 = '<article><h2>Hello</h2><div>World!</div></article>';

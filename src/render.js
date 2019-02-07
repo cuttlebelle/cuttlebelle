@@ -114,9 +114,8 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 		plugins: [
 			require.resolve( 'babel-plugin-transform-es2015-modules-commonjs' ),
 			require.resolve( '@babel/plugin-proposal-object-rest-spread' ),
-			require.resolve( '@babel/plugin-transform-runtime' ),
+			[ require.resolve( '@babel/plugin-transform-runtime' ), { 'helpers': false } ],
 		],
-		cache: !Watch.running, // we don’t need to cache during watch
 	};
 
 	const redirectReact = [
@@ -140,15 +139,15 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 	}
 
 	let component;
-	delete registerObj.cache;
 
 	try {
 		if( source !== '' ) { // require from string
-			registerObj.filename = 'path/to/file'; // bug in babel https://github.com/yahoo/babel-plugin-react-intl/issues/156
+			registerObj.filename = Path.normalize(`${ __dirname }/cuttlebelle-temp-file`); // bug in babel https://github.com/yahoo/babel-plugin-react-intl/issues/156
 			const transpiledSource = require('@babel/core').transformSync( source, registerObj );
 			component = RequireFromString( transpiledSource.code ).default;
 		}
 		else {                // require from file
+			registerObj.cache = !Watch.running; // we don’t need to cache during watch
 			require('@babel/register')( registerObj );
 
 			component = require( componentPath ).default;
