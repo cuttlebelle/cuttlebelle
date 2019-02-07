@@ -378,13 +378,13 @@ export const RenderPartial = ( partial, file, parent, path, rendered, iterator =
 
 	return new Promise( ( resolve, reject ) => {
 
-		let cwd = Path.dirname( file );                                     // we assume relative links
-		if( partial.startsWith('/') ) {                              // unless the path starts with a slash
+		let cwd = Path.dirname( file );                                 // we assume relative links
+		if( partial.startsWith('/') ) {                                 // unless the path starts with a slash
 			cwd = SETTINGS.get().folder.content;
 		}
 		const partialPath = Path.normalize(`${ cwd }/${ partial }`);
 
-		if( partial.endsWith('.md') && Fs.existsSync( partialPath ) ) {     // only if the string ends with ".md" and the corresponding file exists
+		if( partial.endsWith('.md') && Fs.existsSync( partialPath ) ) { // only if the string ends with ".md" and the corresponding file exists
 			Log.verbose(`Partial ${ Style.yellow( partial ) } found`);
 
 			const ID = partialPath.replace( SETTINGS.get().folder.content, '' )
@@ -418,7 +418,7 @@ export const RenderPartial = ( partial, file, parent, path, rendered, iterator =
 			);
 		}
 		else {
-			resolve( partial );                                               // looks like the string wasn’t a partial so we just return it unchanged
+			resolve( partial );                                                 // looks like the string wasn’t a partial so we just return it unchanged
 		}
 	});
 };
@@ -441,7 +441,7 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 		return new Promise( ( resolve, reject ) => {
 			const allPages = [];
 
-			content.forEach( page => { // replace with progress.nextTick()
+			content.forEach( page => process.nextTick( () => { // replace with progress.nextTick()
 				const filePath = Path.normalize(`${ SETTINGS.get().folder.content }/${ page }/${ SETTINGS.get().folder.index }.yml`);
 
 				allPages.push(
@@ -457,13 +457,16 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 							Progress.tick();
 					})
 				);
-			});
+			}));
 
-			Promise.all( allPages )
-				.catch( error => {
-					reject( error );
-				})
-				.then( pages => resolve( pages ) );
+			process.nextTick( () =>
+				Promise
+					.all( allPages )
+					.catch( error => {
+						reject( error );
+					})
+					.then( pages => resolve( pages ) )
+			);
 		});
 	}
 	else {
