@@ -250,47 +250,49 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 
 			Pages.inject( ID, parsedBody.frontmatter ); // we inject the frontmatter early so partials have access to it
 
-			FindPartial(
-				parsedBody.frontmatter,
-				Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`),
-				parent,
-				rendered,
-				iterator
-			)
-			.catch( error => {
-				Log.error(`Generating page failed in ${ Style.yellow( file ) }`);
-				reject( error );
-			})
-			.then( frontmatter => {
-				parsedBody.frontmatter = frontmatter ? frontmatter : {}; // we only got one promise to resolve
+			process.nextTick(() =>
+				FindPartial(
+					parsedBody.frontmatter,
+					Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`),
+					parent,
+					rendered,
+					iterator
+				)
+				.catch( error => {
+					Log.error(`Generating page failed in ${ Style.yellow( file ) }`);
+					reject( error );
+				})
+				.then( frontmatter => {
+					parsedBody.frontmatter = frontmatter ? frontmatter : {}; // we only got one promise to resolve
 
-				// set the default layout
-				if( file.endsWith('.yml') ) {
-					parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.page;
-				}
-				else {
-					parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.partial;
-				}
-
-				// keeping track of all pages per layout will make the watch better
-				Layouts.set( ID, parsedBody.frontmatter.layout );
-
-				// and off we go into the react render machine
-				let pageHTML = RenderReact(
-					Path.normalize(`${ SETTINGS.get().folder.code }/${ parsedBody.frontmatter.layout }`),
-					{
-						_pages: Pages.get(),
-						_parseMD: ( markdown, file, props = defaultProps ) => <cuttlebellesillywrapper key={`${ ID }-${ iterator }-md`} dangerouslySetInnerHTML={ {
-							__html: ParseMD( markdown, file, props )
-						} } />,
-						_body: <cuttlebellesillywrapper key={`${ ID }-${ iterator }`} dangerouslySetInnerHTML={ { __html: parsedBody.body } } />,
-						...defaultProps,
-						...parsedBody.frontmatter
+					// set the default layout
+					if( file.endsWith('.yml') ) {
+						parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.page;
 					}
-				);
+					else {
+						parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.partial;
+					}
 
-				resolve( pageHTML );
-			});
+					// keeping track of all pages per layout will make the watch better
+					Layouts.set( ID, parsedBody.frontmatter.layout );
+
+					// and off we go into the react render machine
+					let pageHTML = RenderReact(
+						Path.normalize(`${ SETTINGS.get().folder.code }/${ parsedBody.frontmatter.layout }`),
+						{
+							_pages: Pages.get(),
+							_parseMD: ( markdown, file, props = defaultProps ) => <cuttlebellesillywrapper key={`${ ID }-${ iterator }-md`} dangerouslySetInnerHTML={ {
+								__html: ParseMD( markdown, file, props )
+							} } />,
+							_body: <cuttlebellesillywrapper key={`${ ID }-${ iterator }`} dangerouslySetInnerHTML={ { __html: parsedBody.body } } />,
+							...defaultProps,
+							...parsedBody.frontmatter
+						}
+					);
+
+					resolve( pageHTML );
+				})
+			);
 		});
 	}
 };
@@ -388,30 +390,32 @@ export const RenderPartial = ( partial, file, parent, path, rendered, iterator =
 			const ID = partialPath.replace( SETTINGS.get().folder.content, '' )
 			const filePath = Path.normalize(`${ SETTINGS.get().folder.content }/${ ID }`);
 
-			ReadFile( filePath )
-				.catch( error => {
-					Log.error(`Generating partial failed in ${ Style.yellow( partial ) }`)
-					reject( error );
-				})
-				.then( content => RenderFile(
-						content,
-						filePath.replace( SETTINGS.get().folder.content, '' ),
-						parent,
-						rendered,
-						iterator
+			process.nextTick(() =>
+				ReadFile( filePath )
+					.catch( error => {
+						Log.error(`Generating partial failed in ${ Style.yellow( partial ) }`)
+						reject( error );
+					})
+					.then( content => RenderFile(
+							content,
+							filePath.replace( SETTINGS.get().folder.content, '' ),
+							parent,
+							rendered,
+							iterator
+						)
+						.catch( reason => reject( reason ) )
 					)
-					.catch( reason => reject( reason ) )
-				)
-				.then( HTML => {
-					const ID = `cuttlebelleID${ Slug( partial ) }-${ iterator }`; // We generate a unique ID for react
+					.then( HTML => {
+						const ID = `cuttlebelleID${ Slug( partial ) }-${ iterator }`; // We generate a unique ID for react
 
-					Log.verbose(`Rendering partial ${ Style.yellow( partial ) } complete with ID ${ Style.yellow( ID ) }`);
+						Log.verbose(`Rendering partial ${ Style.yellow( partial ) } complete with ID ${ Style.yellow( ID ) }`);
 
-					resolve({                                                     // to resolve we need to keep track of the path of where this partial was mentioned
-						path: path,
-						partial: <cuttlebellesillywrapper key={ ID } dangerouslySetInnerHTML={ { __html: HTML } } />,
-					});
-			});
+						resolve({                                                     // to resolve we need to keep track of the path of where this partial was mentioned
+							path: path,
+							partial: <cuttlebellesillywrapper key={ ID } dangerouslySetInnerHTML={ { __html: HTML } } />,
+						});
+				})
+			);
 		}
 		else {
 			resolve( partial );                                               // looks like the string wasn’t a partial so we just return it unchanged
