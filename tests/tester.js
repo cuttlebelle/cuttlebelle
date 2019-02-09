@@ -18,6 +18,7 @@ const Spawn = require('child_process');
 const Copydir = require('copy-dir');
 const Dirsum = require('dirsum');
 const Chalk = require('chalk');
+const Diff = require('diff');
 const Del = require('del');
 const Fs = require(`fs`);
 
@@ -37,60 +38,60 @@ const SETTINGS = {
 			compare: 'site/',
 			empty: false,
 		},
-		{
-			name: 'Test2: testing docs generation',
-			folder: 'site2',
-			script: {
-				options: ['docs'],
-			},
-			compare: 'docs/',
-			empty: false,
-		},
-		{
-			name: 'Test3: testing package.json settings and custom md renderer',
-			folder: 'site3',
-			script: {
-				options: [],
-			},
-			compare: 'site2/',
-			empty: false,
-		},
-		{
-			name: 'Test4: testing partial deep nesting, nav and deep partial conversion',
-			folder: 'site4',
-			script: {
-				options: [],
-			},
-			compare: 'site/',
-			empty: false,
-		},
-		{
-			name: 'Test5: testing deep folder for content, code and assets',
-			folder: 'site5',
-			script: {
-				options: [],
-			},
-			compare: 'site/',
-			empty: false,
-		},
-		{
-			name: 'Test6: testing complex example of a real world site',
-			folder: 'site6',
-			script: {
-				options: [],
-			},
-			compare: 'site/',
-			empty: false,
-		},
-		{
-			name: 'Test7: testing docs with custom settings',
-			folder: 'site7',
-			script: {
-				options: ['docs'],
-			},
-			compare: 'docs2/',
-			empty: false,
-		},
+		// {
+		// 	name: 'Test2: testing docs generation',
+		// 	folder: 'site2',
+		// 	script: {
+		// 		options: ['docs'],
+		// 	},
+		// 	compare: 'docs/',
+		// 	empty: false,
+		// },
+		// {
+		// 	name: 'Test3: testing package.json settings and custom md renderer',
+		// 	folder: 'site3',
+		// 	script: {
+		// 		options: [],
+		// 	},
+		// 	compare: 'site2/',
+		// 	empty: false,
+		// },
+		// {
+		// 	name: 'Test4: testing partial deep nesting, nav and deep partial conversion',
+		// 	folder: 'site4',
+		// 	script: {
+		// 		options: [],
+		// 	},
+		// 	compare: 'site/',
+		// 	empty: false,
+		// },
+		// {
+		// 	name: 'Test5: testing deep folder for content, code and assets',
+		// 	folder: 'site5',
+		// 	script: {
+		// 		options: [],
+		// 	},
+		// 	compare: 'site/',
+		// 	empty: false,
+		// },
+		// {
+		// 	name: 'Test6: testing complex example of a real world site',
+		// 	folder: 'site6',
+		// 	script: {
+		// 		options: [],
+		// 	},
+		// 	compare: 'site/',
+		// 	empty: false,
+		// },
+		// {
+		// 	name: 'Test7: testing docs with custom settings',
+		// 	folder: 'site7',
+		// 	script: {
+		// 		options: ['docs'],
+		// 	},
+		// 	compare: 'docs2/',
+		// 	empty: false,
+		// },
 	],
 };
 
@@ -117,7 +118,7 @@ const Tester = () => {
 				.then( ()      => Run( scriptFolder, unit ) )             // now run script
 				.then( ()      => Fixture( scriptFolder, unit ) )         // get hash for fixture
 				.then( result  => Result( scriptFolder, unit, result ) )  // get hash for result of test
-				.then( result  => Compare( unit, result ) )               // now compare both and detail errors
+				.then( result  => Compare( scriptFolder, unit, result ) ) // now compare both and detail errors
 				.then( success => {                                       // cleaning up after ourself
 					if( success ) {
 						return Delete( scriptFolder );
@@ -166,11 +167,25 @@ const Tester = () => {
 const Flatten = object => {
 	return Object.assign( {}, ...function _flatten( objectBit, path = '' ) {  // spread the result into our return object
 		return [].concat(                                                       // concat everything into one level
-			...Object.keys( objectBit ).map(                                      // iterate over object
-				key => typeof objectBit[ key ] === 'object' ?                       // check if there is a nested object
-					_flatten( objectBit[ key ], `${ path }/${ key }` ) :              // call itself if there is
-					( { [ `${ path }/${ key }` ]: objectBit[ key ] } )                // append object with it’s path as key
-			)
+			...Object.keys( objectBit ).map( key => {                             // iterate over object
+				const item = objectBit[ key ];
+				if( typeof item === 'object' ) {                                    // check if there is a nested object
+					const contents = Object.keys( item );
+					if(
+						contents[ 0 ] === 'files' &&
+						contents[ 1 ] === 'hash' &&
+						contents.length === 2
+					) {                                                               // we ignore every level with [files,hash] array
+						return _flatten( item.files, `${ path }/${ key }` );            // call itself with the contents of .files and ignore this level
+					}
+					else {
+						return _flatten( item, `${ path }/${ key }` );                  // call itself with full object and path
+					}
+				}
+				else {
+					return ( { [ `${ path }/${ key }` ]: item } );                    // append object with it’s path as key
+				}
+			})
 		)
 	}( object ) );
 };
@@ -299,7 +314,7 @@ const Run = ( path, settings ) => {
 		);
 
 		command.stdout.on('data', ( data ) => {
-			// console.log( data.toString() );
+			process.stdout.write( data.toString() );
 		})
 
 		command.stderr.on('data', ( data ) => {
@@ -430,12 +445,13 @@ const Result = ( path, settings, fixture ) => {
 /**
  * Compare the output of a test against its fixture
  *
+ * @param  {string} path     - The path to the test folder
  * @param  {object} settings - The settings object for this test
  * @param  {object} result   - The hash results of fixture and result
  *
  * @return {Promise object}  - The hash object of all files inside the fixture
  */
-const Compare = ( settings, hashes ) => {
+const Compare = ( path, settings, hashes ) => {
 
 	return new Promise( ( resolve, reject ) => {
 		if( hashes.fixture.hash === hashes.result.hash ) {
@@ -463,7 +479,24 @@ const Compare = ( settings, hashes ) => {
 					const fileName = file.split('/');
 
 					if( fixture[ file ] !== compare && fileName[ fileName.length - 1 ] !== 'hash' ) { // we don’t want to compare folders
+						const locationResult = Path.normalize(`${ path }/${ settings.compare }/${ file }`);
+						const locationFixture = Path.normalize(`${ path }/_fixture/${ settings.compare }/${ file }`);
+
+						const contentResult = Fs.readFileSync( locationResult, `utf8` );
+						const contentFixture = Fs.readFileSync( locationFixture, `utf8` );
+
 						Log.error(`Difference inside ${ Chalk.yellow( settings.folder + file ) } file`);
+						const diff = Diff.diffChars( contentResult, contentFixture );
+						let output = '';
+						diff.forEach( part => {
+							if( part.added || part.removed ) {
+								output += `${ Chalk.yellow( part.added ? '+' : '-' ) }${ Chalk[ part.added ? 'green' : 'red' ]( part.value ) }${ Chalk.yellow( part.added ? '+' : '-' ) }`;
+							}
+							else {
+								output += Chalk.white(`${ part.value.substring( 0, 50 ) }${ Chalk.gray('[...]') }${ part.value.slice( -50 ) }`);
+							}
+						});
+						Log.error(`${ output }`);
 					}
 				}
 			}
