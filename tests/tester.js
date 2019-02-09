@@ -484,7 +484,6 @@ const Compare = ( path, settings, hashes ) => {
 
 						const contentResult = Fs.readFileSync( locationResult, `utf8` );
 						const contentFixture = Fs.readFileSync( locationFixture, `utf8` );
-						console.log('\n',contentResult);
 
 						Log.error(`Difference inside ${ Chalk.yellow( settings.folder + file ) } file`);
 						const diff = Diff.diffChars( contentResult, contentFixture );
