@@ -95,7 +95,12 @@ import { Nav } from './nav';
  *
  * @type {string}
  */
-export const Ipsum = Fs.readFileSync( Path.normalize(`${ __dirname }/../assets/ipsum.txt`), 'utf8' );
+export const Ipsum = Fs
+	.readFileSync(
+		Path.normalize(`${ __dirname }/../assets/ipsum.txt`),
+		'utf8'
+	)
+	.replace(/\r?\n/g, '\n');
 
 
 /**
@@ -604,7 +609,7 @@ export const ParseExample = ( example ) => {
 			if( typeof exampleVar === 'object' ) {
 				// TODO
 			}
-			else if( typeof exampleVar === 'string' && exampleVar.includes(`(${ command.name })(`) ) {
+			else if( typeof exampleVar === 'string' && exampleVar.includes('(' + command.name + ')(') ) {
 				const partials = exampleVar.split(`(${ command.name })(`);
 				const amount = parseInt( partials[ 1 ].slice( 0, -1 ) );
 
