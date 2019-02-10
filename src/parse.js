@@ -51,7 +51,7 @@ export const ParseContent = ( content, file = 'partial.md', props = {} ) => {
 			parsedBody.body = '';
 		}
 		else if( /^---(?:\r\n|\r|\n)/.test( content ) ) { // if this is another file that has frontmatter
-			const bodyParts = content.split('/---(?:\r\n|\r|\n)/');
+			const bodyParts = content.split(/---(?:\r\n|\r|\n)/);
 
 			parsedBody.frontmatter = bodyParts[1] ? ParseYaml( bodyParts[1], file ) : {};
 			parsedBody.body = ParseMD( bodyParts.slice( 2 ).join('---\n'), file, props );
