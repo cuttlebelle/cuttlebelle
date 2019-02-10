@@ -277,7 +277,11 @@ const ReplaceFixtures = ( path, settings ) => {
 		else {
 			Replace({
 					files: [
-						Path.normalize(`${ path }/_fixture/**`),
+						Path.normalize(`${ path }/_fixture/**/*.html`),
+						Path.normalize(`${ path }/_fixture/**/*.css`),
+						Path.normalize(`${ path }/_fixture/**/*.js`),
+						Path.normalize(`${ path }/_fixture/**/*.svg`),
+						Path.normalize(`${ path }/_fixture/**/*.json`),
 					],
 					from: [
 						/\r\n/g,
@@ -502,23 +506,26 @@ const Compare = ( path, settings, result ) => {
 						const fixtureName = Chalk.yellow( settings.folder + file );
 
 						Log.error(`🛑  Difference inside ${ fixtureName } file`);
-						Log.error(`>>> ${ fixtureName }\n${ Util.inspect( contentResult ) }\n        <<<`);
-						Log.error(`>>> ${ Chalk.yellow('fixture') }\n${ Util.inspect( contentFixture ) }\n        <<<`);
+						if( file.endsWith('.html') || file.endsWith('.css') || file.endsWith('.js') || file.endsWith('.svg') || file.endsWith('.json') ) {
+							Log.error(`>>> ${ fixtureName }\n${ Util.inspect( contentResult ) }\n        <<<`);
+							Log.error(`>>> ${ Chalk.yellow('fixture') }\n${ Util.inspect( contentFixture ) }\n        <<<`);
 
-						const diff = Diff.diffChars( contentResult, contentFixture );
-						let diffOutput = '';
-						diff.forEach( part => {
-							if( part.added || part.removed ) {
-								diffOutput += `${ Chalk[ part.added ? 'underline' : 'strikethrough' ][ part.added ? 'green' : 'red' ]( part.value ) }`;
-							}
-							else {
-								diffOutput += Chalk.white(`${ part.value.substring( 0, 50 ) }${ Chalk.gray('[...]') }${ part.value.slice( -50 ) }`);
-							}
-						});
-						Log.error(`${ diffOutput }\n        Output:${ Chalk.reset( result.output ) }`);
+							const diff = Diff.diffChars( contentResult, contentFixture );
+							let diffOutput = '';
+							diff.forEach( part => {
+								if( part.added || part.removed ) {
+									diffOutput += `${ Chalk[ part.added ? 'underline' : 'strikethrough' ][ part.added ? 'green' : 'red' ]( part.value ) }`;
+								}
+								else {
+									diffOutput += Chalk.white(`${ part.value.substring( 0, 50 ) }${ Chalk.gray('[...]') }${ part.value.slice( -50 ) }`);
+								}
+							});
+							Log.error( diffOutput );
+						}
 					}
 				}
 			}
+			Log.error(`Output:${ Chalk.reset( result.output ) }`);
 
 			if( Object.keys( output ).length > 0 ) { // found files that have not been deleted yet
 				let files = [];
