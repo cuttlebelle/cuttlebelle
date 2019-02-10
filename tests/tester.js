@@ -29,15 +29,15 @@ const Fs = require(`fs`);
 const SETTINGS = {
 	PASS: true,
 	UNITS: [
-		{
-			name: 'Test1: testing partials, nesting, all props, assets, markdown, basics',
-			folder: 'site1',
-			script: {
-				options: [],
-			},
-			compare: 'site/',
-			empty: false,
-		},
+		// {
+		// 	name: 'Test1: testing partials, nesting, all props, assets, markdown, basics',
+		// 	folder: 'site1',
+		// 	script: {
+		// 		options: [],
+		// 	},
+		// 	compare: 'site/',
+		// 	empty: false,
+		// },
 		// {
 		// 	name: 'Test2: testing docs generation',
 		// 	folder: 'site2',
@@ -92,6 +92,15 @@ const SETTINGS = {
 		// 	compare: 'docs2/',
 		// 	empty: false,
 		// },
+		{
+			name: 'Test8: small default html assembly test',
+			folder: 'site8',
+			script: {
+				options: [],
+			},
+			compare: 'site/',
+			empty: false,
+		},
 	],
 };
 
@@ -473,7 +482,7 @@ const Compare = ( path, settings, hashes ) => {
 				delete result[ file ];          // remove this one so we can keep track of the ones that were not inside the fixture folder
 
 				if( compare === undefined ) {  // we couldn’t find this file inside the resulting folder
-					Log.error(`Missing ${ Chalk.yellow( file ) } file inside result folder`);
+					Log.error(`🛑  Missing ${ Chalk.yellow( file ) } file inside result folder`);
 				}
 				else {
 					const fileName = file.split('/');
@@ -484,13 +493,16 @@ const Compare = ( path, settings, hashes ) => {
 
 						const contentResult = Fs.readFileSync( locationResult, `utf8` );
 						const contentFixture = Fs.readFileSync( locationFixture, `utf8` );
+						const fixtureName = Chalk.yellow( settings.folder + file );
 
-						Log.error(`Difference inside ${ Chalk.yellow( settings.folder + file ) } file`);
+						Log.error(`🛑  Difference inside ${ fixtureName } file`);
+						Log.error(`>>> ${ fixtureName }\n${ contentResult }\n        <<<`);
+
 						const diff = Diff.diffChars( contentResult, contentFixture );
 						let output = '';
 						diff.forEach( part => {
 							if( part.added || part.removed ) {
-								output += `${ Chalk.yellow( part.added ? '+' : '-' ) }${ Chalk[ part.added ? 'green' : 'red' ]( part.value ) }${ Chalk.yellow( part.added ? '+' : '-' ) }`;
+								output += `${ Chalk[ part.added ? 'green' : 'red' ]( part.value ) }`;
 							}
 							else {
 								output += Chalk.white(`${ part.value.substring( 0, 50 ) }${ Chalk.gray('[...]') }${ part.value.slice( -50 ) }`);
@@ -508,7 +520,7 @@ const Compare = ( path, settings, hashes ) => {
 					files.push( file ); // make ’em readable
 				}
 
-				Log.error(`Some new files not accounted for: ${ Chalk.yellow( files.join(', ') ) } inside the fixture folder`);
+				Log.error(`🛑  Some new files not accounted for: ${ Chalk.yellow( files.join(', ') ) } inside the fixture folder`);
 			}
 
 			resolve( false );
