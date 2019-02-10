@@ -30,69 +30,69 @@ const Fs = require(`fs`);
 const SETTINGS = {
 	PASS: true,
 	UNITS: [
-		// {
-		// 	name: 'Test1: testing partials, nesting, all props, assets, markdown, basics',
-		// 	folder: 'site1',
-		// 	script: {
-		// 		options: [],
-		// 	},
-		// 	compare: 'site/',
-		// 	empty: false,
-		// },
-		// {
-		// 	name: 'Test2: testing docs generation',
-		// 	folder: 'site2',
-		// 	script: {
-		// 		options: ['docs'],
-		// 	},
-		// 	compare: 'docs/',
-		// 	empty: false,
-		// },
-		// {
-		// 	name: 'Test3: testing package.json settings and custom md renderer',
-		// 	folder: 'site3',
-		// 	script: {
-		// 		options: [],
-		// 	},
-		// 	compare: 'site2/',
-		// 	empty: false,
-		// },
-		// {
-		// 	name: 'Test4: testing partial deep nesting, nav and deep partial conversion',
-		// 	folder: 'site4',
-		// 	script: {
-		// 		options: [],
-		// 	},
-		// 	compare: 'site/',
-		// 	empty: false,
-		// },
-		// {
-		// 	name: 'Test5: testing deep folder for content, code and assets',
-		// 	folder: 'site5',
-		// 	script: {
-		// 		options: [],
-		// 	},
-		// 	compare: 'site/',
-		// 	empty: false,
-		// },
-		// {
-		// 	name: 'Test6: testing complex example of a real world site',
-		// 	folder: 'site6',
-		// 	script: {
-		// 		options: [],
-		// 	},
-		// 	compare: 'site/',
-		// 	empty: false,
-		// },
-		// {
-		// 	name: 'Test7: testing docs with custom settings',
-		// 	folder: 'site7',
-		// 	script: {
-		// 		options: ['docs'],
-		// 	},
-		// 	compare: 'docs2/',
-		// 	empty: false,
-		// },
+		{
+			name: 'Test1: testing partials, nesting, all props, assets, markdown, basics',
+			folder: 'site1',
+			script: {
+				options: [],
+			},
+			compare: 'site/',
+			empty: false,
+		},
+		{
+			name: 'Test2: testing docs generation',
+			folder: 'site2',
+			script: {
+				options: ['docs'],
+			},
+			compare: 'docs/',
+			empty: false,
+		},
+		{
+			name: 'Test3: testing package.json settings and custom md renderer',
+			folder: 'site3',
+			script: {
+				options: [],
+			},
+			compare: 'site2/',
+			empty: false,
+		},
+		{
+			name: 'Test4: testing partial deep nesting, nav and deep partial conversion',
+			folder: 'site4',
+			script: {
+				options: [],
+			},
+			compare: 'site/',
+			empty: false,
+		},
+		{
+			name: 'Test5: testing deep folder for content, code and assets',
+			folder: 'site5',
+			script: {
+				options: [],
+			},
+			compare: 'site/',
+			empty: false,
+		},
+		{
+			name: 'Test6: testing complex example of a real world site',
+			folder: 'site6',
+			script: {
+				options: [],
+			},
+			compare: 'site/',
+			empty: false,
+		},
+		{
+			name: 'Test7: testing docs with custom settings',
+			folder: 'site7',
+			script: {
+				options: ['docs'],
+			},
+			compare: 'docs2/',
+			empty: false,
+		},
 		{
 			name: 'Test8: small default html assembly test',
 			folder: 'site8',
