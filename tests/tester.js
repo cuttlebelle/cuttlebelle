@@ -18,6 +18,7 @@ const Spawn = require('child_process');
 const Copydir = require('copy-dir');
 const Dirsum = require('dirsum');
 const Chalk = require('chalk');
+const Util = require(`util`);
 const Diff = require('diff');
 const Del = require('del');
 const Fs = require(`fs`);
@@ -503,7 +504,7 @@ const Compare = ( path, settings, result ) => {
 						const fixtureName = Chalk.yellow( settings.folder + file );
 
 						Log.error(`🛑  Difference inside ${ fixtureName } file`);
-						Log.error(`>>> ${ fixtureName }\n${ contentResult }\n        <<<`);
+						Log.error(`>>> ${ fixtureName }\n${ Util.inspect( contentResult ) }\n        <<<`);
 
 						const diff = Diff.diffChars( contentResult, contentFixture );
 						let diffOutput = '';
