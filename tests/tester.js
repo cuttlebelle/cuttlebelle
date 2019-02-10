@@ -275,27 +275,25 @@ const ReplaceFixtures = ( path, settings ) => {
 			resolve();
 		}
 		else {
-			// maybe in the future we have dynamic paths that depend on the system they are tested on.
-
-			// Replace({
-			// 		files: [
-			// 			Path.normalize(`${ path }/_fixture/**`),
-			// 		],
-			// 		from: [
-			// 			/\[thing\]/g,
-			// 		],
-			// 		to: [
-			// 			'thing',
-			// 		],
-			// 		allowEmptyPaths: true,
-			// 		encoding: 'utf8',
-			// 	})
-			// 	.catch( error => {
-			// 		reject( error );
-			// 	})
-			// 	.then( changedFiles => {
+			Replace({
+					files: [
+						Path.normalize(`${ path }/_fixture/**`),
+					],
+					from: [
+						/\r\n/g,
+					],
+					to: [
+						'\n',
+					],
+					allowEmptyPaths: true,
+					encoding: 'utf8',
+				})
+				.catch( error => {
+					reject( error );
+				})
+				.then( changedFiles => {
 					resolve();
-			// });
+			});
 		}
 	});
 };
