@@ -177,25 +177,11 @@ const Tester = () => {
 const Flatten = object => {
 	return Object.assign( {}, ...function _flatten( objectBit, path = '' ) {  // spread the result into our return object
 		return [].concat(                                                       // concat everything into one level
-			...Object.keys( objectBit ).map( key => {                             // iterate over object
-				const item = objectBit[ key ];
-				if( typeof item === 'object' ) {                                    // check if there is a nested object
-					const contents = Object.keys( item );
-					if(
-						contents[ 0 ] === 'files' &&
-						contents[ 1 ] === 'hash' &&
-						contents.length === 2
-					) {                                                               // we ignore every level with [files,hash] array
-						return _flatten( item.files, `${ path }/${ key }` );            // call itself with the contents of .files and ignore this level
-					}
-					else {
-						return _flatten( item, `${ path }/${ key }` );                  // call itself with full object and path
-					}
-				}
-				else {
-					return ( { [ `${ path }/${ key }` ]: item } );                    // append object with it’s path as key
-				}
-			})
+			...Object.keys( objectBit ).map( key =>                               // iterate over object
+				typeof objectBit[ key ] === 'object'                                // check if there is a nested object
+					? _flatten( objectBit[ key ].files, `${ path }/${ key }` )        // call itself if there is
+					: ( { [ `${ path }/${ key }` ]: objectBit[ key ] } )              // append object with it’s path as key
+			)
 		)
 	}( object ) );
 };
