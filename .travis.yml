@@ -1,5 +1,7 @@
 language: node_js
 cache: yarn
+env:
+  - YARN_GPG=no
 os:
   - linux
   - osx
