@@ -125,7 +125,7 @@ const Tester = () => {
 				.then( ()      => CopyFixtures( scriptFolder, unit ) )    // copy fixtures
 				.then( ()      => ReplaceFixtures( scriptFolder, unit ) ) // compile fixtures
 				.then( ()      => Run( scriptFolder, unit ) )             // now run script
-				.then( ()      => Fixture( scriptFolder, unit ) )         // get hash for fixture
+				.then( result  => Fixture( scriptFolder, unit, result ) ) // get hash for fixture
 				.then( result  => Result( scriptFolder, unit, result ) )  // get hash for result of test
 				.then( result  => Compare( scriptFolder, unit, result ) ) // now compare both and detail errors
 				.then( success => {                                       // cleaning up after ourself
@@ -311,6 +311,7 @@ const ReplaceFixtures = ( path, settings ) => {
 const Run = ( path, settings ) => {
 	return new Promise( ( resolve, reject ) => {
 		let errors = '';
+		let output = '';
 
 		// what the command would look like:
 		// console.log('node', [ Path.normalize(`${ path }/../../dist/index.js`), ...settings.script.options ].join(' '));
@@ -323,7 +324,7 @@ const Run = ( path, settings ) => {
 		);
 
 		command.stdout.on('data', ( data ) => {
-			process.stdout.write( data.toString() );
+			output += data.toString();
 		})
 
 		command.stderr.on('data', ( data ) => {
@@ -334,7 +335,7 @@ const Run = ( path, settings ) => {
 			if( code === 0 ) {
 				// Log.pass(`Ran test in ${ Chalk.bgWhite.black(` ${ Path.basename( path ) } `) } folder`);
 
-				resolve();
+				resolve({ output });
 			}
 			else {
 				SETTINGS.PASS = false;
@@ -351,10 +352,11 @@ const Run = ( path, settings ) => {
  *
  * @param  {string} path     - The path to the test folder
  * @param  {object} settings - The settings object for this test
+ * @param  {object} result   - The output of the command
  *
  * @return {Promise object}  - The hash object of all files inside the fixture
  */
-const Fixture = ( path, settings ) => {
+const Fixture = ( path, settings, result ) => {
 	return new Promise( ( resolve, reject ) => {
 		if( !settings.empty ) {
 			Dirsum.digest( Path.normalize(`${ path }/_fixture/${ settings.compare }/`), 'sha256', ( error, hashes ) => {
@@ -366,12 +368,17 @@ const Fixture = ( path, settings ) => {
 					reject( error );
 				}
 				else {
-					resolve( hashes );
+					resolve({
+						fixture: hashes,
+						output: result.output,
+					});
 				}
 			});
 		}
 		else {
-			resolve({});
+			resolve({
+				output: result.output,
+			});
 		}
 	});
 };
@@ -382,13 +389,12 @@ const Fixture = ( path, settings ) => {
  *
  * @param  {string} path     - The path to the test folder
  * @param  {object} settings - The settings object for this test
- * @param  {object} fixture  - The hash results of the fixture to be passed on
+ * @param  {object} result   - The hash results of fixture and output
  *
  * @return {Promise object}  - The hash object of all files inside the resulting files
  */
-const Result = ( path, settings, fixture ) => {
+const Result = ( path, settings, result ) => {
 	const location = Path.normalize(`${ path }/${ settings.compare }/`);
-
 	return new Promise( ( resolve, reject ) => {
 		if( !settings.empty ) {
 			Dirsum.digest( location, 'sha256', ( error, hashes ) => {
@@ -400,12 +406,11 @@ const Result = ( path, settings, fixture ) => {
 					reject();
 				}
 				else {
-
 					resolve({ // passing it to compare later
-						fixture,
 						result: hashes,
+						fixture: result.fixture,
+						output: result.output,
 					});
-
 				}
 			});
 		}
@@ -430,6 +435,7 @@ const Result = ( path, settings, fixture ) => {
 								location: 'nope',
 							},
 						},
+						output: result.output,
 					});
 
 				}
@@ -442,6 +448,7 @@ const Result = ( path, settings, fixture ) => {
 						result: {
 							hash: 'xxx',
 						},
+						output: result.output,
 					});
 
 				}
@@ -460,10 +467,10 @@ const Result = ( path, settings, fixture ) => {
  *
  * @return {Promise object}  - The hash object of all files inside the fixture
  */
-const Compare = ( path, settings, hashes ) => {
+const Compare = ( path, settings, result ) => {
 
 	return new Promise( ( resolve, reject ) => {
-		if( hashes.fixture.hash === hashes.result.hash ) {
+		if( result.fixture.hash === result.result.hash ) {
 			Log.pass(`${ Chalk.bgWhite.black(` ${ settings.name } `) } passed`); // yay
 
 			resolve( true );
@@ -473,13 +480,13 @@ const Compare = ( path, settings, hashes ) => {
 			Log.fail(`${ Chalk.bgWhite.black(` ${ settings.name } `) } failed`);
 
 			// flatten hash object
-			const fixture = Flatten( hashes.fixture.files );
-			const result = Flatten( hashes.result.files );
+			const fixture = Flatten( result.fixture.files );
+			const output = Flatten( result.result.files );
 
 			// iterate over fixture
 			for( const file of Object.keys( fixture ) ) {
-				const compare = result[ file ]; // get the hash from our result folder
-				delete result[ file ];          // remove this one so we can keep track of the ones that were not inside the fixture folder
+				const compare = output[ file ]; // get the hash from our result folder
+				delete output[ file ];          // remove this one so we can keep track of the ones that were not inside the fixture folder
 
 				if( compare === undefined ) {  // we couldn’t find this file inside the resulting folder
 					Log.error(`🛑  Missing ${ Chalk.yellow( file ) } file inside result folder`);
@@ -499,24 +506,24 @@ const Compare = ( path, settings, hashes ) => {
 						Log.error(`>>> ${ fixtureName }\n${ contentResult }\n        <<<`);
 
 						const diff = Diff.diffChars( contentResult, contentFixture );
-						let output = '';
+						let diffOutput = '';
 						diff.forEach( part => {
 							if( part.added || part.removed ) {
-								output += `${ Chalk[ part.added ? 'green' : 'red' ]( part.value ) }`;
+								diffOutput += `${ Chalk[ part.added ? 'underline' : 'strikethrough' ][ part.added ? 'green' : 'red' ]( part.value ) }`;
 							}
 							else {
-								output += Chalk.white(`${ part.value.substring( 0, 50 ) }${ Chalk.gray('[...]') }${ part.value.slice( -50 ) }`);
+								diffOutput += Chalk.white(`${ part.value.substring( 0, 50 ) }${ Chalk.gray('[...]') }${ part.value.slice( -50 ) }`);
 							}
 						});
-						Log.error(`${ output }`);
+						Log.error(`${ diffOutput }\n        Output:${ Chalk.reset( result.output ) }`);
 					}
 				}
 			}
 
-			if( Object.keys( result ).length > 0 ) { // found files that have not been deleted yet
+			if( Object.keys( output ).length > 0 ) { // found files that have not been deleted yet
 				let files = [];
 
-				for( const file of Object.keys( result ) ) {
+				for( const file of Object.keys( output ) ) {
 					files.push( file ); // make ’em readable
 				}
 
