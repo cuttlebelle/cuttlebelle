@@ -278,10 +278,6 @@ const ReplaceFixtures = ( path, settings ) => {
 			Replace({
 					files: [
 						Path.normalize(`${ path }/_fixture/**/*.html`),
-						Path.normalize(`${ path }/_fixture/**/*.css`),
-						Path.normalize(`${ path }/_fixture/**/*.js`),
-						Path.normalize(`${ path }/_fixture/**/*.svg`),
-						Path.normalize(`${ path }/_fixture/**/*.json`),
 					],
 					from: [
 						/\r\n/g,
