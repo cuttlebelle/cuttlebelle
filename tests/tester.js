@@ -505,6 +505,7 @@ const Compare = ( path, settings, result ) => {
 
 						Log.error(`🛑  Difference inside ${ fixtureName } file`);
 						Log.error(`>>> ${ fixtureName }\n${ Util.inspect( contentResult ) }\n        <<<`);
+						Log.error(`>>> ${ Chalk.yellow('fixture') }\n${ Util.inspect( contentFixture ) }\n        <<<`);
 
 						const diff = Diff.diffChars( contentResult, contentFixture );
 						let diffOutput = '';
