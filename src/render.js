@@ -241,7 +241,7 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 						Log.error( error );
 					}
 				},
-                global: SETTINGS.get().globalProp || {}
+				_globalProp: SETTINGS.get().globalProp || {},
 			};
 
 			// parsing out front matter for this file
