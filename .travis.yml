@@ -11,3 +11,6 @@ node_js:
   - "8"
   - "10"
 install: yarn --ignore-scripts
+script:
+  - yarn build
+  - yarn test
