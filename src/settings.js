@@ -94,6 +94,7 @@ export const SETTINGS = {
 			redirectReact: true,
 			markdownRenderer: '',
 			watchTimeout: 400,
+			globalProp: {},
 		},
 		docs: {
 			root: Path.normalize(`files/`),
