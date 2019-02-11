@@ -23,7 +23,6 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import BS from 'browser-sync';
-import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -37,6 +36,7 @@ import { SETTINGS } from './settings';
 import { Progress } from './progress';
 import { ParseHTML } from './parse';
 import { GetLayout } from './site';
+import { Path } from './path';
 
 
 /**
@@ -89,7 +89,7 @@ export const Watch = {
 			DebouncedWatch( path, true );
 		})
 		.on('unlink', path => {
-			Log.info(`File has ben deleted ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
+			Log.info(`File has been deleted ${ Style.yellow( path.replace( SETTINGS.get().folder.cwd, '' ) ) }`);
 			DebouncedWatch( path, true );
 		});
 

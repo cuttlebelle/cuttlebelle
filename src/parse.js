@@ -16,9 +16,8 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import Marked from 'marked';
-import React from 'react';
 import YAML from 'js-yaml';
-import Path from 'upath';
+import React from 'react';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -26,6 +25,7 @@ import Path from 'upath';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { Log, Style } from './helper';
 import { SETTINGS } from './settings';
+import { Path } from './path';
 
 
 /**
@@ -50,8 +50,8 @@ export const ParseContent = ( content, file = 'partial.md', props = {} ) => {
 			parsedBody.frontmatter = ParseYaml( content, file );
 			parsedBody.body = '';
 		}
-		else if( content.startsWith('---\n') ) { // if this is another file that has frontmatter
-			const bodyParts = content.split('---\n');
+		else if( /^---(?:\r\n|\r|\n)/.test( content ) ) { // if this is another file that has frontmatter
+			const bodyParts = content.split(/---(?:\r\n|\r|\n)/);
 
 			parsedBody.frontmatter = bodyParts[1] ? ParseYaml( bodyParts[1], file ) : {};
 			parsedBody.body = ParseMD( bodyParts.slice( 2 ).join('---\n'), file, props );

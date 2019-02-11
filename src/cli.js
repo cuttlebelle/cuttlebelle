@@ -15,7 +15,6 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import Size from 'window-size';
-import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -23,6 +22,7 @@ import Fs from 'fs';
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { Log, Style } from './helper';
+import { Path } from './path';
 
 
 /**
@@ -39,7 +39,7 @@ const pkg = require('../package.json');
 export const DisplayHelp = () => {
 	const maxLength = 80;
 	const paddingSize = Math.max( 0, Math.floor( ( Size.width - maxLength ) / 2 ) );
-	const padding = String.repeat(` `, paddingSize );
+	const padding = ` `.repeat( paddingSize );
 
 	Log.space();
 	console.log(`
