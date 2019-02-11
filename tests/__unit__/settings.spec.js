@@ -11,7 +11,7 @@
 
 
 import { SETTINGS } from '../../src/settings';
-import Path from 'upath';
+import { Path } from '../../src/path';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -39,6 +39,7 @@ test('SETTINGS.get() - The default settings are correct', () => {
 			redirectReact: true,
 			markdownRenderer: '',
 			watchTimeout: 400,
+			globalProp: {},
 		},
 		docs: {
 			root: 'files/',
@@ -106,6 +107,7 @@ test('SETTINGS.set() - Not setting anything will merge default correctly', () =>
 			redirectReact: true,
 			markdownRenderer: '',
 			watchTimeout: 400,
+			globalProp: {},
 		},
 		docs: {
 			root: 'files/',
@@ -173,6 +175,7 @@ test('SETTINGS.set() - An empty object as settings folder will merge default cor
 			redirectReact: true,
 			markdownRenderer: '',
 			watchTimeout: 400,
+			globalProp: {},
 		},
 		docs: {
 			root: 'files/',
@@ -244,6 +247,7 @@ test('SETTINGS.set() - Prevent cwd from being set', () => {
 			redirectReact: true,
 			markdownRenderer: '',
 			watchTimeout: 400,
+			globalProp: {},
 		},
 		docs: {
 			root: 'files/',
@@ -324,6 +328,7 @@ test('SETTINGS.set() - Set settings correctly', () => {
 			redirectReact: true,
 			markdownRenderer: '',
 			watchTimeout: 400,
+			globalProp: {},
 		},
 		docs: {
 			root: 'test',
@@ -390,6 +395,7 @@ test('SETTINGS.set() - Set all settings correctly', () => {
 			redirectReact: 'test',
 			markdownRenderer: 'test',
 			watchTimeout: 100,
+			globalProp: 'foo',
 		},
 		docs: {
 			root: 'test',
@@ -421,6 +427,7 @@ test('SETTINGS.set() - Set all settings correctly', () => {
 			redirectReact: 'test',
 			markdownRenderer: 'test',
 			watchTimeout: 100,
+			globalProp: 'foo',
 		},
 		docs: {
 			root: 'test',

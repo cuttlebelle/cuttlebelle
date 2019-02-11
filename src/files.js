@@ -18,7 +18,6 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import FsExtra from 'fs-extra';
-import Path from 'upath';
 import Del from 'del';
 import Fs from 'fs';
 
@@ -27,6 +26,7 @@ import Fs from 'fs';
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { Log, Style } from './helper';
+import { Path } from './path';
 
 
 /**
@@ -161,8 +161,6 @@ export const CopyFiles = ( source /*: string */, destination /*: string */ ) /*:
 	Log.verbose(`Copy folder from ${ Style.yellow( source ) } to ${ Style.yellow( destination ) }`);
 
 	return new Promise( ( resolve, reject ) => {
-		RemoveDir([ destination ]); // remove destination first
-
 		if( Fs.existsSync( source ) ) {
 			FsExtra.copy( source, destination, ( error /*: Error */ ) => {
 				if( error ) {

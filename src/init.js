@@ -15,7 +15,6 @@
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import FsExtra from 'fs-extra';
-import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -25,6 +24,7 @@ import Fs from 'fs';
 import { CopyFiles, CreateDir } from './files';
 import { Log, Style } from './helper';
 import { SETTINGS } from './settings';
+import { Path } from './path';
 
 
 /**

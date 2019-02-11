@@ -12,12 +12,14 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // DEPENDENCIES
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+const { Path } = require('./../dist/path.js');
 const Replace = require('replace-in-file');
 const Spawn = require('child_process');
 const Copydir = require('copy-dir');
 const Dirsum = require('dirsum');
 const Chalk = require('chalk');
-const Path = require('path');
+const Util = require(`util`);
+const Diff = require('diff');
 const Del = require('del');
 const Fs = require(`fs`);
 
@@ -91,6 +93,15 @@ const SETTINGS = {
 			compare: 'docs2/',
 			empty: false,
 		},
+		{
+			name: 'Test8: small default html assembly test',
+			folder: 'site8',
+			script: {
+				options: [],
+			},
+			compare: 'site/',
+			empty: false,
+		},
 	],
 };
 
@@ -115,9 +126,9 @@ const Tester = () => {
 				.then( ()      => CopyFixtures( scriptFolder, unit ) )    // copy fixtures
 				.then( ()      => ReplaceFixtures( scriptFolder, unit ) ) // compile fixtures
 				.then( ()      => Run( scriptFolder, unit ) )             // now run script
-				.then( ()      => Fixture( scriptFolder, unit ) )         // get hash for fixture
+				.then( result  => Fixture( scriptFolder, unit, result ) ) // get hash for fixture
 				.then( result  => Result( scriptFolder, unit, result ) )  // get hash for result of test
-				.then( result  => Compare( unit, result ) )               // now compare both and detail errors
+				.then( result  => Compare( scriptFolder, unit, result ) ) // now compare both and detail errors
 				.then( success => {                                       // cleaning up after ourself
 					if( success ) {
 						return Delete( scriptFolder );
@@ -166,10 +177,10 @@ const Tester = () => {
 const Flatten = object => {
 	return Object.assign( {}, ...function _flatten( objectBit, path = '' ) {  // spread the result into our return object
 		return [].concat(                                                       // concat everything into one level
-			...Object.keys( objectBit ).map(                                      // iterate over object
-				key => typeof objectBit[ key ] === 'object' ?                       // check if there is a nested object
-					_flatten( objectBit[ key ], `${ path }/${ key }` ) :              // call itself if there is
-					( { [ `${ path }/${ key }` ]: objectBit[ key ] } )                // append object with it’s path as key
+			...Object.keys( objectBit ).map( key =>                               // iterate over object
+				typeof objectBit[ key ] === 'object'                                // check if there is a nested object
+					? _flatten( objectBit[ key ].files, `${ path }/${ key }` )        // call itself if there is
+					: ( { [ `${ path }/${ key }` ]: objectBit[ key ] } )              // append object with it’s path as key
 			)
 		)
 	}( object ) );
@@ -250,27 +261,25 @@ const ReplaceFixtures = ( path, settings ) => {
 			resolve();
 		}
 		else {
-			// maybe in the future we have dynamic paths that depend on the system they are tested on.
-
-			// Replace({
-			// 		files: [
-			// 			Path.normalize(`${ path }/_fixture/**`),
-			// 		],
-			// 		from: [
-			// 			/\[thing\]/g,
-			// 		],
-			// 		to: [
-			// 			'thing',
-			// 		],
-			// 		allowEmptyPaths: true,
-			// 		encoding: 'utf8',
-			// 	})
-			// 	.catch( error => {
-			// 		reject( error );
-			// 	})
-			// 	.then( changedFiles => {
+			Replace({
+					files: [
+						Path.normalize(`${ path }/_fixture/**/*.html`),
+					],
+					from: [
+						/\r\n/g,
+					],
+					to: [
+						'\n',
+					],
+					allowEmptyPaths: true,
+					encoding: 'utf8',
+				})
+				.catch( error => {
+					reject( error );
+				})
+				.then( changedFiles => {
 					resolve();
-			// });
+			});
 		}
 	});
 };
@@ -287,6 +296,7 @@ const ReplaceFixtures = ( path, settings ) => {
 const Run = ( path, settings ) => {
 	return new Promise( ( resolve, reject ) => {
 		let errors = '';
+		let output = '';
 
 		// what the command would look like:
 		// console.log('node', [ Path.normalize(`${ path }/../../dist/index.js`), ...settings.script.options ].join(' '));
@@ -299,7 +309,7 @@ const Run = ( path, settings ) => {
 		);
 
 		command.stdout.on('data', ( data ) => {
-			// console.log( data.toString() );
+			output += data.toString();
 		})
 
 		command.stderr.on('data', ( data ) => {
@@ -310,7 +320,7 @@ const Run = ( path, settings ) => {
 			if( code === 0 ) {
 				// Log.pass(`Ran test in ${ Chalk.bgWhite.black(` ${ Path.basename( path ) } `) } folder`);
 
-				resolve();
+				resolve({ output });
 			}
 			else {
 				SETTINGS.PASS = false;
@@ -327,10 +337,11 @@ const Run = ( path, settings ) => {
  *
  * @param  {string} path     - The path to the test folder
  * @param  {object} settings - The settings object for this test
+ * @param  {object} result   - The output of the command
  *
  * @return {Promise object}  - The hash object of all files inside the fixture
  */
-const Fixture = ( path, settings ) => {
+const Fixture = ( path, settings, result ) => {
 	return new Promise( ( resolve, reject ) => {
 		if( !settings.empty ) {
 			Dirsum.digest( Path.normalize(`${ path }/_fixture/${ settings.compare }/`), 'sha256', ( error, hashes ) => {
@@ -342,12 +353,17 @@ const Fixture = ( path, settings ) => {
 					reject( error );
 				}
 				else {
-					resolve( hashes );
+					resolve({
+						fixture: hashes,
+						output: result.output,
+					});
 				}
 			});
 		}
 		else {
-			resolve({});
+			resolve({
+				output: result.output,
+			});
 		}
 	});
 };
@@ -358,13 +374,12 @@ const Fixture = ( path, settings ) => {
  *
  * @param  {string} path     - The path to the test folder
  * @param  {object} settings - The settings object for this test
- * @param  {object} fixture  - The hash results of the fixture to be passed on
+ * @param  {object} result   - The hash results of fixture and output
  *
  * @return {Promise object}  - The hash object of all files inside the resulting files
  */
-const Result = ( path, settings, fixture ) => {
+const Result = ( path, settings, result ) => {
 	const location = Path.normalize(`${ path }/${ settings.compare }/`);
-
 	return new Promise( ( resolve, reject ) => {
 		if( !settings.empty ) {
 			Dirsum.digest( location, 'sha256', ( error, hashes ) => {
@@ -376,12 +391,11 @@ const Result = ( path, settings, fixture ) => {
 					reject();
 				}
 				else {
-
 					resolve({ // passing it to compare later
-						fixture,
 						result: hashes,
+						fixture: result.fixture,
+						output: result.output,
 					});
-
 				}
 			});
 		}
@@ -406,6 +420,7 @@ const Result = ( path, settings, fixture ) => {
 								location: 'nope',
 							},
 						},
+						output: result.output,
 					});
 
 				}
@@ -418,6 +433,7 @@ const Result = ( path, settings, fixture ) => {
 						result: {
 							hash: 'xxx',
 						},
+						output: result.output,
 					});
 
 				}
@@ -430,15 +446,16 @@ const Result = ( path, settings, fixture ) => {
 /**
  * Compare the output of a test against its fixture
  *
+ * @param  {string} path     - The path to the test folder
  * @param  {object} settings - The settings object for this test
  * @param  {object} result   - The hash results of fixture and result
  *
  * @return {Promise object}  - The hash object of all files inside the fixture
  */
-const Compare = ( settings, hashes ) => {
+const Compare = ( path, settings, result ) => {
 
 	return new Promise( ( resolve, reject ) => {
-		if( hashes.fixture.hash === hashes.result.hash ) {
+		if( result.fixture.hash === result.result.hash ) {
 			Log.pass(`${ Chalk.bgWhite.black(` ${ settings.name } `) } passed`); // yay
 
 			resolve( true );
@@ -448,34 +465,58 @@ const Compare = ( settings, hashes ) => {
 			Log.fail(`${ Chalk.bgWhite.black(` ${ settings.name } `) } failed`);
 
 			// flatten hash object
-			const fixture = Flatten( hashes.fixture.files );
-			const result = Flatten( hashes.result.files );
+			const fixture = Flatten( result.fixture.files );
+			const output = Flatten( result.result.files );
 
 			// iterate over fixture
 			for( const file of Object.keys( fixture ) ) {
-				const compare = result[ file ]; // get the hash from our result folder
-				delete result[ file ];          // remove this one so we can keep track of the ones that were not inside the fixture folder
+				const compare = output[ file ]; // get the hash from our result folder
+				delete output[ file ];          // remove this one so we can keep track of the ones that were not inside the fixture folder
 
 				if( compare === undefined ) {  // we couldn’t find this file inside the resulting folder
-					Log.error(`Missing ${ Chalk.yellow( file ) } file inside result folder`);
+					Log.error(`🛑  Missing ${ Chalk.yellow( file ) } file inside result folder`);
 				}
 				else {
 					const fileName = file.split('/');
 
 					if( fixture[ file ] !== compare && fileName[ fileName.length - 1 ] !== 'hash' ) { // we don’t want to compare folders
-						Log.error(`Difference inside ${ Chalk.yellow( settings.folder + file ) } file`);
+						const locationResult = Path.normalize(`${ path }/${ settings.compare }/${ file }`);
+						const locationFixture = Path.normalize(`${ path }/_fixture/${ settings.compare }/${ file }`);
+
+						const contentResult = Fs.readFileSync( locationResult, `utf8` );
+						const contentFixture = Fs.readFileSync( locationFixture, `utf8` );
+						const fixtureName = Chalk.yellow( settings.folder + file );
+
+						Log.error(`🛑  Difference inside ${ fixtureName } file`);
+						if( file.endsWith('.html') || file.endsWith('.css') || file.endsWith('.js') || file.endsWith('.svg') || file.endsWith('.json') ) {
+							Log.error(`>>> ${ fixtureName }\n${ Util.inspect( contentResult ) }\n        <<<`);
+							Log.error(`>>> ${ Chalk.yellow('fixture') }\n${ Util.inspect( contentFixture ) }\n        <<<`);
+
+							const diff = Diff.diffChars( contentResult, contentFixture );
+							let diffOutput = '';
+							diff.forEach( part => {
+								if( part.added || part.removed ) {
+									diffOutput += `${ Chalk[ part.added ? 'underline' : 'strikethrough' ][ part.added ? 'green' : 'red' ]( part.value ) }`;
+								}
+								else {
+									diffOutput += Chalk.white(`${ part.value.substring( 0, 50 ) }${ Chalk.gray('[...]') }${ part.value.slice( -50 ) }`);
+								}
+							});
+							Log.error( diffOutput );
+						}
 					}
 				}
 			}
+			Log.error(`Output:${ Chalk.reset( result.output ) }`);
 
-			if( Object.keys( result ).length > 0 ) { // found files that have not been deleted yet
+			if( Object.keys( output ).length > 0 ) { // found files that have not been deleted yet
 				let files = [];
 
-				for( const file of Object.keys( result ) ) {
+				for( const file of Object.keys( output ) ) {
 					files.push( file ); // make ’em readable
 				}
 
-				Log.error(`Some new files not accounted for: ${ Chalk.yellow( files.join(', ') ) } inside the fixture folder`);
+				Log.error(`🛑  Some new files not accounted for: ${ Chalk.yellow( files.join(', ') ) } inside the fixture folder`);
 			}
 
 			resolve( false );

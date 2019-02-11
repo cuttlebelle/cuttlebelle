@@ -12,9 +12,9 @@ const Component1 = ({
 	_body,
 	_pages,
 	_storeSet,
-	_store
+	_store,
 }) => {
-	_storeSet({ title: _pages[ _ID ].title }); // getting the title from the store (to test the store)
+	_storeSet({ [`item-${ _ID }`]: _pages[ _ID ].title }); // getting the title from the store (to test the store)
 
 	const ulStyling = {
 		display: 'inline-block',
@@ -29,7 +29,6 @@ const Component1 = ({
 
 	return (
 		<header>
-			<h1>{ _store()['title'] }</h1>
 			<div>
 				breadcrumbs:
 				<ul style={ ulStyling }>

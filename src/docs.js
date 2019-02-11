@@ -70,9 +70,8 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import ReactDOMServer from 'react-dom/server';
 const ReactDocs = require('react-docgen');
-import Pretty from 'pretty';
+import Pretty from 'prettify-html';
 import React from 'react';
-import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -87,6 +86,7 @@ import { Log, Style } from './helper';
 import { GetLayout } from './site';
 import { Pages } from './pages';
 import { Store } from './store';
+import { Path } from './path';
 import { Nav } from './nav';
 
 
@@ -95,7 +95,12 @@ import { Nav } from './nav';
  *
  * @type {string}
  */
-export const Ipsum = Fs.readFileSync( Path.normalize(`${ __dirname }/../assets/ipsum.txt`), 'utf8' );
+export const Ipsum = Fs
+	.readFileSync(
+		Path.normalize(`${ __dirname }/../assets/ipsum.txt`),
+		'utf8'
+	)
+	.replace(/\r?\n/g, '\n');
 
 
 /**
@@ -578,7 +583,7 @@ export const BuildHTML = ( object ) => {
 			file: object.file,
 			yaml: object.yaml,
 			disabled: object.disabled,
-			html: Pretty( ParseHTML( html ) ).replace(/\r?\n/g, "\n"),
+			html: Pretty( ParseHTML( html ) ).replace(/\r?\n/g, '\n'),
 			component: <cuttlebellesillywrapper dangerouslySetInnerHTML={ { __html: html } } />,
 		})
 	});
@@ -604,7 +609,7 @@ export const ParseExample = ( example ) => {
 			if( typeof exampleVar === 'object' ) {
 				// TODO
 			}
-			else if( typeof exampleVar === 'string' && exampleVar.includes(`(${ command.name })(`) ) {
+			else if( typeof exampleVar === 'string' && exampleVar.includes('(' + command.name + ')(') ) {
 				const partials = exampleVar.split(`(${ command.name })(`);
 				const amount = parseInt( partials[ 1 ].slice( 0, -1 ) );
 
@@ -635,7 +640,7 @@ export const ReplaceMagic = ( example ) => {
 		parsedExample = parsedExample.replace( regex, command.replacement );
 	});
 
-	return parsedExample.replace(/\r?\n/g, "\n");
+	return parsedExample.replace(/\r?\n/g, '\n');
 };
 
 
@@ -675,7 +680,7 @@ export const MakeIpsum = ( amount ) => {
 		output += `${ sentences[ i ] }.`;
 	};
 
-	output = ParseMD( output ).replace(/(?:\r\n|\r|\n)/g, ' ').replace(/\r?\n/g, "\n");
+	output = ParseMD( output ).replace(/(?:\r\n|\r|\n)/g, ' ').replace(/\r?\n/g, '\n');
 
 	return <cuttlebellesillywrapper dangerouslySetInnerHTML={ { __html: output } } />;
 };
@@ -695,6 +700,6 @@ export const vocabulary = [
 	{
 		name: 'text',
 		func: MakeIpsum,
-		replacement: `${ Ipsum.slice( 0, 53 ).replace(/\r?\n/g, "\n") }...`,
+		replacement: `${ Ipsum.slice( 0, 53 ).replace(/\r?\n/g, '\n') }...`,
 	},
 ];

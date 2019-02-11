@@ -13,11 +13,11 @@ const Component1 = ({
 	_store,
 	_body
 }) => {
-	_storeSet({ title: _pages[ _ID ].title }); // getting the title from the store (to test the store)
+	// _storeSet({ title: _pages[ _ID ].title }); // getting the title from the store (to test the store)
 
 	return (
 		<header>
-			<h1>{ _store()['title'] }</h1>
+			<h1></h1>
 			<div>{ _body }</div>
 			<p><small>{ _self }</small></p>
 		</header>

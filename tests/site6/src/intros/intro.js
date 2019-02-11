@@ -21,7 +21,7 @@ const Intro = ( page ) => {
 							{ page.subtitle && <p className="intro__subtitle">{ page.subtitle }</p> }
 							{ page.attrTitle1 &&
 								<div className="intro__metadata intro__metadata--intro small">
-								  <dl>
+									<dl>
 									<dt>{ page.attrTitle1 }</dt>
 									<dd>{ page.attrLink1 ? (
 										<a href={ page.attrLink1 }>{ page.attrValue1 }</a>
@@ -36,7 +36,7 @@ const Intro = ( page ) => {
 										<span>{ page.attrValue2 }</span>
 										)}
 									</dd>
-								  </dl>
+									</dl>
 								</div>
 							}
 							<div className="intro__text">{ page._body }</div>

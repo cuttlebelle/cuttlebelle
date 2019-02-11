@@ -1,12 +1,15 @@
 language: node_js
 cache: yarn
+env:
+  - YARN_GPG=no
 os:
   - linux
   - osx
+  - windows
 node_js:
   - "8"
-  - "6"
-before_script: yarn flow
+  - "10"
+# before_script: yarn build
 # Tests are run on the prepublish hook which fires after install
 # No need to run tests twice.
 script: echo "noop"
