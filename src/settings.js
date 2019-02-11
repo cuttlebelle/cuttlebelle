@@ -74,7 +74,6 @@ export const SETTINGS = {
 	 * @type {Object}
 	 */
 	defaults: {
-        globalProp: {},
 		folder: {
 			cwd: Path.normalize(`${ process.cwd() }/`),
 			content: Path.normalize(`${ process.cwd() }/content/`),
@@ -95,6 +94,7 @@ export const SETTINGS = {
 			redirectReact: true,
 			markdownRenderer: '',
 			watchTimeout: 400,
+			globalProp: {},
 		},
 		docs: {
 			root: Path.normalize(`files/`),
@@ -171,7 +171,6 @@ export const SETTINGS = {
 			if( !localSettings.docs ) {
 				localSettings.docs = {};
 			}
-            if( !localSettings.globalProp ) localSettings.globalProp = {};
 
 			delete localSettings.folder.cwd; // ignore the cwd key
 
@@ -205,7 +204,6 @@ export const SETTINGS = {
 			newSettings.layouts = Object.assign( SETTINGS.defaults.layouts, localSettings.layouts );
 			newSettings.site = Object.assign( SETTINGS.defaults.site, localSettings.site );
 			newSettings.docs = Object.assign( SETTINGS.defaults.docs, localSettings.docs );
-			newSettings.globalProp = Object.assign( SETTINGS.defaults.globalProp, localSettings.globalProp );
 
 			SETTINGS.defaults = newSettings;
 
