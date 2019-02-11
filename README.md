@@ -665,6 +665,7 @@ A file will receive the following props:
 | `_body`        | The body of your markdown file (empty for `index.yml` files)                          | `props._body`                                 |
 | `_pages`       | An object of all pages and their props; with ID as key                                | `props._pages.map()`                          |
 | `_nav`         | A nested object of your site structure                                                | `Object.keys( props._nav ).map()`             |
+| `_globalProp`  | A prop that can be set globally from the `package.json`                               | `props._globalProp`                           |
 | `_storeSet`    | You can set data to persist between react components by setting them with this helper | `props._storeSet({ variable: "value" })`      |
 | `_store`       | To get that data just call this prop function                                         | `props._store()`                              |
 | `_relativeURL` | A helper function to make an absolute URL relative                                    | `props._relativeURL( URL, yourLocation )`     |
@@ -714,7 +715,8 @@ See below all configuration with default values:
 +			"doctype": "<!DOCTYPE html>",
 +			"redirectReact": true,
 +			"markdownRenderer": "",
-+			"watchTimeout": 400
++			"watchTimeout": 400,
++			"globalProp": {},
 +		},
 +		"docs": {
 +			"root": "files/",
@@ -761,6 +763,7 @@ A breakdown:
                                   // before we go into the markdown parsing
     "watchTimeout": 400           // This is the time in milliseconds the watch waits
                                   // to detect a double saves action
+    "globalProp": {}              // A global prop that can be set here accessible for all pages
   },
   "docs": {                                          // Docs settings
     "root": "files/",                                // What is the root folder called where all
