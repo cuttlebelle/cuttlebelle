@@ -51,7 +51,7 @@ index: { Object.keys( _pages['index'] ).sort().join(', ') }<br/>
 index: { Object.keys( _pages['page1'] ).sort().join(', ') }<br/>
 index: { typeof _pages['page1/page2'] === 'object' ? Object.keys( _pages['page1/page2'] ).sort().join(', ') : null }<hr/>
 _nav: { JSON.stringify( _nav ) }<hr/>
-_store: { JSON.stringify( _store() ) }<hr/>
+_store: { JSON.stringify( Object.keys( _store() ).sort().map( item => _store()[ item ] ) ) }<hr/>
 _relativeURL: { _relativeURL( `/assets/css/style.css`, _pages[ _ID ]._url ) }<hr/>
 _parseYaml: { JSON.stringify( _parseYaml('test:\n  - one\n  - two') ) }<hr/>
 _parseMD: { _parseMD('This is **markdown**!') }<hr/>

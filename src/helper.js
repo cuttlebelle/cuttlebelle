@@ -21,7 +21,6 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import Notifier from 'node-notifier';
 import Slugify from 'slugify';
-import Path from 'upath';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -29,6 +28,7 @@ import Path from 'upath';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { Progress } from './progress';
 import { Watch } from './watch';
+import { Path } from './path';
 
 
 /**
@@ -295,7 +295,7 @@ export const Notify = {
  * @param {object} error   - Object to distinguish between closing events
  */
 export const ExitHandler = ( exiting /*: { withoutSpace: boolean } */, error /*: string */ ) => {
-	if( error && error !== 1 ) {
+	if( error && parseInt( error ) !== 1 ) {
 		try {              // try using our pretty output
 			Log.error( error );
 		}

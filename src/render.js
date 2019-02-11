@@ -46,7 +46,6 @@ import RequireFromString from 'require-from-string';
 import ReactDOMServer from 'react-dom/server';
 import Traverse from 'traverse';
 import React from 'react';
-import Path from 'upath';
 import Fs from 'fs';
 
 
@@ -56,13 +55,14 @@ import Fs from 'fs';
 import { ReadFile, CreateFile, CreateDir, RemoveDir, CopyFiles } from './files';
 import { ParseContent, ParseMD, ParseYaml, ParseHTML } from './parse';
 import { GetContent, GetLayout } from './site';
-import { Layouts, Watch } from './watch';
 import { Log, Style } from './helper';
+import { Layouts, Watch } from './watch';
 import { SETTINGS } from './settings';
 import { Progress } from './progress';
 import { Pages } from './pages';
 import { Store } from './store';
 import { Slug } from './helper';
+import { Path } from './path';
 import { Nav } from './nav';
 
 
@@ -97,63 +97,75 @@ export const RelativeURL = ( URL, ID ) => {
 export const RenderReact = ( componentPath, props, source = '' ) => {
 	Log.verbose(`Rendering react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.code, '' ) ) }`);
 
-	let registerObj = {};
-	try {
-		// babelfy components
-		// we have to keep the presets and plugins close as we want to support and even encourage global installs
-		registerObj = {
-			presets: [
-				require.resolve( 'babel-preset-react' ),
-				[
-					require.resolve( 'babel-preset-env' ),
-					{
-						targets: {
-							node: 'current'
-						}
-					}
-				]
-			],
-			plugins: [
-				require.resolve( 'babel-plugin-transform-es2015-modules-commonjs' ),
-				require.resolve( 'babel-plugin-transform-object-rest-spread' ),
-				require.resolve( 'babel-plugin-transform-runtime' ),
-			],
-			cache: !Watch.running, // we don’t need to cache during watch
-		};
-
-		const redirectReact = [
-			require.resolve( 'babel-plugin-syntax-dynamic-import' ),
+	// babelfy components
+	// we have to keep the presets and plugins close as we want to support and even encourage global installs
+	const registerObj = {
+		presets: [
+			require.resolve( '@babel/preset-react' ),
 			[
-				require.resolve( 'babel-plugin-import-redirect' ),
+				require.resolve( '@babel/preset-env' ),
 				{
-					redirect: {
-						react: require.resolve( 'react' ),
-						'prop-types': require.resolve( 'prop-types' ),
-					},
-					suppressResolveWarning: true,
+					targets: {
+						node: 'current'
+					}
+				}
+			]
+		],
+		plugins: [
+			require.resolve( 'babel-plugin-transform-es2015-modules-commonjs' ),
+			require.resolve( '@babel/plugin-proposal-object-rest-spread' ),
+			[ require.resolve( '@babel/plugin-transform-runtime' ), { 'helpers': false } ],
+		],
+	};
+
+	const redirectReact = [
+		require.resolve( '@babel/plugin-syntax-dynamic-import' ),
+		[
+			require.resolve( 'babel-plugin-import-redirect' ),
+			{
+				redirect: {
+					react: require.resolve( 'react' ),
+					'prop-types': require.resolve( 'prop-types' ),
 				},
-			],
-		];
+				suppressResolveWarning: true,
+			},
+		],
+	];
 
-		// optional we redirect import statements for react to our local node_module folder
-		// so react doesn’t have to be installed separately on globally installed cuttlebelle
-		if( SETTINGS.get().site.redirectReact ) {
-			registerObj.plugins = [ ...registerObj.plugins, ...redirectReact ];
-		}
+	// optional we redirect import statements for react to our local node_module folder
+	// so react doesn’t have to be installed separately on globally installed cuttlebelle
+	if( SETTINGS.get().site.redirectReact || source !== '' ) {
+		registerObj.plugins = [ ...registerObj.plugins, ...redirectReact ];
+	}
 
-		let component;
+	let component;
+
+	try {
 		if( source !== '' ) { // require from string
-			registerObj.plugins = [ ...registerObj.plugins, ...redirectReact ];
-			delete registerObj.cache;
-			const transpiledSource = require('babel-core').transform( source, registerObj );
+			registerObj.filename = Path.normalize(`${ __dirname }/cuttlebelle-temp-file`); // bug in babel https://github.com/yahoo/babel-plugin-react-intl/issues/156
+			const transpiledSource = require('@babel/core').transformSync( source, registerObj );
 			component = RequireFromString( transpiledSource.code ).default;
 		}
 		else {                // require from file
-			require('babel-register')( registerObj );
+			registerObj.cache = !Watch.running; // we don’t need to cache during watch
+			require('@babel/register')( registerObj );
 
 			component = require( componentPath ).default;
 		}
+	}
+	catch( error ) {
+		Log.error(`Babel failed for ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.code, '' ) ) }:`);
+		Log.error( error );
+		Log.verbose( JSON.stringify( registerObj ) );
 
+		if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if the render fails in production
+			process.exit( 1 );
+		}
+
+		return '';
+	}
+
+	try {
 		return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
 	}
 	catch( error ) {
@@ -195,7 +207,7 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 	}
 	else {
 		return new Promise( ( resolve, reject ) => {
-			const ID = parent.length > 0 ? Path.dirname( parent ) : Path.dirname( file ); // the ID of this page is the folder in which it exists
+			const ID = Path.normalize( parent.length > 0 ? Path.dirname( parent ) : Path.dirname( file ) ); // the ID of this page is the folder in which it exists
 
 			// to get the parents we just look at the path
 			let parents = ID.split('/').map( ( item, i ) => {
@@ -238,47 +250,49 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 
 			Pages.inject( ID, parsedBody.frontmatter ); // we inject the frontmatter early so partials have access to it
 
-			FindPartial(
-				parsedBody.frontmatter,
-				Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`),
-				parent,
-				rendered,
-				iterator
-			)
-			.catch( error => {
-				Log.error(`Generating page failed in ${ Style.yellow( file ) }`);
-				reject( error );
-			})
-			.then( frontmatter => {
-				parsedBody.frontmatter = frontmatter ? frontmatter : {}; // we only got one promise to resolve
+			process.nextTick(() =>
+				FindPartial(
+					parsedBody.frontmatter,
+					Path.normalize(`${ SETTINGS.get().folder.content }/${ file }`),
+					parent,
+					rendered,
+					iterator
+				)
+				.catch( error => {
+					Log.error(`Generating page failed in ${ Style.yellow( file ) }`);
+					reject( error );
+				})
+				.then( frontmatter => {
+					parsedBody.frontmatter = frontmatter ? frontmatter : {}; // we only got one promise to resolve
 
-				// set the default layout
-				if( file.endsWith('.yml') ) {
-					parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.page;
-				}
-				else {
-					parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.partial;
-				}
-
-				// keeping track of all pages per layout will make the watch better
-				Layouts.set( ID, parsedBody.frontmatter.layout );
-
-				// and off we go into the react render machine
-				let pageHTML = RenderReact(
-					Path.normalize(`${ SETTINGS.get().folder.code }/${ parsedBody.frontmatter.layout }`),
-					{
-						_pages: Pages.get(),
-						_parseMD: ( markdown, file, props = defaultProps ) => <cuttlebellesillywrapper key={`${ ID }-${ iterator }-md`} dangerouslySetInnerHTML={ {
-							__html: ParseMD( markdown, file, props )
-						} } />,
-						_body: <cuttlebellesillywrapper key={`${ ID }-${ iterator }`} dangerouslySetInnerHTML={ { __html: parsedBody.body } } />,
-						...defaultProps,
-						...parsedBody.frontmatter
+					// set the default layout
+					if( file.endsWith('.yml') ) {
+						parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.page;
 					}
-				);
+					else {
+						parsedBody.frontmatter.layout = parsedBody.frontmatter.layout || SETTINGS.get().layouts.partial;
+					}
 
-				resolve( pageHTML );
-			});
+					// keeping track of all pages per layout will make the watch better
+					Layouts.set( ID, parsedBody.frontmatter.layout );
+
+					// and off we go into the react render machine
+					let pageHTML = RenderReact(
+						Path.normalize(`${ SETTINGS.get().folder.code }/${ parsedBody.frontmatter.layout }`),
+						{
+							_pages: Pages.get(),
+							_parseMD: ( markdown, file, props = defaultProps ) => <cuttlebellesillywrapper key={`${ ID }-${ iterator }-md`} dangerouslySetInnerHTML={ {
+								__html: ParseMD( markdown, file, props )
+							} } />,
+							_body: <cuttlebellesillywrapper key={`${ ID }-${ iterator }`} dangerouslySetInnerHTML={ { __html: parsedBody.body } } />,
+							...defaultProps,
+							...parsedBody.frontmatter
+						}
+					);
+
+					resolve( pageHTML );
+				})
+			);
 		});
 	}
 };
@@ -364,45 +378,47 @@ export const RenderPartial = ( partial, file, parent, path, rendered, iterator =
 
 	return new Promise( ( resolve, reject ) => {
 
-		let cwd = Path.dirname( file );                                     // we assume relative links
-		if( partial.startsWith('/') ) {                              // unless the path starts with a slash
+		let cwd = Path.dirname( file );                                 // we assume relative links
+		if( partial.startsWith('/') ) {                                 // unless the path starts with a slash
 			cwd = SETTINGS.get().folder.content;
 		}
 		const partialPath = Path.normalize(`${ cwd }/${ partial }`);
 
-		if( partial.endsWith('.md') && Fs.existsSync( partialPath ) ) {     // only if the string ends with ".md" and the corresponding file exists
+		if( partial.endsWith('.md') && Fs.existsSync( partialPath ) ) { // only if the string ends with ".md" and the corresponding file exists
 			Log.verbose(`Partial ${ Style.yellow( partial ) } found`);
 
 			const ID = partialPath.replace( SETTINGS.get().folder.content, '' )
 			const filePath = Path.normalize(`${ SETTINGS.get().folder.content }/${ ID }`);
 
-			ReadFile( filePath )
-				.catch( error => {
-					Log.error(`Generating partial failed in ${ Style.yellow( partial ) }`)
-					reject( error );
-				})
-				.then( content => RenderFile(
-						content,
-						filePath.replace( SETTINGS.get().folder.content, '' ),
-						parent,
-						rendered,
-						iterator
+			process.nextTick(() =>
+				ReadFile( filePath )
+					.catch( error => {
+						Log.error(`Generating partial failed in ${ Style.yellow( partial ) }`)
+						reject( error );
+					})
+					.then( content => RenderFile(
+							content,
+							filePath.replace( SETTINGS.get().folder.content, '' ),
+							parent,
+							rendered,
+							iterator
+						)
+						.catch( reason => reject( reason ) )
 					)
-					.catch( reason => reject( reason ) )
-				)
-				.then( HTML => {
-					const ID = `cuttlebelleID${ Slug( partial ) }-${ iterator }`; // We generate a unique ID for react
+					.then( HTML => {
+						const ID = `cuttlebelleID${ Slug( partial ) }-${ iterator }`; // We generate a unique ID for react
 
-					Log.verbose(`Rendering partial ${ Style.yellow( partial ) } complete with ID ${ Style.yellow( ID ) }`);
+						Log.verbose(`Rendering partial ${ Style.yellow( partial ) } complete with ID ${ Style.yellow( ID ) }`);
 
-					resolve({                                                     // to resolve we need to keep track of the path of where this partial was mentioned
-						path: path,
-						partial: <cuttlebellesillywrapper key={ ID } dangerouslySetInnerHTML={ { __html: HTML } } />,
-					});
-			});
+						resolve({                                                     // to resolve we need to keep track of the path of where this partial was mentioned
+							path: path,
+							partial: <cuttlebellesillywrapper key={ ID } dangerouslySetInnerHTML={ { __html: HTML } } />,
+						});
+				})
+			);
 		}
 		else {
-			resolve( partial );                                               // looks like the string wasn’t a partial so we just return it unchanged
+			resolve( partial );                                                 // looks like the string wasn’t a partial so we just return it unchanged
 		}
 	});
 };
@@ -425,7 +441,7 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 		return new Promise( ( resolve, reject ) => {
 			const allPages = [];
 
-			content.forEach( page => {
+			content.forEach( page => process.nextTick( () => { // replace with progress.nextTick()
 				const filePath = Path.normalize(`${ SETTINGS.get().folder.content }/${ page }/${ SETTINGS.get().folder.index }.yml`);
 
 				allPages.push(
@@ -441,13 +457,16 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 							Progress.tick();
 					})
 				);
-			});
+			}));
 
-			Promise.all( allPages )
-				.catch( error => {
-					reject( error );
-				})
-				.then( pages => resolve( pages ) );
+			process.nextTick( () =>
+				Promise
+					.all( allPages )
+					.catch( error => {
+						reject( error );
+					})
+					.then( pages => resolve( pages ) )
+			);
 		});
 	}
 	else {

@@ -47,15 +47,13 @@ test('ParseContent() - Parse md content correctly', () => {
 	const match1 = { frontmatter: {}, body: '' };
 	expect( ParseContent( content1, 'partial.md' ) ).toMatchObject( match1 );
 
-	const content2 = `---
-test: var
-var: test
----
+	const content2 = `---\ntest: var\nvar: test\n---\n\n**yes**\n`;
 
-**yes**
-`;
 	const match2 = { frontmatter: { test: 'var', var: 'test' }, body: '<p><strong>yes</strong></p>\n' };
 	expect( ParseContent( content2, 'partial.md' ) ).toMatchObject( match2 );
+
+	const content3 = `---\r\ntest: var\r\nvar: test\r\n---\r\n\r\n**yes**\r\n`;
+	expect( ParseContent( content3, 'partial.md' ) ).toMatchObject( match2 );
 });
 
 
