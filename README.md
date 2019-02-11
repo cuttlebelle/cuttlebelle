@@ -959,10 +959,12 @@ I got an [end-to-end test script](https://github.com/cuttlebelle/cuttlebelle/blo
 generates. In each of those folders I test for [specific things](https://github.com/cuttlebelle/cuttlebelle/blob/master/tests/tester.js#L30) and make sure
 the checksum of the generated files match the fixtures. In addition to that I created as many
 [unit tests](https://github.com/cuttlebelle/cuttlebelle/tree/master/tests/__unit__) as I can via [Jest](https://facebook.github.io/jest/).
+[Flow](https://flow.org/) types are also checked where they are specified.
 
 - `yarn run test` to run all tests
 - `yarn run test:end-to-end` will run the end-to-end test only
 - `yarn run test:unit-test` will run the unit test only
+- `yarn run test:flow` will run the flow type test
 - `yarn run test:detail` will give you coverage infos for the unit tests
 - `yarn run test:watch` will spin up the jest watch
 
