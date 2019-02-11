@@ -5,9 +5,9 @@ import React from 'react';
 /**
  * The Partial component for the default layout of partials
  */
-const Partial = ({ _body, title, _self }) => (
+const Partial = ({ _body, subtitle, _self }) => (
 	<article>
-		{ title && <h2>{ title }</h2> }
+		{ subtitle && <h2>{ subtitle }</h2> }
 		<div>{ _body }</div>
 		<small>{ _self }</small>
 	</article>
@@ -16,9 +16,9 @@ const Partial = ({ _body, title, _self }) => (
 
 Partial.propTypes = {
 	/**
-	 * title: Partial title
+	 * subtitle: Partial title
 	 */
-	title: PropTypes.string,
+	subtitle: PropTypes.string,
 
 	/**
 	 * _body: (partials)(4)
