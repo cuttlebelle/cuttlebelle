@@ -44,16 +44,15 @@ javascript. **No more templating languages** that only do half of what you need.
 
 
 To use Cuttlebelle you need at least node `>= 6`.
-Cuttlebelle is being automatically tested on the below systems and node versions:
+Cuttlebelle is being automatically tested on the below systems and node versions.
 
-| OS              | Node version |
-|-----------------|--------------|
-| `Ubuntu trusty` | `~6`         |
-| `Ubuntu trusty` | `~8`         |
-| `OSX`           | `~6`         |
-| `OSX`           | `~8`         |
-| `Windows`       | `~6`         |
-| `Windows`       | `~8`         |
+https://travis-ci.org/cuttlebelle/cuttlebelle.svg?branch=master
+
+| OS        | Node version | Node version | Node version |
+|-----------|--------------|--------------|--------------|
+| `Linux`   | `~6`         | `~8`         | `~10`        |
+| `OSX`     | `~6`         | `~8`         | `~10`        |
+| `Windows` | `~6`         | `~8`         | `~10`        |
 
 
 
