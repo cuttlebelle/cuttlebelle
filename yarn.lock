@@ -4579,10 +4579,10 @@ prop-types@^15.6.2:
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
 
-prop-types@^15.7.0:
-  version "15.7.0"
-  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.0.tgz#cc45233a8ccef80f4a2e3a6bf575bee4e19b4a50"
-  integrity sha512-rlfizAIb1WrkMkbFm3uk7cZGqeVPOhHHMj3gy9FUHE+Ha5lKvbIzj9ygvLdG8Cv2CQEhQnP5djXS7pbmTOpBqw==
+prop-types@^15.7.1:
+  version "15.7.1"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.1.tgz#2fa61e0a699d428b40320127733ee2931f05d9d1"
+  integrity sha512-f8Lku2z9kERjOCcnDOPm68EBJAO2K00Q5mSgPAUE/gJuBgsYLbVy6owSrtcHj90zt8PvW+z0qaIIgsIhHOa1Qw==
   dependencies:
     object-assign "^4.1.1"
     react-is "^16.8.1"

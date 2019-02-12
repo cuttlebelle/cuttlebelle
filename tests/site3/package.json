@@ -21,6 +21,10 @@
 			"redirectReact": false,
 			"markdownRenderer": "markdown/renderer.js",
 			"watchTimeout": 5000,
+			"browserSync": {
+				"open": true,
+				"port": 1337
+			},
 			"globalProp": {
 				"foo": "bar",
 				"enabled": true,

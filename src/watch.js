@@ -97,13 +97,15 @@ export const Watch = {
 
 		Log.info(`Watching for changes`);
 
-		browsersync.init({
-			server: SETTINGS.get().folder.site,
+		const defaultOptions = {
 			logLevel: 'silent',
 			host: '127.0.0.1',
 			port: 8080,
-		});
+		};
+		const options = { ...defaultOptions, ...SETTINGS.get().site.browserSync };
+		options.server = SETTINGS.get().folder.site;
 
+		browsersync.init( options );
 	},
 };
 

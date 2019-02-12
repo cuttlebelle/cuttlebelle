@@ -1,7 +1,7 @@
 {
 	"name": "cuttlebelle",
 	"description": "The react static site generator that separates editing and code concerns",
-	"version": "1.0.0-alpha.58",
+	"version": "1.0.0-alpha.59",
 	"homepage": "http://cuttlebelle.com",
 	"author": {
 		"name": "Dominik Wilkowski",
@@ -64,7 +64,7 @@
 		"marked": "^0.6.0",
 		"node-notifier": "^5.4.0",
 		"prettify-html": "^0.0.2",
-		"prop-types": "^15.7.0",
+		"prop-types": "^15.7.1",
 		"react": "^16.8.1",
 		"react-docgen": "^3.0.0",
 		"react-dom": "^16.8.1",
