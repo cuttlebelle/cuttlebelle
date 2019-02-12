@@ -39,6 +39,7 @@ test('SETTINGS.get() - The default settings are correct', () => {
 			redirectReact: true,
 			markdownRenderer: '',
 			watchTimeout: 400,
+			browserSync: {},
 			globalProp: {},
 		},
 		docs: {
@@ -107,6 +108,7 @@ test('SETTINGS.set() - Not setting anything will merge default correctly', () =>
 			redirectReact: true,
 			markdownRenderer: '',
 			watchTimeout: 400,
+			browserSync: {},
 			globalProp: {},
 		},
 		docs: {
@@ -175,6 +177,7 @@ test('SETTINGS.set() - An empty object as settings folder will merge default cor
 			redirectReact: true,
 			markdownRenderer: '',
 			watchTimeout: 400,
+			browserSync: {},
 			globalProp: {},
 		},
 		docs: {
@@ -247,6 +250,7 @@ test('SETTINGS.set() - Prevent cwd from being set', () => {
 			redirectReact: true,
 			markdownRenderer: '',
 			watchTimeout: 400,
+			browserSync: {},
 			globalProp: {},
 		},
 		docs: {
@@ -328,6 +332,7 @@ test('SETTINGS.set() - Set settings correctly', () => {
 			redirectReact: true,
 			markdownRenderer: '',
 			watchTimeout: 400,
+			browserSync: {},
 			globalProp: {},
 		},
 		docs: {
@@ -395,6 +400,9 @@ test('SETTINGS.set() - Set all settings correctly', () => {
 			redirectReact: 'test',
 			markdownRenderer: 'test',
 			watchTimeout: 100,
+			browserSync: {
+				port: 1337,
+			},
 			globalProp: 'foo',
 		},
 		docs: {
@@ -427,6 +435,9 @@ test('SETTINGS.set() - Set all settings correctly', () => {
 			redirectReact: 'test',
 			markdownRenderer: 'test',
 			watchTimeout: 100,
+			browserSync: {
+				port: 1337,
+			},
 			globalProp: 'foo',
 		},
 		docs: {

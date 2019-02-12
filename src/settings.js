@@ -49,7 +49,7 @@ export type Settings = {
 		doctype: string,
 		redirectReact: boolean,
 		markdownRenderer: string,
-		watchTimeout: number
+		watchTimeout: number,
 	},
 	docs: {
 		root: string,
@@ -94,6 +94,7 @@ export const SETTINGS = {
 			redirectReact: true,
 			markdownRenderer: '',
 			watchTimeout: 400,
+			browserSync: {},
 			globalProp: {},
 		},
 		docs: {

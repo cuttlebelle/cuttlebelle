@@ -715,6 +715,7 @@ See below all configuration with default values:
 +			"redirectReact": true,
 +			"markdownRenderer": "",
 +			"watchTimeout": 400,
++			"browserSync": {},
 +			"globalProp": {},
 +		},
 +		"docs": {
@@ -762,6 +763,8 @@ A breakdown:
                                   // before we go into the markdown parsing
     "watchTimeout": 400           // This is the time in milliseconds the watch waits
                                   // to detect a double saves action
+    "browserSync": {}             // You can overwrite the browserSync options here
+                                  // https://www.browsersync.io/docs/options
     "globalProp": {}              // A global prop that can be set here accessible for all pages
   },
   "docs": {                                          // Docs settings
