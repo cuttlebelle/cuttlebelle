@@ -1,5 +1,5 @@
 ---
-title: Subheading 2
+subtitle: Subheading 2
 ---
 
 ### Partial 3

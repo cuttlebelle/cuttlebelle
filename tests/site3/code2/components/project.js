@@ -5,9 +5,9 @@ import React from 'react';
 /**
  * The Project component for the display of a project
  */
-const Project = ({ title, description }) => (
+const Project = ({ subtitle, description }) => (
 	<div>
-		<h3>{ title }</h3>
+		<h3>{ subtitle }</h3>
 		<div>{ description }</div>
 	</div>
 );
@@ -15,9 +15,9 @@ const Project = ({ title, description }) => (
 
 Project.propTypes = {
 	/**
-	 * title: Project title
+	 * subtitle: Project title
 	 */
-	title: PropTypes.string.isRequired,
+	subtitle: PropTypes.string.isRequired,
 
 	/**
 	 * description: (text)(6)
