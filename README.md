@@ -980,7 +980,7 @@ the checksum of the generated files match the fixtures. In addition to that I cr
 
 ## Release History
 
-* v1.0.0.alphaX - 💥 Alpha versions with breaking API changes
+See [CHANGELOG](https://raw.githubusercontent.com/cuttlebelle/cuttlebelle/master/CHANGELOG.md).
 
 
 **[⬆ back to top](#contents)**
