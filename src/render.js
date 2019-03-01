@@ -524,7 +524,8 @@ export const PreRender = () => {
  */
 export const RenderAssets = ( source, destination ) => {
 	return new Promise( ( resolve, reject ) => {
-		CreateDir( destination );
+		if (!Fs.existsSync(destination))
+			CreateDir( destination );
 
 		CopyFiles( source, destination )
 			.catch( error => {

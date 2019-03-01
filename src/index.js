@@ -130,8 +130,9 @@ else {
 
 					const allPromises = [];
 
+					let assetsToRoot   = SETTINGS.get().folder.assetsToRoot === true;
 					let assetsLocation = SETTINGS.get().folder.assets.split('/');
-					assetsLocation = Path.normalize(`${ SETTINGS.get().folder.site }/${ assetsLocation[ assetsLocation.length - 2 ] }/`);
+					assetsLocation = Path.normalize(`${ SETTINGS.get().folder.site }/${ assetsToRoot ? "" : assetsLocation[ assetsLocation.length - 2 ] }/`);
 
 					// copy all asset files to the site/ folder
 					allPromises.push(
