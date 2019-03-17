@@ -12,9 +12,9 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // DEPENDENCIES
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+const ChildProcess = require('child_process');
 const { Path } = require('./../dist/path.js');
 const Replace = require('replace-in-file');
-const Spawn = require('child_process');
 const Copydir = require('copy-dir');
 const Dirsum = require('dirsum');
 const Chalk = require('chalk');
@@ -98,6 +98,24 @@ const SETTINGS = {
 			folder: 'site8',
 			script: {
 				options: [],
+			},
+			compare: 'site/',
+			empty: false,
+		},
+		// {
+		// 	name: 'Test9: TODO',
+		// 	folder: 'site9',
+		// 	script: {
+		// 		options: [],
+		// 	},
+		// 	compare: 'site/',
+		// 	empty: false,
+		// },
+		{
+			name: 'Test10: init files',
+			folder: 'site10',
+			script: {
+				options: ['init'],
 			},
 			compare: 'site/',
 			empty: false,
@@ -302,7 +320,7 @@ const Run = ( path, settings ) => {
 		// console.log('node', [ Path.normalize(`${ path }/../../dist/index.js`), ...settings.script.options ].join(' '));
 		// console.log(`in ${ path }`);
 
-		const command = Spawn
+		const command = ChildProcess
 			.spawn( 'node', [ Path.normalize(`${ path }/../../dist/index.js`), ...settings.script.options ], {
 				cwd: path,
 			}
@@ -346,7 +364,7 @@ const Fixture = ( path, settings, result ) => {
 		if( !settings.empty ) {
 			Dirsum.digest( Path.normalize(`${ path }/_fixture/${ settings.compare }/`), 'sha256', ( error, hashes ) => {
 				if( error ) {
-					Log.pass( error );
+					Log.fail( error );
 
 					SETTINGS.PASS = false;
 
