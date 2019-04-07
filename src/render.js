@@ -239,7 +239,7 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 						return ReactDOMServer.renderToStaticMarkup( component );
 					}
 					catch( error ) {
-						Log.error(`An error occurred inside ${ Style.yellow( file ) } while running ${ Style.yellow('_renderReact') }`);
+						Log.error(`An error occurred inside ${ Style.yellow( file ) } while running ${ Style.yellow('_parseReact') }`);
 						Log.error( error );
 					}
 				},
@@ -462,14 +462,15 @@ export const RenderAllPages = ( content = [], layout = [] ) => {
 				);
 			}));
 
-			process.nextTick( () =>
-				Promise
-					.all( allPages )
-					.catch( error => {
-						reject( error );
-					})
-					.then( pages => resolve( pages ) )
-			);
+			process.nextTick( async () => {
+				try {
+					const pages = await Promise.all( allPages );
+					resolve( pages );
+				}
+				catch( error ) {
+					reject( error );
+				}
+			});
 		});
 	}
 	else {
@@ -502,15 +503,16 @@ export const PreRender = () => {
 		// Setting how many pages we will have to go through
 		Progress.set( content.length );
 
-		return new Promise( ( resolve, reject ) => {
-			// Get all front matter from all pages and put them into a global var
-			Pages
-				.setAll( content )
-				.catch( error => reject( error ) )
-				.then( () => resolve({
-					content,
-					layout,
-				}) );
+		return new Promise( async ( resolve, reject ) => {
+			try {
+				// Get all front matter from all pages and put them into a global var
+				await Pages.setAll( content );
+			}
+			catch( error ) {
+				reject( error );
+			}
+
+			resolve({ content, layout });
 		});
 	}
 };
