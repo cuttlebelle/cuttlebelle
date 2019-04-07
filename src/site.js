@@ -2,10 +2,10 @@
  *
  * Getting infos from our site
  *
+ * GetType      - Get an array of paths recursively from a folder
  * GetContent   - Get all content folders recursively
+ * GetPartials  - Get all partial files recursively
  * GetLayout    - Get all layout files recursively
- * ToDepth      - Split a path into a nested object recursively
- * ToNested     - Nest a bunch of paths into an object
  *
  **************************************************************************************************************************************************************/
 
@@ -27,73 +27,104 @@ import { Path } from './path';
 
 
 /**
- * Get all folders recursively that have the index.yml (or whatever SETTINGS.folder.index says)
+ * Get all folders recursively that meet a condition
  *
- * @param  {string} folder    - The start folder we search in
- * @param  {array}  structure - We keep track of what we found so far to recursively find all folders
+ * @param  {string}   folder     - The start folder we search in
+ * @param  {function} condition  - A function to find the right type of file
+ * @param  {function} format     - A function to format the paths
+ * @param  {array}    files      - We keep track of what we found so far to recursively find all folders
  *
- * @return {array}            - An array of all relative paths that should be pages we need to generate
+ * @return {array}               - An array of all paths
  */
-export const GetContent = ( folder = SETTINGS.get().folder.content, content = []) => {
+export const GetType = ( folder, condition, format, files = [] ) => {
 	if( Fs.existsSync( folder ) ) {
-		Fs.readdirSync( folder )                                                 // starting from this level
+		Fs.readdirSync( folder )                                                                // starting from this level
 			.map(
-				file => {                                                            // iterate over all files
-					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {     // if this is a directory we just call ourself again
-						const result = GetContent( Path.join( folder, file ), content ); // shoot off a recursive call
-						content = [ ...result ];                                         // and spread the result into our content array
+				file => {                                                                           // iterate over all files
+					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {                    // if this is a directory we just call ourself again
+						files = [ ...GetType( Path.join( folder, file ), condition, format, files ) ];  // and spread the result into our array
 					}
 					else {
-						if( file === `${ SETTINGS.get().folder.index }.yml` ) {          // we only want the index.yml files and ignore (shared) folder
-							Log.verbose(`Found content in ${ Style.yellow( folder ) }`);
-
-							const replaceString = Path.normalize( SETTINGS.get().folder.cwd + SETTINGS.get().folder.content.replace( SETTINGS.get().folder.cwd, '' ) );
-
-							content.push( folder.replace( replaceString, '' ) );
+						if( condition( file ) ) {                                                       // let’s see if we include this file
+							Log.verbose(`Found type in ${ Style.yellow( Path.join( folder, file ) ) }`);
+							files.push( format( folder, file ) );
 						}
 					}
 				}
 			);
 
-		return content;
+		return files;
 	}
 	else {
-		Log.info(`No content found in ${ Style.yellow( folder ) }`)
+		return null;
 	}
 };
 
 
 /**
- * Get all layout files recursively
+ * Get all folders that have the index.yml (or whatever SETTINGS.folder.index says)
  *
- * @param  {string} folder    - The start folder we search in
- * @param  {array}  structure - We keep track of what we found so far to recursively find all folders
+ * @param  {string}  folder  - The start folder we search in
  *
- * @return {array}            - An array of all relative paths that should be pages we need to generate
+ * @return {array}           - An array of all relative paths that should be pages we need to generate
  */
-export const GetLayout = ( folder = SETTINGS.get().folder.code, structure = [] ) => {
-	if( Fs.existsSync( folder ) ) {
-		Fs.readdirSync( folder )                                                      // starting from this level
-			.map(
-				file => {                                                                 // iterate over all files
-					if( Fs.statSync( Path.join( folder, file ) ).isDirectory() ) {          // if this is a directory we just call ourself again
-						structure = [ ...GetLayout( Path.join( folder, file ), structure ) ]; // and spread the result into our array
-					}
-					else {
-						if( Path.extname( file ) === '.js' ) {                                // we only want js files and ignore invisible files
-							Log.verbose(`Found layout in ${ Style.yellow( Path.join( folder, file ) ) }`);
+export const GetContent = ( folder = SETTINGS.get().folder.content ) => {
+	const condition = file => file === `${ SETTINGS.get().folder.index }.yml`;
+	const replacePathString = Path.normalize( SETTINGS.get().folder.cwd + folder.replace( SETTINGS.get().folder.cwd, '' ) );
+	const format = ( folder, _ ) => folder.replace( replacePathString, '' );
 
-							const replaceString = Path.normalize( SETTINGS.get().folder.cwd + SETTINGS.get().folder.code.replace( SETTINGS.get().folder.cwd, '' ) );
+	const files = GetType( folder, condition, format );
 
-							structure.push( Path.join( folder, file ).replace( replaceString, '' ) );
-						}
-					}
-				}
-			);
-
-		return structure;
+	if( files === null ) {
+		Log.info(`No content found in ${ Style.yellow( folder ) }`)
 	}
 	else {
+		return files;
+	}
+}
+
+
+/**
+ * Get all partials from all content folders
+ *
+ * @param  {string}  folder  - The start folder we search in
+ *
+ * @return {array}           - An array of all relative paths of all partials
+ */
+export const GetPartials = ( folder = SETTINGS.get().folder.content ) => {
+	const condition = file => file.endsWith('.md');
+	const replacePathString = Path.normalize( SETTINGS.get().folder.cwd + folder.replace( SETTINGS.get().folder.cwd, '' ) );
+	const format = ( folder, file ) => Path.join( folder, file ).replace( replacePathString, '' );
+
+	const files = GetType( folder, condition, format );
+
+	if( files === null ) {
+		Log.info(`No partials found in ${ Style.yellow( folder ) }`)
+	}
+	else {
+		return files;
+	}
+}
+
+
+/**
+ * Get all layout files recursively
+ *
+ * @param  {string}  folder  - The start folder we search in
+ *
+ * @return {array}           - An array of all relative paths that we see as layouts
+ */
+export const GetLayout = ( folder = SETTINGS.get().folder.code ) => {
+	const condition = file => Path.extname( file ) === '.js';
+	const replacePathString = Path.normalize( SETTINGS.get().folder.cwd + folder.replace( SETTINGS.get().folder.cwd, '' ) );
+	const format = ( folder, file ) => Path.join( folder, file ).replace( replacePathString, '' );
+
+	const files = GetType( folder, condition, format );
+
+	if( files === null ) {
 		Log.info(`No react source found in ${ Style.yellow( folder ) }`)
 	}
-};
+	else {
+		return files;
+	}
+}
