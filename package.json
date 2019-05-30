@@ -82,7 +82,7 @@
 		"flow-bin": "^0.99.1",
 		"jest-cli": "^24.8.0",
 		"marked-man": "^0.6.0",
-		"onchange": "^6.0.0",
+		"onchange": "^5.2.0",
 		"replace-in-file": "^4.1.0"
 	},
 	"jest": {
