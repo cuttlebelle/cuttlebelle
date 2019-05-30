@@ -15,7 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
-* [v1.0.0-alpha.62 - Updated dependencies](#v100-alpha62)
+* [v1.0.0-alpha.62 - Updated dependencies, DRY code refactor, added inti test](#v100-alpha62)
 * [v1.0.0-alpha.61 - Fixed dependency range in `package.json`](#v100-alpha61)
 * [v1.0.0-alpha.60 - Dependency updates](#v100-alpha60)
 * [v1.0.0-alpha.*  - Alpha versions for testing](#v100-alpha)
@@ -44,6 +44,8 @@ Cuttlebelle changelog
 + "replace-in-file": "^3.4.3",
 - "replace-in-file": "^4.1.0",
 ```
+- DRY code refactor for recursive folder lookup
+- Added end-to-end test for `init` option
 
 ### v1.0.0-alpha.61
 
