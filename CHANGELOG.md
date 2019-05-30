@@ -15,6 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.62 - Updated dependencies](#v100-alpha62)
 * [v1.0.0-alpha.61 - Fixed dependency range in `package.json`](#v100-alpha61)
 * [v1.0.0-alpha.60 - Dependency updates](#v100-alpha60)
 * [v1.0.0-alpha.*  - Alpha versions for testing](#v100-alpha)
@@ -26,6 +27,23 @@ Cuttlebelle changelog
 
 
 ## Release History
+
+### v1.0.0-alpha.62
+
+- Updated dependencies, fixed [axios](https://nvd.nist.gov/vuln/detail/CVE-2019-10742) security bug.
+	Major changes:
+```diff
+- "del": "^3.0.0",
++ "del": "^4.1.1",
+- "fs-extra": "^7.0.1",
++ "fs-extra": "^8.0.1",
+- "copy-dir": "^0.4.0",
++ "copy-dir": "^1.1.0",
++ "onchange": "^5.2.0",
+- "onchange": "^6.0.0",
++ "replace-in-file": "^3.4.3",
+- "replace-in-file": "^4.1.0",
+```
 
 ### v1.0.0-alpha.61
 
