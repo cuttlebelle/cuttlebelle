@@ -35,12 +35,8 @@ Cuttlebelle changelog
 ```diff
 - "del": "^3.0.0",
 + "del": "^4.1.1",
-- "fs-extra": "^7.0.1",
-+ "fs-extra": "^8.0.1",
 - "copy-dir": "^0.4.0",
 + "copy-dir": "^1.1.0",
-+ "onchange": "^5.2.0",
-- "onchange": "^6.0.0",
 + "replace-in-file": "^3.4.3",
 - "replace-in-file": "^4.1.0",
 ```
