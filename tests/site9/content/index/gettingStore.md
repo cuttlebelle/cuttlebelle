@@ -1,0 +1,4 @@
+---
+layout: getStore
+thing: 'getting'
+---
