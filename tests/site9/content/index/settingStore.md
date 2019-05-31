@@ -1,0 +1,4 @@
+---
+layout: setStore
+thing: 'setting'
+---

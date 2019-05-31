@@ -12,9 +12,9 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // DEPENDENCIES
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+const ChildProcess = require('child_process');
 const { Path } = require('./../dist/path.js');
 const Replace = require('replace-in-file');
-const Spawn = require('child_process');
 const Copydir = require('copy-dir');
 const Dirsum = require('dirsum');
 const Chalk = require('chalk');
@@ -31,7 +31,7 @@ const SETTINGS = {
 	PASS: true,
 	UNITS: [
 		{
-			name: 'Test1: testing partials, nesting, all props, assets, markdown, basics',
+			name: 'Test 1: testing partials, nesting, all props, assets, markdown, basics',
 			folder: 'site1',
 			script: {
 				options: [],
@@ -40,7 +40,7 @@ const SETTINGS = {
 			empty: false,
 		},
 		{
-			name: 'Test2: testing docs generation',
+			name: 'Test 2: testing docs generation',
 			folder: 'site2',
 			script: {
 				options: ['docs'],
@@ -49,7 +49,7 @@ const SETTINGS = {
 			empty: false,
 		},
 		{
-			name: 'Test3: testing package.json settings and custom md renderer',
+			name: 'Test 3: testing package.json settings and custom md renderer',
 			folder: 'site3',
 			script: {
 				options: [],
@@ -58,7 +58,7 @@ const SETTINGS = {
 			empty: false,
 		},
 		{
-			name: 'Test4: testing partial deep nesting, nav and deep partial conversion',
+			name: 'Test 4: testing partial deep nesting, nav and deep partial conversion',
 			folder: 'site4',
 			script: {
 				options: [],
@@ -67,7 +67,7 @@ const SETTINGS = {
 			empty: false,
 		},
 		{
-			name: 'Test5: testing deep folder for content, code and assets',
+			name: 'Test 5: testing deep folder for content, code and assets',
 			folder: 'site5',
 			script: {
 				options: [],
@@ -76,7 +76,7 @@ const SETTINGS = {
 			empty: false,
 		},
 		{
-			name: 'Test6: testing complex example of a real world site',
+			name: 'Test 6: testing complex example of a real world site',
 			folder: 'site6',
 			script: {
 				options: [],
@@ -85,7 +85,7 @@ const SETTINGS = {
 			empty: false,
 		},
 		{
-			name: 'Test7: testing docs with custom settings',
+			name: 'Test 7: testing docs with custom settings',
 			folder: 'site7',
 			script: {
 				options: ['docs'],
@@ -94,10 +94,28 @@ const SETTINGS = {
 			empty: false,
 		},
 		{
-			name: 'Test8: small default html assembly test',
+			name: 'Test 8: small default html assembly test',
 			folder: 'site8',
 			script: {
 				options: [],
+			},
+			compare: 'site/',
+			empty: false,
+		},
+		// {
+		// 	name: 'Test 9: Store test',
+		// 	folder: 'site9',
+		// 	script: {
+		// 		options: [],
+		// 	},
+		// 	compare: 'site/',
+		// 	empty: false,
+		// },
+		{
+			name: 'Test10: init files',
+			folder: 'site10',
+			script: {
+				options: ['init'],
 			},
 			compare: 'site/',
 			empty: false,
@@ -302,7 +320,7 @@ const Run = ( path, settings ) => {
 		// console.log('node', [ Path.normalize(`${ path }/../../dist/index.js`), ...settings.script.options ].join(' '));
 		// console.log(`in ${ path }`);
 
-		const command = Spawn
+		const command = ChildProcess
 			.spawn( 'node', [ Path.normalize(`${ path }/../../dist/index.js`), ...settings.script.options ], {
 				cwd: path,
 			}
@@ -346,7 +364,7 @@ const Fixture = ( path, settings, result ) => {
 		if( !settings.empty ) {
 			Dirsum.digest( Path.normalize(`${ path }/_fixture/${ settings.compare }/`), 'sha256', ( error, hashes ) => {
 				if( error ) {
-					Log.pass( error );
+					Log.fail( error );
 
 					SETTINGS.PASS = false;
 

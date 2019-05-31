@@ -1,0 +1,13 @@
+title: Homepage
+
+header:
+  - /_shared/header.md
+
+main:
+  - body.md
+  - gettingStore.md
+  - nothing.md
+  - settingStore.md
+
+footer:
+  - /_shared/footer.md

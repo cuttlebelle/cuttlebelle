@@ -1,0 +1,12 @@
+{
+	"name": "test10",
+	"private": true,
+	"cuttlebelle": {
+		"folder": {
+			"content": "testfolder/content/",
+			"code": "testfolder/code/",
+			"assets": "testfolder/assets/",
+			"site": "site/"
+		}
+	}
+}

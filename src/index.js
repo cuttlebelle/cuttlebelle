@@ -85,95 +85,105 @@ if( process.argv.includes('-i') || process.argv.includes('init') ) {
 
 // build docs
 if( process.argv.includes('-d') || process.argv.includes('docs') ) {
-	BuildDocs()
-		.catch( error => {
+	( async function () {
+		let pages;
+		try {
+			pages = await BuildDocs();
+		}
+		catch( error ) {
 			Log.error(`Trying to generate the docs failed.`);
 			Log.error( error );
 
 			process.exit( 1 );
-		})
-		.then( ( pages ) => {
-			const elapsedTime = process.hrtime( startTime );
+		}
 
-			Log.done(
-				`${ pages > 0 ? `Successfully built ${ Style.yellow( pages ) } doc pages ` : `No doc pages have been build ` }` +
-				`to ${ Style.yellow( SETTINGS.get().folder.docs.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
-				`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
-			);
+		const elapsedTime = process.hrtime( startTime );
 
-			process.exit( 0 );
-	});
+		Log.done(
+			`${ pages > 0 ? `Successfully built ${ Style.yellow( pages ) } doc pages ` : `No doc pages have been build ` }` +
+			`to ${ Style.yellow( SETTINGS.get().folder.docs.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+			`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+		);
+
+		process.exit( 0 );
+	})();
 }
 
 // build site
 else {
-	// pre-render everything
-	PreRender()
-		.catch( error => {
+	( async function () {
+		let content;
+		let layout;
+
+		// pre-render everything
+		try {
+			({ content, layout } = await PreRender());
+		}
+		catch( error ) {
 			Log.error(`Trying to initilize the pages failed.`);
 			Log.error( error );
 
 			process.exit( 1 );
-		})
-		.then( ({ content, layout }) => {
-			if( content.length === 0 ) {
-				Log.info(`Nothing to generate; consider running ${ Style.yellow(`cuttlebelle init`) } to get a clean slate.`);
+		}
 
-				const elapsedTime = process.hrtime( startTime );
-				Log.done(`Done in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`);
+		// nothing to render
+		if( content.length === 0 ) {
+			Log.info(`Nothing to generate; consider running ${ Style.yellow(`cuttlebelle init`) } to get a clean slate.`);
+
+			const elapsedTime = process.hrtime( startTime );
+			Log.done(`Done in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`);
+			process.exit( 0 );
+		}
+
+		// generate all files unless it’s disabled
+		if( !process.argv.includes('-n') && !process.argv.includes('--no-generate') ) {
+			Log.info(`Generating pages`);
+
+			const allPromises = [];
+
+			// we need to move the assets folder in into the site/ folder with the same name so let's merge them together
+			let assetsLocation = SETTINGS.get().folder.assets.split('/');
+			assetsLocation = Path.normalize(`${ SETTINGS.get().folder.site }/${ assetsLocation[ assetsLocation.length - 2 ] }/`);
+
+			// copy all asset files to the site/ folder
+			allPromises.push( RenderAssets( SETTINGS.get().folder.assets, assetsLocation ) );
+
+			// render all pages to site/
+			allPromises.push( RenderAllPages( content, layout ) );
+
+			let pages;
+			try {
+				pages = await Promise.all( allPromises );
+			}
+			catch( error ) {
+				Log.error(`Generating pages failed :(`);
+				Log.error( error );
+
+				process.exit( 1 );
+			}
+
+			const elapsedTime = process.hrtime( startTime );
+
+			Log.done(
+				`${ pages.length > 0
+					? `Successfully built ${ Style.yellow( pages[ 1 ].length ) } page${ pages[ 1 ].length > 1 ? 's' : '' } `
+					: `No pages have been build ` }` +
+				`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
+				`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
+			);
+
+			// run watch on flag
+			if( Watch.running ) {
+				Watch.start();
 			}
 			else {
-
-				// generate all files unless it’s disabled
-				if( !process.argv.includes('-n') && !process.argv.includes('--no-generate') ) {
-					Log.info(`Generating pages`);
-
-					const allPromises = [];
-
-					let assetsLocation = SETTINGS.get().folder.assets.split('/');
-					assetsLocation = Path.normalize(`${ SETTINGS.get().folder.site }/${ assetsLocation[ assetsLocation.length - 2 ] }/`);
-
-					// copy all asset files to the site/ folder
-					allPromises.push(
-						RenderAssets(
-							SETTINGS.get().folder.assets,
-							assetsLocation
-						)
-					);
-
-					// render all pages to site/
-					allPromises.push( RenderAllPages( content, layout ) );
-
-					Promise.all( allPromises )
-						.catch( error => {
-							Log.error(`Generating pages failed :(`);
-							Log.error( error );
-
-							process.exit( 1 );
-						})
-						.then( pages => {
-							const elapsedTime = process.hrtime( startTime );
-
-							Log.done(
-								`${ pages.length > 0 ? `Successfully built ${ Style.yellow( pages[ 1 ].length ) } pages ` : `No pages have been build ` }` +
-								`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
-								`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
-							);
-
-							// run watch on flag
-							if( Watch.running ) {
-								Watch.start();
-							}
-					});
-				}
-				else {
-					// run watch on flag
-					if( process.argv.includes('-w') || process.argv.includes('watch') ) {
-						Watch.start();
-					}
+				// run watch on flag
+				if( process.argv.includes('-w') || process.argv.includes('watch') ) {
+					Watch.start();
 				}
 			}
-	});
+		}
+	})();
 }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
