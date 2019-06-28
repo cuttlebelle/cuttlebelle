@@ -214,7 +214,10 @@ test('RenderReact() - Render react components with static sync getInitialProps m
 
 		export default GetData;`;
 	const HTML = '<div>My Data: set</div>';
-	return RenderReact( file, props, jsx ).then( result => { expect( result ).toBe( HTML ) });
+	return RenderReact( file, props, jsx ).then( result => {
+		expect( result ).toBe( HTML );
+		expect( console.info.mock.calls[0][0] ).toContain('getInitialProps');
+	});
 });
 
 
