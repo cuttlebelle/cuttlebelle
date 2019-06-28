@@ -14,10 +14,10 @@ class AsyncData extends Component {
 		this._self = _self;
 	}
 
-	static async getInitialProps() {
+	static async getInitialProps( props ) {
 		const Sleep = wait => new Promise( resolve => setTimeout( resolve, wait ) );
 		await Sleep( 2000 );
-		return { data: 'fetched!' }
+		return { data: `fetched! ${ Object.keys( props ).sort().join(', ') }` }
 	}
 
 	render() {

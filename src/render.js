@@ -174,7 +174,7 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 			return Promise.resolve( ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) ) );
 		}
 
-		const initialProps = getInitialProps(); // now let's run this thing and see what happens
+		const initialProps = getInitialProps( props ); // now let's run this thing and see what happens
 		if( Object.prototype.toString.call(initialProps) === '[object Promise]' ) {
 			return new Promise( (resolve, reject) => {
 				initialProps

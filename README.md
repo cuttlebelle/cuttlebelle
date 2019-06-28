@@ -673,8 +673,8 @@ If you require data from an API or some other async operations you can use the s
 import React, { Component } from 'react';
 
 class GetData extends Component {
-	static async getInitialProps() {
-		const data = await FetchMyDataFromSomewhere();
+	static async getInitialProps( props ) {
+		const data = await FetchMyDataFromSomewhere( props._ID );
 		return { data };
 	}
 
@@ -691,6 +691,7 @@ export default GetData;
 ```
 
 `getInitialProps` will be executed before we render the HTML and whatever you return from it will be passed into your react component as a prop.
+The function will have access to all props of that partial as well.
 
 _(_ 💡 _Make sure you return an object so that you can find your prop again.)_
 
