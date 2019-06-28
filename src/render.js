@@ -171,21 +171,23 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 		const getInitialProps = component.getInitialProps;
 
 		if( typeof getInitialProps !== 'function' ) { // no getInitialProps in this component
-			return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
+			return Promise.resolve( ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) ) );
 		}
 
 		const initialProps = getInitialProps(); // now let's run this thing and see what happens
-		if( initialProps instanceof Promise ) {
-			return initialProps
-				.catch( error => {
-					Log.error(`Render failed for ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.code, '' ) ) }:`)
-					return Promise.reject( error );
-				})
-				.then( newProps => ReactDOMServer.renderToStaticMarkup( React.createElement( component, { ...newProps, ...props } ) ) );
+		if( Object.prototype.toString.call(initialProps) === '[object Promise]' ) {
+			return new Promise( (resolve, reject) => {
+				initialProps
+					.catch( error => {
+						Log.error(`Render failed for ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.code, '' ) ) }:`)
+						reject( error );
+					})
+					.then( newProps => resolve( ReactDOMServer.renderToStaticMarkup( React.createElement( component, { ...newProps, ...props } ) ) ) )
+			});
 		}
 		else { // in case getInitialProps isn't used as an async function (which is silly)
 			Log.info('The getInitialProps() method is meant for async data fetching. It should return a promise. Maybe use `static async getInitialProps()`');
-			return ReactDOMServer.renderToStaticMarkup( React.createElement( component, { ...initialProps, ...props } ) );
+			return Promise.resolve( ReactDOMServer.renderToStaticMarkup( React.createElement( component, { ...initialProps, ...props } ) ) );
 		}
 	}
 	catch( error ) {
@@ -197,7 +199,7 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 			process.exit( 1 );
 		}
 
-		return '';
+		return Promise.resolve('');
 	}
 }
 
@@ -309,9 +311,7 @@ export const RenderFile = ( content, file, parent = '', rendered = [], iterator 
 							...defaultProps,
 							...parsedBody.frontmatter
 						}
-					);
-
-					resolve( pageHTML );
+					).then( pageHTML => resolve( pageHTML ));
 				})
 			);
 		});

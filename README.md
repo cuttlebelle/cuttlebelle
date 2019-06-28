@@ -687,7 +687,7 @@ class GetData extends Component {
 	}
 }
 
-export default GetStore;
+export default GetData;
 ```
 
 `getInitialProps` will be executed before we render the HTML and whatever you return from it will be passed into your react component as a prop.
