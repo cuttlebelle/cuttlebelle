@@ -28,6 +28,10 @@ Cuttlebelle changelog
 
 ## Release History
 
+### v1.0.0-alpha.63
+
+- Added `getInitialProps` for async data fetching
+
 ### v1.0.0-alpha.62
 
 - Updated dependencies, fixed [axios](https://nvd.nist.gov/vuln/detail/CVE-2019-10742) security bug.

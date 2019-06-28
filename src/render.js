@@ -91,7 +91,7 @@ export const RelativeURL = ( URL, ID ) => {
  * Render a react component to string
  *
  * @param  {string} componentPath - The path to the react component
- * @param  {object} props         - The props
+ * @param  {object} props         - The props for the component
  * @param  {object} source        - An optional string to compile from a string rather than from a file, optional
  *
  * @return {string}               - The static markup of the component
@@ -168,7 +168,25 @@ export const RenderReact = ( componentPath, props, source = '' ) => {
 	}
 
 	try {
-		return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
+		const getInitialProps = component.getInitialProps;
+
+		if( typeof getInitialProps !== 'function' ) { // no getInitialProps in this component
+			return ReactDOMServer.renderToStaticMarkup( React.createElement( component, props ) );
+		}
+
+		const initialProps = getInitialProps(); // now let's run this thing and see what happens
+		if( initialProps instanceof Promise ) {
+			return initialProps
+				.catch( error => {
+					Log.error(`Render failed for ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.code, '' ) ) }:`)
+					return Promise.reject( error );
+				})
+				.then( newProps => ReactDOMServer.renderToStaticMarkup( React.createElement( component, { ...newProps, ...props } ) ) );
+		}
+		else { // in case getInitialProps isn't used as an async function (which is silly)
+			Log.info('The getInitialProps() method is meant for async data fetching. It should return a promise. Maybe use `static async getInitialProps()`');
+			return ReactDOMServer.renderToStaticMarkup( React.createElement( component, { ...initialProps, ...props } ) );
+		}
 	}
 	catch( error ) {
 		Log.error(`The react component ${ Style.yellow( componentPath.replace( SETTINGS.get().folder.code, '' ) ) } had trouble rendering:`);
