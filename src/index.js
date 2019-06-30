@@ -171,17 +171,14 @@ else {
 				`to ${ Style.yellow( SETTINGS.get().folder.site.replace( SETTINGS.get().folder.cwd, '' ) ) } ` +
 				`in ${ Style.yellow(`${ ConvertHrtime( elapsedTime ) }s`) }`
 			);
+		}
+		else {
+			Log.info(`Skipping generation of pages`);
+		}
 
-			// run watch on flag
-			if( Watch.running ) {
-				Watch.start();
-			}
-			else {
-				// run watch on flag
-				if( process.argv.includes('-w') || process.argv.includes('watch') ) {
-					Watch.start();
-				}
-			}
+		// run watch on flag
+		if( Watch.running ) {
+			Watch.start();
 		}
 	})();
 }

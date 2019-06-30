@@ -28,6 +28,11 @@ Cuttlebelle changelog
 
 ## Release History
 
+### v1.0.0-alpha.64
+
+- When quitting the watch an error would occur siting `SIGINT` which is just the signal to exit the program. We skip that "error" now.
+- When combining `-w` and `-n` flags the watch would not run. It does now.
+
 ### v1.0.0-alpha.63
 
 - Added `getInitialProps` for async data fetching
