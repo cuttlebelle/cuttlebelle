@@ -576,16 +576,25 @@ export const BuildHTML = ( object ) => {
 
 		if( !object.disabled ) {
 			const componentPath = Path.normalize(`${ SETTINGS.get().folder.code }/${ object.file }`);
-			html = RenderReact( componentPath, object.props );
+			RenderReact( componentPath, object.props ).then( html => {
+				resolve({
+					file: object.file,
+					yaml: object.yaml,
+					disabled: object.disabled,
+					html: Pretty( ParseHTML( html ) ).replace(/\r?\n/g, '\n'),
+					component: <cuttlebellesillywrapper dangerouslySetInnerHTML={ { __html: html } } />,
+				})
+			});
 		}
-
-		resolve({
-			file: object.file,
-			yaml: object.yaml,
-			disabled: object.disabled,
-			html: Pretty( ParseHTML( html ) ).replace(/\r?\n/g, '\n'),
-			component: <cuttlebellesillywrapper dangerouslySetInnerHTML={ { __html: html } } />,
-		})
+		else {
+			resolve({
+				file: object.file,
+				yaml: object.yaml,
+				disabled: object.disabled,
+				html: Pretty( ParseHTML( html ) ).replace(/\r?\n/g, '\n'),
+				component: <cuttlebellesillywrapper dangerouslySetInnerHTML={ { __html: html } } />,
+			});
+		}
 	});
 };
 

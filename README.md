@@ -582,7 +582,7 @@ export default ({ title, stylesheet, title, main, aside }) => (
 
 ```css
 main {
-	background:  rebeccapurple;
+	background: rebeccapurple;
 }
 
 aside {
@@ -663,6 +663,37 @@ A file will receive the following props:
 | `_parseReact`  | A helper function to parse a react component into a string                            | `props._parseReact( <Component prop="hi"/> )` |
 
 Plus all other variables declared inside the file either as `frontmatter` or in the `yaml` files.
+
+
+#### Async data fetching
+
+If you require data from an API or some other async operations you can use the static `getInitialProps` method in your component:
+
+```jsx
+import React, { Component } from 'react';
+
+class GetData extends Component {
+	static async getInitialProps( props ) {
+		const data = await FetchMyDataFromSomewhere( props._ID );
+		return { data };
+	}
+
+	render() {
+		return (
+			<div>
+				My Data: { this.props.data }
+			</div>
+		);
+	}
+}
+
+export default GetData;
+```
+
+`getInitialProps` will be executed before we render the HTML and whatever you return from it will be passed into your react component as a prop.
+The function will have access to all props of that partial as well.
+
+_(_ 💡 _Make sure you return an object so that you can find your prop again.)_
 
 
 **[↑ back to Usage](#usage)**

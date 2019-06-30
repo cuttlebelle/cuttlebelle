@@ -62,22 +62,24 @@ test('RenderReact() - Render react components from source correctly', () => {
 			</main>
 		);`;
 	const HTML1 = '<main><h1>Hello</h1><div>Hello World!</div></main>';
-	expect( RenderReact( file1, props1, jsx ) ).toBe( HTML1 );
+	return RenderReact( file1, props1, jsx ).then( result => { expect( result ).toBe( HTML1 ) });
 });
 
 test('RenderReact() - Render react components from file correctly', () => {
 	const file1 = Path.normalize(`${ __dirname }/mocks/react1`);
 	const props1 = { title: 'Hello', _body: 'World!' };
 	const HTML1 = '<article><h2>Hello</h2><div>World!</div></article>';
-	expect( RenderReact( file1, props1 ) ).toBe( HTML1 );
+	return RenderReact( file1, props1 ).then( result => { expect( result ).toBe( HTML1 ) });
 });
 
-test('RenderReact() - Render cuttlebelle react from file components correctly', () => {
+test('RenderReact() - Render cuttlebelle react from file components correctly 1', () => {
 	const file1 = Path.normalize(`${ __dirname }/mocks/react1`);
 	const props1 = { title: 'Hello', _body: 'World!' };
 	const HTML1 = '<article><h2>Hello</h2><div>World!</div></article>';
-	expect( RenderReact( file1, props1 ) ).toBe( HTML1 );
+	return RenderReact( file1, props1 ).then( result => { expect( result ).toBe( HTML1 ) });
+});
 
+test('RenderReact() - Render cuttlebelle react from file components correctly 2', () => {
 	const file2 = Path.normalize(`${ __dirname }/mocks/react2`);
 	const props2 = {
 		title: 'Hello World',
@@ -158,7 +160,64 @@ test('RenderReact() - Render cuttlebelle react from file components correctly', 
 		'<a class=\"navigation__item__anchor\" href=\"page1/subpage4/subsubpage3\">SubSubpage 3</a></li></ul></li></ul></li>' +
 		'<li class=\"navigation__item\"><a class=\"navigation__item__anchor\" href=\"page2\">Page 2</a></li></ul></nav><div>Main content</div></main>' +
 		'<aside>Aside content</aside></body></html>';
-	expect( RenderReact( file2, props2 ) ).toBe( HTML2 );
+	return RenderReact( file2, props2 ).then( result => { expect( result ).toBe( HTML2 ) });
+});
+
+test('RenderReact() - Render react components with static async getInitialProps method', () => {
+	const file = Path.normalize(`${ __dirname }/mocks/doesnotexist`);
+	const props = {};
+	const jsx = `
+		import React, { Component } from 'react';
+
+		class GetData extends Component {
+			static async getInitialProps() {
+				const Sleep = wait => new Promise( resolve => setTimeout( resolve, wait ) );
+				await Sleep( 1000 );
+				return { data: 'set' };
+			}
+
+			render() {
+				return (
+					<div>
+						My Data: { this.props.data }
+					</div>
+				);
+			}
+		}
+
+		export default GetData;`;
+	const HTML = '<div>My Data: set</div>';
+	return RenderReact( file, props, jsx ).then( result => { expect( result ).toBe( HTML ) });
+});
+
+test('RenderReact() - Render react components with static sync getInitialProps method', () => {
+	console.log = jest.fn();
+	console.info = jest.fn();
+	const file = Path.normalize(`${ __dirname }/mocks/doesnotexist`);
+	const props = {};
+	const jsx = `
+		import React, { Component } from 'react';
+
+		class GetData extends Component {
+			static getInitialProps() {
+				return { data: 'set' };
+			}
+
+			render() {
+				return (
+					<div>
+						My Data: { this.props.data }
+					</div>
+				);
+			}
+		}
+
+		export default GetData;`;
+	const HTML = '<div>My Data: set</div>';
+	return RenderReact( file, props, jsx ).then( result => {
+		expect( result ).toBe( HTML );
+		expect( console.info.mock.calls[0][0] ).toContain('getInitialProps');
+	});
 });
 
 

@@ -7,5 +7,7 @@ main:
   - partial1.md
   - partial2.md
   - partial3.md
+  - asyncData.md
+  - syncData.md
 footer:
   - /shared/component2.md
