@@ -40,9 +40,15 @@ test('RelativeURL() - Resolve two URLs to a relative path', () => {
 	expect( RelativeURL( '/path/to', '/' ) )                       .toBe( 'path/to' );
 	expect( RelativeURL( '/path/to', '/path2' ) )                  .toBe( '../path/to' );
 	expect( RelativeURL( '/path/to', '/path2/more/deep/yay/wow' ) ).toBe( '../../../../../path/to' );
-	expect( RelativeURL( '/path/to', '/path/to/deepter' ) )        .toBe( '..' );
+	expect( RelativeURL( '/path/to', '/path/to/deeper' ) )         .toBe( '..' );
 	expect( RelativeURL( '/path/to', '/path/to' ) )                .toBe( '.' );
 	expect( RelativeURL( '/path/to', '/path/to/more/pages' ) )     .toBe( '../..' );
+
+	// testing https://github.com/nodejs/node/issues/28549
+	expect( RelativeURL( '/', '/page1' ) )                            .toBe( '..' );
+	expect( RelativeURL( '/', '/page1/page2/foo' ) )                  .toBe( '../../..' );
+	expect( RelativeURL( '/page1/', '/page1/page2/foo' ) )            .toBe( '../..' );
+	expect( RelativeURL( '/page1/page2/', '/page1/page2/foo' ) )      .toBe( '..' );
 });
 
 
@@ -262,7 +268,6 @@ footer:
 	})
 });
 
-
 test('RenderFile() - Generate the right HTML from a mock index.yml file WITH partials', () => {
 	CreateDir( testDir );
 
@@ -319,7 +324,6 @@ test('RenderPartial() - We should not change non-partial strings', () => {
 	});
 });
 
-
 test('RenderPartial() - Return a rendered object for partials', () => {
 	console.log = jest.fn();
 	console.info = jest.fn();
@@ -350,7 +354,6 @@ test('PreRender() - Resolve with empty object if no content was found', () => {
 			expect( result.layout.length ).toEqual( 0 );
 	});
 });
-
 
 test('PreRender() - Return the correct content and layout data', () => {
 	console.log = jest.fn();
@@ -414,7 +417,6 @@ test('RenderAssets() - Copy all nested assets files to its destination', () => {
 			RemoveDir( testDir );
 	});
 });
-
 
 test('RenderAssets() - Copying non existent directory will create an empty folder in the destination', () => {
 	return RenderAssets( Path.normalize(`${ __dirname }/mocks/assets/NonExistent-Dir/`), `${ testDir }/NonExistent/` )

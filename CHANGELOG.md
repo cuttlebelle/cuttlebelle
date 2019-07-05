@@ -35,6 +35,15 @@ Cuttlebelle changelog
 
 - Fixed how errors are reported when docs failed to generate an example yaml
 - Fixed some CSS for docs
+- Updated dependencies, fixed [axios](https://nvd.nist.gov/vuln/detail/CVE-2019-10742) security bug again...
+	Major changes:
+```diff
+- "del": "^4.1.1",
++ "del": "^5.0.0",
+- "fs-extra": "^7.0.1",
++ "fs-extra": "^8.1.0",
+```
+- Deprecated support for Node 6
 
 ### v1.0.0-alpha.64
 
