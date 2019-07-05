@@ -37,8 +37,6 @@ export const Init = () /*: void */ => {
 	const _hasCode = Fs.existsSync( SETTINGS.get().folder.code );
 	const _hasAssets = Fs.existsSync( SETTINGS.get().folder.assets );
 
-	console.log(_hasContent,_hasCode,_hasAssets);
-
 	if( _hasContent || _hasCode || _hasAssets ) {
 		if( _hasContent ) {
 			Log.info(`Found content in ${ Style.yellow( SETTINGS.get().folder.content ) }`);
