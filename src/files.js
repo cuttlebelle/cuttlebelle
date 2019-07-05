@@ -139,8 +139,10 @@ export const CreateDir = ( dir /*: string */ ) /*: string */ => {
  * @param  {array} dir      - An array of all folders to be removed
  */
 export const RemoveDir = ( dir /*: string[] */ ) => {
+	const cleanDirs = dir.map( path => Path.normalize( path ) );
+
 	try {
-		Del.sync( Path.normalize( dir ) );
+		Del.sync( cleanDirs );
 		Log.verbose(`Removed ${ Style.yellow( JSON.stringify( dir ) ) } folder`)
 	}
 	catch( error ) {

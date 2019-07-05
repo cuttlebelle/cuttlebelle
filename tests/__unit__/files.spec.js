@@ -92,22 +92,22 @@ test('ReadFile() - Cannot read file that is non existent', () => {
 // RemoveDir
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 test('RemoveDir() - Removing a non existent directory', () => {
-	RemoveDir( `${ testDir }/NonExistent/CreateDir/` );
+	RemoveDir([ `${ testDir }/NonExistent/CreateDir/` ]);
 	expect( Fs.existsSync( `${ testDir }/NonExistent/CreateDir/` ) ).toEqual( false );
 
-	RemoveDir( testDir );
+	RemoveDir([ testDir ]);
 	expect( Fs.existsSync( `${ testDir }` ) ).toEqual( false );
 });
 
 test('RemoveDir() - Removing a directory', () => {
 	CreateDir( `${ testDir }/ToBeRemoved/` );
-	RemoveDir( `${ testDir }/ToBeRemoved/` );
+	RemoveDir([ `${ testDir }/ToBeRemoved/` ]);
 	expect( Fs.existsSync( `${ testDir }/ToBeRemoved/` ) ).toEqual( false );
 });
 
 test('RemoveDir() - Removing a nested directory', () => {
 	CreateDir( `${ testDir }/ToBeRemoved2/deep/last` );
-	RemoveDir( `${ testDir }/ToBeRemoved/deep/` );
+	RemoveDir([ `${ testDir }/ToBeRemoved/deep/` ]);
 
 	expect( Fs.existsSync( `${ testDir }/ToBeRemoved/deep/last` ) ).toEqual( false );
 	expect( Fs.existsSync( `${ testDir }/ToBeRemoved/deep/` ) ).toEqual( false );

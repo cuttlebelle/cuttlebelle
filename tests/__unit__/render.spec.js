@@ -262,7 +262,7 @@ footer:
 		'</main></div><footer>Footer</footer></body></html>';
 
 	return RenderFile( content, 'subpage/index.yml' ).then( result => {
-		RemoveDir( testDir );
+		RemoveDir([ testDir ]);
 
 		expect( result ).toBe( fixture );
 	})
@@ -302,7 +302,7 @@ footer:
 		'</main></div><footer>Footer</footer></body></html>';
 
 	return RenderFile( content, 'subpage/index.yml' ).then( result => {
-		RemoveDir( testDir );
+		RemoveDir([ testDir ]);
 
 		expect( result ).toBe( fixture );
 	})
@@ -414,7 +414,7 @@ test('RenderAssets() - Copy all nested assets files to its destination', () => {
 			expect( Fs.existsSync( Path.normalize(`${ testDir }/style.css`) ) ).toEqual( true );
 			expect( Fs.existsSync( Path.normalize(`${ testDir }/test/style2.css`) ) ).toEqual( true );
 
-			RemoveDir( testDir );
+			RemoveDir([ testDir ]);
 	});
 });
 

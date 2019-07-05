@@ -15,6 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.66 - Fixed error output in cli output](#v100-alpha66)
 * [v1.0.0-alpha.65 - Some fixes to docs](#v100-alpha65)
 * [v1.0.0-alpha.64 - Fixed `-w -n` flag](#v100-alpha64)
 * [v1.0.0-alpha.63 - Added `getInitialProps` for async data fetching](#v100-alpha63)
@@ -30,6 +31,10 @@ Cuttlebelle changelog
 
 
 ## Release History
+
+### v1.0.0-alpha.66
+
+- Fixed `TypeError: input.replace is not a function` error in cli output
 
 ### v1.0.0-alpha.65
 
