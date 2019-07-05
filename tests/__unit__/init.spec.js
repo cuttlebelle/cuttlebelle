@@ -33,7 +33,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-	RemoveDir( testDir );
+	RemoveDir([ testDir ]);
 });
 
 
