@@ -59,7 +59,7 @@
 		"babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
 		"browser-sync": "^2.26.7",
 		"del": "^5.0.0",
-		"fs-extra": "^8.1.0",
+		"fs-extra": "^7.0.1",
 		"js-yaml": "^3.13.1",
 		"marked": "^0.6.3",
 		"node-notifier": "^5.4.0",
