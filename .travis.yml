@@ -1,9 +1,9 @@
 language: node_js
+cache: yarn
 
 os:
   - linux
   - osx
-  - windows
 
 node_js:
   - 8
@@ -17,15 +17,19 @@ matrix:
       os: windows
       cache: false     # windows cache uploads are slow
       env: YARN_GPG=no # starts gpg-agent that never exits
+      node_js: 8
 
-    - name: "MacOS build"
-      os: osx
-      cache: yarn
+    - name: "Windows build"
+      os: windows
+      cache: false     # windows cache uploads are slow
+      env: YARN_GPG=no # starts gpg-agent that never exits
+      node_js: 10
 
-    - name: "Linux build"
-      os: linux
-      cache: yarn
-
+    - name: "Windows build"
+      os: windows
+      cache: false     # windows cache uploads are slow
+      env: YARN_GPG=no # starts gpg-agent that never exits
+      node_js: 12
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell -command 'Set-MpPreference -DisableRealtimeMonitoring $true'                                                           ; fi
