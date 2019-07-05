@@ -43,7 +43,7 @@ javascript. **No more templating languages** that only do half of what you need.
 ## Requirements
 
 
-To use Cuttlebelle you need at least node `>= 6`.
+To use Cuttlebelle you need at least node `>= 8`.
 
 
 **[⬆ back to top](#contents)**
@@ -985,9 +985,9 @@ https://travis-ci.org/cuttlebelle/cuttlebelle.svg?branch=master
 
 | OS        | Node version | Node version | Node version |
 |-----------|--------------|--------------|--------------|
-| `Linux`   | `~6`         | `~8`         | `~10`        |
-| `OSX`     | `~6`         | `~8`         | `~10`        |
-| `Windows` | `~6`         | `~8`         | `~10`        |
+| `Linux`   | `~8`         | `~10`         | `~12`       |
+| `OSX`     | `~8`         | `~10`         | `~12`       |
+| `Windows` | `~8`         | `~10`         | `~12`       |
 
 I got an [end-to-end test script](https://github.com/cuttlebelle/cuttlebelle/blob/master/tests/tester.js) that compares fixtures to what cuttlebelle
 generates. In each of those folders I test for [specific things](https://github.com/cuttlebelle/cuttlebelle/blob/master/tests/tester.js#L30) and make sure
