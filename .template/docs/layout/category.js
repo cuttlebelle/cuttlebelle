@@ -92,6 +92,7 @@ const Category = ( page ) => (
 	<html>
 	<head>
 		<title>{ page._title }</title>
+		<meta charSet="utf-8"/>
 
 		<link rel="stylesheet" href={ `${ '../'.repeat( page._level + 1 ) }assets/style.css` } />
 		{
