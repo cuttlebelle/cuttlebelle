@@ -1,16 +1,58 @@
 language: node_js
 cache: yarn
-env:
-  - YARN_GPG=no
+
 os:
   - linux
   - osx
-  - windows
+
 node_js:
-  - "6"
-  - "8"
-  - "10"
-install: yarn --ignore-scripts
+  - 8
+  - 10
+  - 12
+
+matrix:
+  fast_finish: true
+  include:
+    - name: "Windows build"
+      os: windows
+      cache: false     # windows cache uploads are slow
+      env: YARN_GPG=no # starts gpg-agent that never exits
+      node_js: 8
+
+    - name: "Windows build"
+      os: windows
+      cache: false     # windows cache uploads are slow
+      env: YARN_GPG=no # starts gpg-agent that never exits
+      node_js: 10
+
+    - name: "Windows build"
+      os: windows
+      cache: false     # windows cache uploads are slow
+      env: YARN_GPG=no # starts gpg-agent that never exits
+      node_js: 12
+
+before_install:
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell -command 'Set-MpPreference -DisableRealtimeMonitoring $true'                                                           ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then export NODEPATH=$(where.exe node.exe)                                                                                             ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then export PROJECTDIR=$(pwd)                                                                                                          ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then export YARNCACHE=$(yarn cache dir)                                                                                                ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then export TEMPDIR=$LOCALAPPDATA\\Temp                                                                                                ; fi
+
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell Add-MpPreference -ExclusionProcess ${NODEPATH}                                                                         ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell Add-MpPreference -ExclusionPath ${YARNCACHE}                                                                           ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell Add-MpPreference -ExclusionPath ${PROJECTDIR}                                                                          ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell Add-MpPreference -ExclusionPath ${TEMPDIR}                                                                             ; fi
+
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then echo "DisableArchiveScanning..."                                                                                                  ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell Start-Process -PassThru -Wait PowerShell -ArgumentList "'-Command Set-MpPreference -DisableArchiveScanning \$true'"    ; fi
+
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then echo "DisableBehaviorMonitoring..."                                                                                               ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell Start-Process -PassThru -Wait PowerShell -ArgumentList "'-Command Set-MpPreference -DisableBehaviorMonitoring \$true'" ; fi
+
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then echo "DisableRealtimeMonitoring..."                                                                                               ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell Start-Process -PassThru -Wait PowerShell -ArgumentList "'-Command Set-MpPreference -DisableRealtimeMonitoring \$true'" ; fi
+
+install: yarn --ignore-scripts --frozen-lockfile --non-interactive
 script:
   - yarn build
   - yarn test

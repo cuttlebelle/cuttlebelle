@@ -81,7 +81,12 @@ export const RelativeURL = ( URL, ID ) => {
 		ID = '';
 	}
 
-	const relative = Path.posix.relative( `${ SETTINGS.get().site.root }${ ID }`, `${ SETTINGS.get().site.root }${ URL }` );
+	let relative = Path.posix.relative( `${ SETTINGS.get().site.root }${ ID }`, `${ SETTINGS.get().site.root }${ URL }` );
+
+	// bug in node 12: https://github.com/nodejs/node/issues/28549
+	if( URL === '/' && relative.endsWith('/') ) {
+		relative = relative.slice( 0, -1 );
+	}
 
 	return relative === '' ? '.' : relative;
 }

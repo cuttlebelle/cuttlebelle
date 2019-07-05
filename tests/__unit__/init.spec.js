@@ -21,14 +21,20 @@ import Fs from 'fs';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Globals
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-const testDir = `${ __dirname }/temp2`;
+const testDir = `${ __dirname }/temp2/`;
 SETTINGS.get().folder = {
 	content: Path.normalize(`${ testDir }/content/`),
 	code: Path.normalize(`${ testDir }/code/`),
 	assets: Path.normalize(`${ testDir }/assets/`),
 };
 
-CreateDir( testDir );
+beforeEach(() => {
+	CreateDir( testDir );
+});
+
+afterEach(() => {
+	RemoveDir( testDir );
+});
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -43,10 +49,7 @@ test('Init() - Init should create three folders', () => {
 	expect( Fs.existsSync( `${ testDir }/content/` ) ).toEqual( true );
 	expect( Fs.existsSync( `${ testDir }/code/` ) ).toEqual( true );
 	expect( Fs.existsSync( `${ testDir }/assets/` ) ).toEqual( true );
-
-	RemoveDir( testDir );
 });
-
 
 test('Init() - Init should not create any folders if the content folder exists', () => {
 	console.log = jest.fn();
@@ -59,8 +62,6 @@ test('Init() - Init should not create any folders if the content folder exists',
 	expect( Fs.existsSync( `${ testDir }/content/` ) ).toEqual( true );
 	expect( Fs.existsSync( `${ testDir }/code/` ) ).toEqual( false );
 	expect( Fs.existsSync( `${ testDir }/assets/` ) ).toEqual( false );
-
-	RemoveDir( testDir );
 });
 
 test('Init() - Init should not create any folders if the code folder exists', () => {
@@ -74,8 +75,6 @@ test('Init() - Init should not create any folders if the code folder exists', ()
 	expect( Fs.existsSync( `${ testDir }/content/` ) ).toEqual( false );
 	expect( Fs.existsSync( `${ testDir }/code/` ) ).toEqual( true );
 	expect( Fs.existsSync( `${ testDir }/assets/` ) ).toEqual( false );
-
-	RemoveDir( testDir );
 });
 
 test('Init() - Init should not create any folders if the assets folder exists', () => {
@@ -89,8 +88,6 @@ test('Init() - Init should not create any folders if the assets folder exists', 
 	expect( Fs.existsSync( `${ testDir }/content/` ) ).toEqual( false );
 	expect( Fs.existsSync( `${ testDir }/code/` ) ).toEqual( false );
 	expect( Fs.existsSync( `${ testDir }/assets/` ) ).toEqual( true );
-
-	RemoveDir( testDir );
 });
 
 
@@ -101,24 +98,18 @@ test('CopyStuff() - Copy the assets folder successfully', () => {
 	CopyStuff('assets');
 
 	expect( Fs.existsSync( `${ testDir }/assets/` ) ).toEqual( true );
-
-	RemoveDir( testDir );
 });
 
 test('CopyStuff() - Copy the content folder successfully', () => {
 	CopyStuff('content');
 
 	expect( Fs.existsSync( `${ testDir }/content/` ) ).toEqual( true );
-
-	RemoveDir( testDir );
 });
 
 test('CopyStuff() - Copy the code folder successfully', () => {
 	CopyStuff('code');
 
 	expect( Fs.existsSync( `${ testDir }/code/` ) ).toEqual( true );
-
-	RemoveDir( testDir );
 });
 
 test('CopyStuff() - Copy the folders to user defined folder-names', () => {
@@ -135,6 +126,4 @@ test('CopyStuff() - Copy the folders to user defined folder-names', () => {
 	expect( Fs.existsSync( `${ testDir }/2content/` ) ).toEqual( true );
 	expect( Fs.existsSync( `${ testDir }/c2ode/` ) ).toEqual( true );
 	expect( Fs.existsSync( `${ testDir }/ass2ets/` ) ).toEqual( true );
-
-	RemoveDir( testDir );
 });
