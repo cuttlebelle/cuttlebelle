@@ -140,7 +140,7 @@ export const CreateDir = ( dir /*: string */ ) /*: string */ => {
  */
 export const RemoveDir = ( dir /*: string[] */ ) => {
 	try {
-		Del.sync( dir );
+		Del.sync( Path.normalize( dir ) );
 		Log.verbose(`Removed ${ Style.yellow( JSON.stringify( dir ) ) } folder`)
 	}
 	catch( error ) {

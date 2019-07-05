@@ -30,10 +30,12 @@ SETTINGS.get().folder = {
 
 beforeEach(() => {
 	CreateDir( testDir );
+	console.log('beforeEach!');
 });
 
 afterEach(() => {
 	RemoveDir( testDir );
+	console.log('afterEach!');
 });
 
 
@@ -50,7 +52,6 @@ test('Init() - Init should create three folders', () => {
 	expect( Fs.existsSync( `${ testDir }/code/` ) ).toEqual( true );
 	expect( Fs.existsSync( `${ testDir }/assets/` ) ).toEqual( true );
 });
-
 
 test('Init() - Init should not create any folders if the content folder exists', () => {
 	// console.log = jest.fn();
