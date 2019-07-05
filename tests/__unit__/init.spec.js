@@ -30,12 +30,10 @@ SETTINGS.get().folder = {
 
 beforeEach(() => {
 	CreateDir( testDir );
-	console.log('beforeEach!');
 });
 
 afterEach(() => {
 	RemoveDir( testDir );
-	console.log('afterEach!');
 });
 
 
@@ -43,8 +41,8 @@ afterEach(() => {
 // Init
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 test('Init() - Init should create three folders', () => {
-	// console.log = jest.fn();
-	// console.info = jest.fn();
+	console.log = jest.fn();
+	console.info = jest.fn();
 
 	Init();
 
@@ -54,13 +52,12 @@ test('Init() - Init should create three folders', () => {
 });
 
 test('Init() - Init should not create any folders if the content folder exists', () => {
-	// console.log = jest.fn();
-	// console.info = jest.fn();
+	console.log = jest.fn();
+	console.info = jest.fn();
 
 	CreateDir( Path.normalize(`${ testDir }/content/`) );
 
 	Init();
-	// console.error(JSON.stringify(console.info.mock.calls,null,2));
 
 	expect( Fs.existsSync( `${ testDir }/content/` ) ).toEqual( true );
 	expect( Fs.existsSync( `${ testDir }/code/` ) ).toEqual( false );
