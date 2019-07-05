@@ -10,6 +10,26 @@ node_js:
   - "8"
   - "10"
   - "12"
+before_install:
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then export NODEPATH=$(where.exe node.exe)                                                                                             ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then export PROJECTDIR=$(pwd)                                                                                                          ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then export YARNCACHE=$(yarn cache dir)                                                                                                ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then export TEMPDIR=$LOCALAPPDATA\\Temp                                                                                                ; fi
+
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell Add-MpPreference -ExclusionProcess ${NODEPATH}                                                                         ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell Add-MpPreference -ExclusionPath ${YARNCACHE}                                                                           ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell Add-MpPreference -ExclusionPath ${PROJECTDIR}                                                                          ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell Add-MpPreference -ExclusionPath ${TEMPDIR}                                                                             ; fi
+
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then echo "DisableArchiveScanning..."                                                                                                  ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell Start-Process -PassThru -Wait PowerShell -ArgumentList "'-Command Set-MpPreference -DisableArchiveScanning \$true'"    ; fi
+
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then echo "DisableBehaviorMonitoring..."                                                                                               ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell Start-Process -PassThru -Wait PowerShell -ArgumentList "'-Command Set-MpPreference -DisableBehaviorMonitoring \$true'" ; fi
+
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then echo "DisableRealtimeMonitoring..."                                                                                               ; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then powershell Start-Process -PassThru -Wait PowerShell -ArgumentList "'-Command Set-MpPreference -DisableRealtimeMonitoring \$true'" ; fi
+
 install: yarn --ignore-scripts
 script:
   - yarn build
