@@ -92,6 +92,7 @@ const Index = ( page ) => (
 	<html>
 	<head>
 		<title>{ page._title }</title>
+		<meta charSet="utf-8"/>
 
 		<link rel="stylesheet" href='assets/style.css' />
 	</head>

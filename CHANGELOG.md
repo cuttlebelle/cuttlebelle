@@ -15,6 +15,9 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.65 - Some fixes to docs](#v100-alpha65)
+* [v1.0.0-alpha.64 - Fixed `-w -n` flag](#v100-alpha64)
+* [v1.0.0-alpha.63 - Added `getInitialProps` for async data fetching](#v100-alpha63)
 * [v1.0.0-alpha.62 - Updated dependencies, DRY code refactor, added inti test](#v100-alpha62)
 * [v1.0.0-alpha.61 - Fixed dependency range in `package.json`](#v100-alpha61)
 * [v1.0.0-alpha.60 - Dependency updates](#v100-alpha60)
@@ -27,6 +30,11 @@ Cuttlebelle changelog
 
 
 ## Release History
+
+### v1.0.0-alpha.65
+
+- Fixed how errors are reported when docs failed to generate an example yaml
+- Fixed some CSS for docs
 
 ### v1.0.0-alpha.64
 

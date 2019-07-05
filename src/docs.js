@@ -242,7 +242,7 @@ export const GetCategoryComponents = ( category, components ) => {
 
 					allComponents.push(
 						ParseComponent( component )                                // Parse the component first
-							.then( ( data ) => BuildPropsYaml( data ) )              // then we build the yaml and props
+							.then( ( data ) => BuildPropsYaml( data, component ) )   // then we build the yaml and props
 							.then( ( data ) => BuildHTML( data ) )                   // now we shoot it all into the HTML blender
 							.then( data => Object.assign( {}, { category }, data ) ) // and finally we keep category in our return value
 					);
@@ -449,10 +449,11 @@ export const ParseComponent = ( component ) => {
  * @param  {object} object          - The object with infos about this react component
  * @param  {string} object.file     - The file path and name
  * @param  {object} object.infos    - The object with parsed infos about the react component
+ * @param  {object} component       - The component name for stack trace
  *
  * @return {object}                 - The object with all gathered infos, format: { file: '', contents: '', infos: {}, props: {}, yaml: '' }
  */
-export const BuildPropsYaml = ( object ) => {
+export const BuildPropsYaml = ( object, component ) => {
 	Log.verbose(`Building props and yaml from the gathered infos for ${ Style.yellow( object.file ) }`);
 
 	return new Promise( ( resolve, reject ) => {
@@ -475,7 +476,7 @@ export const BuildPropsYaml = ( object ) => {
 
 				prop.description = prop.description || '';
 
-				example = ParseYaml( prop.description );
+				example = ParseYaml( prop.description, `props example for ${ component }` );
 				props = Object.assign( {}, props, ParseExample( example ) );
 
 				if( propKey === '_body' ) {

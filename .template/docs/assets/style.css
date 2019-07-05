@@ -3,6 +3,7 @@
 	margin: 0;
 	padding: 0;
 	color: #313131;
+	background:  #fff;
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
@@ -96,6 +97,7 @@ a.cuttlebelle-docs__aside__headline:focus {
 .cuttlebelle-partial {
 	display: block;
 	width: 100%;
+	opacity: 0.5;
 }
 
 .cuttlebelle-partial:not(:first-child) {
@@ -123,6 +125,11 @@ a.cuttlebelle-docs__aside__headline:focus {
 	margin-bottom: 2em;
 	border-radius: 3px;
 	color: #fff;
+}
+
+.cuttlebelle-docs__main__component__yaml,
+.cuttlebelle-docs__main__component__html {
+	text-align: left;
 }
 
 .cuttlebelle-docs__main__component__yaml {
