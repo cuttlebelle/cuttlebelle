@@ -15,6 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.67 - Updated dependencies](#v100-alpha67)
 * [v1.0.0-alpha.66 - Fixed error output in cli output](#v100-alpha66)
 * [v1.0.0-alpha.65 - Some fixes to docs](#v100-alpha65)
 * [v1.0.0-alpha.64 - Fixed `-w -n` flag](#v100-alpha64)
@@ -31,6 +32,15 @@ Cuttlebelle changelog
 
 
 ## Release History
+
+### v1.0.0-alpha.67
+
+- Updated dependencies, fixed [lodash](https://github.com/lodash/lodash/pull/4336) security bug.
+	Major changes:
+```diff
+- "marked": "^0.6.3",
++ "marked": "^0.7.0",
+```
 
 ### v1.0.0-alpha.66
 
