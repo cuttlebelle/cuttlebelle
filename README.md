@@ -782,9 +782,9 @@ A breakdown:
                                   // https://github.com/chjj/marked#renderer
                                   // The only addition is the `preparse` key that will be run
                                   // before we go into the markdown parsing
-    "watchTimeout": 400           // This is the time in milliseconds the watch waits
+    "watchTimeout": 400,          // This is the time in milliseconds the watch waits
                                   // to detect a double saves action
-    "browserSync": {}             // You can overwrite the browserSync options here
+    "browserSync": {},            // You can overwrite the browserSync options here
                                   // https://www.browsersync.io/docs/options
     "globalProp": {}              // A global prop that can be set here accessible for all pages
   },
