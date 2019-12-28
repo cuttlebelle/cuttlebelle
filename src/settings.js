@@ -173,6 +173,7 @@ export const SETTINGS = {
 				localSettings.docs = {};
 			}
 
+			// $FlowFixMe
 			delete localSettings.folder.cwd; // ignore the cwd key
 
 			// let’s make them absolute
