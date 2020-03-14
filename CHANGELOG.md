@@ -15,7 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
-* [v1.0.0-alpha.69 - Deprecated node 8, Updated dependencies](#v100-alpha69)
+* [v1.0.0-alpha.69 - Disabled Windows support, Deprecated node 8, Updated dependencies](#v100-alpha69)
 * [v1.0.0-alpha.68 - Updated dependencies](#v100-alpha68)
 * [v1.0.0-alpha.67 - Updated dependencies](#v100-alpha67)
 * [v1.0.0-alpha.66 - Fixed error output in cli output](#v100-alpha66)
@@ -37,6 +37,7 @@ Cuttlebelle changelog
 
 ### v1.0.0-alpha.69
 
+- Disabled Windows support as it's too hard to maintain
 - Deprecated support for node 8
 - Updated dependencies, fixed [acorn](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-7598) security bug.
 	Major changes:
