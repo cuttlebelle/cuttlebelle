@@ -1,7 +1,7 @@
 {
 	"name": "cuttlebelle",
 	"description": "The react static site generator that separates editing and code concerns",
-	"version": "1.0.0-alpha.68",
+	"version": "1.0.0-alpha.69",
 	"homepage": "http://cuttlebelle.com",
 	"author": {
 		"name": "Dominik Wilkowski",
@@ -29,7 +29,7 @@
 		}
 	],
 	"engines": {
-		"node": ">=8"
+		"node": ">=10"
 	},
 	"scripts": {
 		"prepublish": "yarn build && yarn test && yarn man",
@@ -47,14 +47,14 @@
 		"nuke": "rm -rf dist && rm -rf node_modules && rm yarn.lock"
 	},
 	"dependencies": {
-		"@babel/core": "^7.7.7",
-		"@babel/plugin-proposal-object-rest-spread": "^7.7.7",
-		"@babel/plugin-syntax-dynamic-import": "^7.7.4",
-		"@babel/plugin-transform-runtime": "^7.7.6",
-		"@babel/preset-env": "^7.7.7",
-		"@babel/preset-react": "^7.7.4",
-		"@babel/register": "^7.7.7",
-		"@babel/runtime": "^7.7.7",
+		"@babel/core": "^7.8.7",
+		"@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+		"@babel/plugin-syntax-dynamic-import": "^7.8.3",
+		"@babel/plugin-transform-runtime": "^7.8.3",
+		"@babel/preset-env": "^7.8.7",
+		"@babel/preset-react": "^7.8.3",
+		"@babel/register": "^7.8.6",
+		"@babel/runtime": "^7.8.7",
 		"babel-plugin-import-redirect": "^1.1.1",
 		"babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
 		"browser-sync": "^2.26.7",
@@ -65,22 +65,22 @@
 		"node-notifier": "^6.0.0",
 		"prettify-html": "^0.0.2",
 		"prop-types": "^15.7.2",
-		"react": "^16.12.0",
-		"react-docgen": "^5.0.0",
-		"react-dom": "^16.12.0",
+		"react": "^16.13.0",
+		"react-docgen": "^5.3.0",
+		"react-dom": "^16.13.0",
 		"require-from-string": "^2.0.2",
-		"slugify": "^1.3.6",
+		"slugify": "^1.4.0",
 		"traverse": "^0.6.6",
 		"window-size": "^1.1.1"
 	},
 	"devDependencies": {
-		"@babel/cli": "^7.7.7",
+		"@babel/cli": "^7.8.4",
 		"chalk": "^3.0.0",
 		"copy-dir": "^1.2.0",
-		"diff": "^4.0.1",
+		"diff": "^4.0.2",
 		"dirsum": "^0.1.1",
-		"flow-bin": "^0.114.0",
-		"jest-cli": "^24.9.0",
+		"flow-bin": "^0.120.1",
+		"jest-cli": "^25.1.0",
 		"marked-man": "^0.7.0",
 		"onchange": "^6.1.0",
 		"replace-in-file": "^5.0.2"
