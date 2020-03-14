@@ -6,9 +6,9 @@ os:
   - osx
 
 node_js:
-  - 8
   - 10
   - 12
+  - node
 
 matrix:
   fast_finish: true

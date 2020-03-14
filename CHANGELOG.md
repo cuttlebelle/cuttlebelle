@@ -15,6 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.69 - Deprecated node 8, Updated dependencies](#v100-alpha69)
 * [v1.0.0-alpha.68 - Updated dependencies](#v100-alpha68)
 * [v1.0.0-alpha.67 - Updated dependencies](#v100-alpha67)
 * [v1.0.0-alpha.66 - Fixed error output in cli output](#v100-alpha66)
@@ -33,6 +34,38 @@ Cuttlebelle changelog
 
 
 ## Release History
+
+### v1.0.0-alpha.69
+
+- Deprecated support for node 8
+- Updated dependencies, fixed [acorn](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-7598) security bug.
+	Major changes:
+```diff
+- "@babel/core": "^7.7.7",
++ "@babel/core": "^7.8.7",
+- "@babel/plugin-proposal-object-rest-spread": "^7.7.7",
++ "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+- "@babel/plugin-syntax-dynamic-import": "^7.7.4",
++ "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+- "@babel/plugin-transform-runtime": "^7.7.6",
++ "@babel/plugin-transform-runtime": "^7.8.3",
+- "@babel/preset-env": "^7.7.7",
++ "@babel/preset-env": "^7.8.7",
+- "@babel/preset-react": "^7.7.4",
++ "@babel/preset-react": "^7.8.3",
+- "@babel/register": "^7.7.7",
++ "@babel/register": "^7.8.6",
+- "@babel/runtime": "^7.7.7",
++ "@babel/runtime": "^7.8.7",
+- "react": "^16.12.0",
++ "react": "^16.13.0",
+- "react-docgen": "^5.0.0",
++ "react-docgen": "^5.3.0",
+- "react-dom": "^16.12.0",
++ "react-dom": "^16.13.0",
+- "slugify": "^1.3.6",
++ "slugify": "^1.4.0",
+```
 
 ### v1.0.0-alpha.68
 
