@@ -15,7 +15,11 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import Marked from 'marked';
+import Fs from 'fs';
+import Remark from 'remark';
+import HTML from 'remark-html';
+import visit from 'unist-util-visit';
+import is from 'unist-util-is';
 import YAML from 'js-yaml';
 import React from 'react';
 
@@ -23,7 +27,7 @@ import React from 'react';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { Log, Style } from './helper';
+import { Log, Style, Slug } from './helper';
 import { SETTINGS } from './settings';
 import { Path } from './path';
 
@@ -80,41 +84,112 @@ export const ParseContent = ( content, file = 'partial.md', props = {} ) => {
  */
 export const ParseMD = ( markdown, file, props ) => {
 	if( typeof markdown === 'string' ) {
+		const mdSettings = SETTINGS.get().site.markdown;
 
-		let renderer = new Marked.Renderer();
+		const md = new Remark()
+			.data( 'settings', {
+				entities: false
+			} )
+			.use( HTML );
 
-		if( SETTINGS.get().site.markdownRenderer ) {
-			const filePath = Path.normalize(`${ process.cwd() }/${ SETTINGS.get().site.markdownRenderer }`);
+		// Add IDs to headings
+		if( mdSettings.headingIds === true ) {
+			md.use(
+				() => ( tree ) => {
+					visit( tree, 'heading', node => {
+						if( !node.children || node.children.length < 1 ) {
+							return;
+						}
 
-			try {
-				const customRenderer = require( filePath );
-				renderer = customRenderer({ Marked: new Marked.Renderer(), ...props });
+						let text = '';
+						node.children.forEach( child => {
+							if( is( child, 'text' ) ) {
+								text += child.value;
+							}
+						} );
+
+						let data = node.data || ( node.data = {} );
+						let hProperties = data.hProperties || ( data.hProperties = {} );
+						let id = hProperties.id;
+
+						if( id ) {
+							data.id = id;
+							return;
+						}
+
+						if( !text ) {
+							return;
+						}
+
+						id = Slug( text );
+						data.id = id;
+						hProperties.id = id;
+					} );
+				}
+			);
+		}
+
+		let plugins = mdSettings.plugins;
+		if( plugins ) {
+			if( typeof plugins === 'string' ) {
+				plugins = [ plugins ];
 			}
-			catch( error ) {
-				Log.error(`Using the custom renderer for markdown caused an error at ${ Style.yellow( filePath ) }`);
-				Log.error( error );
+
+			if( Array.isArray( plugins ) && plugins.length > 0 ) {
+				plugins.forEach( plugin => {
+					// First check if it is a local plugin
+					let pluginPath = Path.normalize( `${ process.cwd() }/${ plugin }` );
+
+					if( !Fs.existsSync( pluginPath ) ) {
+						// Null the path as it was not found
+						pluginPath = null;
+
+						// It could be an NPM module plugin name instead
+						let pluginResolved = null;
+						try {
+							pluginResolved = require.resolve( plugin );
+						}
+						catch( error ) {
+							// Do nothing
+						}
+						if ( pluginResolved ) {
+							pluginPath = plugin;
+						}
+					}
+
+					if( pluginPath ) {
+						try {
+							md.use( require( pluginPath ), props );
+						}
+						catch( error ) {
+							Log.error(`Using the plugin for markdown caused an error at ${ Style.yellow( pluginPath ) }`);
+							Log.error( error );
+
+							if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if something goes wrong in production
+								process.exit( 1 );
+							}
+						}
+					}
+				} );
+			}
+		}
+
+		let processed;
+		md.process( markdown, ( error, result ) => {
+			if( error ) {
+				Log.error(`Rendering markdown caused an error in ${ Style.yellow( file ) }`);
+				Log.error( String( error ) );
 
 				if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if something goes wrong in production
 					process.exit( 1 );
 				}
-			}
-		}
-
-		try {
-			if( typeof renderer.preparse === 'function' ) {
-				markdown = renderer.preparse( markdown );
+				return;
 			}
 
-			return Marked( markdown, { renderer: renderer } );
-		}
-		catch( error ) {
-			Log.error(`Rendering markdown caused an error in ${ Style.yellow( file ) }`);
-			Log.error( error );
+			processed = String( result );
+		} );
 
-			if( process.env.NODE_ENV === 'production' ) { // let’s die in a fiery death if something goes wrong in production
-				process.exit( 1 );
-			}
-		}
+		return processed;
 	}
 	else {
 		return markdown;

@@ -734,7 +734,10 @@ See below all configuration with default values:
 +			"root": "/",
 +			"doctype": "<!DOCTYPE html>",
 +			"redirectReact": true,
-+			"markdownRenderer": "",
++			"markdown": {
++				"headingIds": true,
++				"plugins": []
++			},
 +			"watchTimeout": 400,
 +			"browserSync": {},
 +			"globalProp": {},
@@ -777,7 +780,10 @@ A breakdown:
     "redirectReact": true,        // You can disable redirecting `import` calls to the locally
                                   // installed react instance of cuttlebelle rather than your
                                   // local folder.
-    "markdownRenderer": "",       // A path to a file that `module.exports` an Marked.Renderer()
+    "markdown": {                 // Markdown settings
+      "headingIds": true          // Add id attributes to headings
+      "plugins": []               // A list of markdown plugin paths or NPM plugin names of
+    },                            // Remark plugins you have installed locally.
                                   // object. Learn more about it here:
                                   // https://github.com/chjj/marked#renderer
                                   // The only addition is the `preparse` key that will be run
