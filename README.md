@@ -989,12 +989,12 @@ Cuttlebelle is being automatically tested on the below systems and node versions
 
 https://travis-ci.org/cuttlebelle/cuttlebelle.svg?branch=master
 
-| OS        | Node version | Node version | Node version |
-|-----------|--------------|--------------|--------------|
-| `Linux`   | `~8`         | `~10`         | `~12`       |
-| `OSX`     | `~8`         | `~10`         | `~12`       |
+| OS        | Node version | Node version |
+|-----------|--------------|--------------|
+| `Linux`   | `~10`        | `~12`        |
+| `OSX`     | `~10`        | `~12`        |
 
-I got an [end-to-end test script](https://github.com/cuttlebelle/cuttlebelle/blob/master/tests/tester.js) that compares fixtures to what cuttlebelle
+I've got an [end-to-end test script](https://github.com/cuttlebelle/cuttlebelle/blob/master/tests/tester.js) that compares fixtures to what cuttlebelle
 generates. In each of those folders I test for [specific things](https://github.com/cuttlebelle/cuttlebelle/blob/master/tests/tester.js#L30) and make sure
 the checksum of the generated files match the fixtures. In addition to that I created as many
 [unit tests](https://github.com/cuttlebelle/cuttlebelle/tree/master/tests/__unit__) as I can via [Jest](https://facebook.github.io/jest/).
