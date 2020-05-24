@@ -989,10 +989,10 @@ Cuttlebelle is being automatically tested on the below systems and node versions
 
 https://travis-ci.org/cuttlebelle/cuttlebelle.svg?branch=master
 
-| OS        | Node version | Node version |
-|-----------|--------------|--------------|
-| `Linux`   | `~10`        | `~12`        |
-| `OSX`     | `~10`        | `~12`        |
+| OS        | Node version | Node version | Node version |
+|-----------|--------------|--------------|--------------|
+| `Linux`   | `~10`        | `~12`        | `latest`     |
+| `OSX`     | `~10`        | `~12`        | `latest`     |
 
 I've got an [end-to-end test script](https://github.com/cuttlebelle/cuttlebelle/blob/master/tests/tester.js) that compares fixtures to what cuttlebelle
 generates. In each of those folders I test for [specific things](https://github.com/cuttlebelle/cuttlebelle/blob/master/tests/tester.js#L30) and make sure
