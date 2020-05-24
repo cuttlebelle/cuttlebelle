@@ -24,6 +24,7 @@ const attacher = ({
 			6: 'display-6',
 		};
 
+		// Set all headings one way first
 		visit( tree, 'heading', node => {
 			let data = node.data || ( node.data = {} );
 			if( node.data.id ) {
@@ -33,11 +34,29 @@ const attacher = ({
 			if( hProperties && hProperties.id ) {
 				delete node.data.hProperties.id;
 			}
+		} );
 
-			// This is fragile
-			if( node.children && node.children.length > 1 && node.children[0].type === 'linkReference' ) {
-				hProperties.class = headingLevels[node.children[0].label];
-				node.children.shift();
+		// Then selectively change them where required
+		visit( tree, 'linkReference', ( node, _index, parent ) => {
+			if( !parent.type || parent.type !== 'heading' ) {
+				return;
+			}
+
+			if( node !== parent.children[0] ) {
+				return;
+			}
+
+			if( !node.label || ! /[0-9]+/.test( node.label ) ) {
+				return;
+			}
+
+			let data = parent.data || ( parent.data = {} );
+			let hProperties = data.hProperties || ( data.hProperties = {} );
+
+			let newClass = headingLevels[ node.label ];
+			if( newClass ) {
+				parent.data.hProperties.class = newClass;
+				parent.children.shift();
 			}
 		} );
 

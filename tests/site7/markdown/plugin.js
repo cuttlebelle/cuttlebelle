@@ -24,6 +24,7 @@ const attacher = ({
 			6: 'display-6',
 		};
 
+		// Remove IDs from headings - this should really be done via the setting
 		visit( tree, 'heading', node => {
 			let data = node.data || ( node.data = {} );
 			if( node.data.id ) {
@@ -33,18 +34,29 @@ const attacher = ({
 			if( hProperties && hProperties.id ) {
 				delete node.data.hProperties.id;
 			}
+		} );
 
-			// This is fragile
-			let display;
-			if( node.children && node.children.length > 1 && node.children[0].type === 'linkReference' ) {
-				display = node.children[0].label;
-				node.children.shift();
+		// Then selectively change them where required
+		visit( tree, 'linkReference', ( node, _index, parent ) => {
+			if( !parent.type || parent.type !== 'heading' ) {
+				return;
 			}
 
-			if( headingLevels[ display ] ) {
-				let data = node.data || ( node.data = {} );
-				let hProperties = data.hProperties || ( data.hProperties = {} );
-				node.data.hProperties.class = headingLevels[ display ];
+			if( node !== parent.children[0] ) {
+				return;
+			}
+
+			if( !node.label || ! /[0-9]+/.test( node.label ) ) {
+				return;
+			}
+
+			let data = parent.data || ( parent.data = {} );
+			let hProperties = data.hProperties || ( data.hProperties = {} );
+
+			let newClass = headingLevels[ node.label ];
+			if( newClass ) {
+				parent.data.hProperties.class = newClass;
+				parent.children.shift();
 			}
 		} );
 
@@ -91,7 +103,7 @@ const attacher = ({
 		const entitiesSplit = new RegExp( entitiesTest.source, entitiesTest.flags + 'g' );
 
 		visit( tree, 'text', ( node, _index, parent ) => {
-			if( [ 'code', 'inlineCode' ].includes( parent.type ) ) {
+			if( [ 'code', 'inlineCode', 'fencedCode' ].includes( parent.type ) ) {
 				return;
 			}
 
