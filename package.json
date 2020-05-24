@@ -1,7 +1,7 @@
 {
 	"name": "cuttlebelle",
 	"description": "The react static site generator that separates editing and code concerns",
-	"version": "1.0.0-alpha.69",
+	"version": "1.0.0-alpha.70",
 	"homepage": "http://cuttlebelle.com",
 	"author": {
 		"name": "Dominik Wilkowski",
@@ -88,8 +88,7 @@
 		"onchange": "^7.0.2",
 		"remark-dropcap": "^0.1.7",
 		"remark-man": "^7.0.0",
-		"replace-in-file": "^6.0.0",
-		"unist-util-visit-parents": "^3.0.2"
+		"replace-in-file": "^6.0.0"
 	},
 	"jest": {
 		"testEnvironment": "node",
