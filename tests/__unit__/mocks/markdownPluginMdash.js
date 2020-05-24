@@ -16,7 +16,7 @@ const attacher = ({
 } = {}) => {
   const transformer = ( tree, _file ) => {
     visit( tree, 'text', ( node, _index, parent ) => {
-      if( [ 'code', 'fencedCode' ].includes( parent.type ) ) {
+      if( [ 'code', 'inlineCode' ].includes( parent.type ) ) {
         return;
       }
 

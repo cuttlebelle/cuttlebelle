@@ -83,7 +83,7 @@ const attacher = ({
 		const entitiesSplit = new RegExp( entitiesTest.source, entitiesTest.flags + 'g' );
 
 		visit( tree, 'text', ( node, _index, parent ) => {
-			if( [ 'code', 'fencedCode' ].includes( parent.type ) ) {
+			if( [ 'code', 'inlineCode' ].includes( parent.type ) ) {
 				return;
 			}
 
