@@ -987,7 +987,7 @@ _(_ 💡 _Please look at the coding style and work with it, not against it :smil
 
 Cuttlebelle is being automatically tested on the below systems and node versions.
 
-https://travis-ci.org/cuttlebelle/cuttlebelle.svg?branch=master
+![Travis CI - Build Status](https://travis-ci.org/cuttlebelle/cuttlebelle.svg?branch=master)
 
 | OS        | Node version | Node version | Node version |
 |-----------|--------------|--------------|--------------|
