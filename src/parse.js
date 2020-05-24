@@ -87,9 +87,6 @@ export const ParseMD = ( markdown, file, props ) => {
 		const mdSettings = SETTINGS.get().site.markdown;
 
 		const md = new Remark()
-			.data( 'settings', {
-				entities: false
-			} )
 			.use( HTML );
 
 		// Add IDs to headings

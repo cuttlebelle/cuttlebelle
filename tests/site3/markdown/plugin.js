@@ -14,44 +14,16 @@ const attacher = ({
 	_parseReact = null,  // A function that parses React to static markup
 	_globalProp = null   // A prop that can be set globally from the `package.json`
 } = {}) => {
-	const headingLevels = {
-		1: 'display-1',
-		2: 'display-2',
-		3: 'display-3',
-		4: 'display-4',
-		5: 'display-5',
-		6: 'display-6',
-	};
+	const transformer = (tree, _file) => {
+		const headingLevels = {
+			1: 'display-1',
+			2: 'display-2',
+			3: 'display-3',
+			4: 'display-4',
+			5: 'display-5',
+			6: 'display-6',
+		};
 
-	// Unicode object keys?… that's alright I guess…
-	const entities = {
-		'—': {
-			pattern: '\\—',
-			encoded: '&mdash;'
-		},
-		'–': {
-			pattern: '\\–',
-			encoded: '&ndash;'
-		},
-		'"': {
-			pattern: '\\"',
-			encoded: '&quot;'
-		},
-		"'": {
-			pattern: "\\'",
-			encoded: '&apos;'
-		},
-		'...': {
-			pattern: '\\.\\.\\.',
-			encoded: '&hellip;'
-		}
-	};
-
-	const joinEntities = Object.values(entities).map(entity => entity.pattern).join('|');
-	const testEntitiesRE = new RegExp(`(?:${joinEntities})`);
-	const matchEntitiesRE = new RegExp(`((?:(?!(?:${joinEntities}))[^])*)((?:${joinEntities})?)`, 'g');
-
-	const transformer = (tree, file) => {
 		visit( tree, 'heading', node => {
 			let data = node.data || ( node.data = {} );
 			if( node.data.id ) {
@@ -84,51 +56,73 @@ const attacher = ({
 			}
 		} );
 
-		visit( tree, 'paragraph', node => {
-			if( !node.children || node.children.length < 1 ) {
+		// Unicode object keys?… that's alright I guess…
+		const entities = {
+			'—': {
+				pattern: '\\—',
+				encoded: '&mdash;'
+			},
+			'–': {
+				pattern: '\\–',
+				encoded: '&ndash;'
+			},
+			'"': {
+				pattern: '\\"',
+				encoded: '&quot;'
+			},
+			"'": {
+				pattern: "\\'",
+				encoded: '&apos;'
+			},
+			'...': {
+				pattern: '\\.\\.\\.',
+				encoded: '&hellip;'
+			}
+		};
+		const entitiesJoined = Object.values(entities).map(entity => entity.pattern).join('|');
+		const entitiesTest = new RegExp(`(${entitiesJoined})`);
+		const entitiesSplit = new RegExp( entitiesTest.source, entitiesTest.flags + 'g' );
+
+		visit( tree, 'text', ( node, _index, parent ) => {
+			if( [ 'code', 'fencedCode' ].includes( parent.type ) ) {
 				return;
 			}
 
-			const processChildren = node.children.some(child => {
-				if( !child.type || child.type !== 'text' || !child.value ) {
-					return;
-				}
+			if( !node.value ) {
+				return;
+			}
 
-				return testEntitiesRE.test( child.value );
-			});
-
-			if( !processChildren ) {
+			if( !entitiesTest.test( node.value ) ) {
 				return;
 			}
 
 			const newChildren = [];
-			node.children.forEach(child => {
-				if( child.position ) {
-					delete child.position;
-				}
-				if( !child.type === 'text' || !testEntitiesRE.test( child.value ) ) {
+			parent.children.forEach(child => {
+				if (child !== node || !child.value ) {
+					if( child.position ) {
+						delete child.position;
+					}
 					newChildren.push( child );
 					return;
 				}
 
-				[ ...child.value.matchAll(matchEntitiesRE) ].forEach(([_full, text, entity]) => {
-					if( text ) {
-						newChildren.push( {
-							type: 'text',
-							value: text
-						} );
-					}
-
-					if( entity ) {
+				child.value.split( entitiesSplit ).forEach(part => {
+					if( Object.keys( entities ).includes( part ) ) {
 						newChildren.push( {
 							type: 'html',
-							value: entities[entity].encoded
+							value: entities[part].encoded
+						} );
+					}
+					else {
+						newChildren.push( {
+							type: 'text',
+							value: part
 						} );
 					}
 				});
 			});
 
-			node.children = newChildren;
+			parent.children = newChildren;
 		} );
 	}
 

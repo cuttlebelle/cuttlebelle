@@ -14,7 +14,7 @@ const attacher = ({
 	_parseReact = null,  // A function that parses React to static markup
 	_globalProp = null   // A prop that can be set globally from the `package.json`
 } = {}) => {
-	const transformer = (tree, file) => {
+	const transformer = (tree, _file) => {
 		visit( tree, 'heading', node => {
 			if( node.children && node.children.length > 0 ) {
 				node.children[0].value = '!' + node.children[0].value;

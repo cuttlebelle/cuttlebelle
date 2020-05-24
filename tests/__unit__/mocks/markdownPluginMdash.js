@@ -14,53 +14,47 @@ const attacher = ({
   _parseReact = null,  // A function that parses React to static markup
   _globalProp = null   // A prop that can be set globally from the `package.json`
 } = {}) => {
-  const transformer = (tree, file) => {
-    visit( tree, [ 'paragraph' ], node => {
-      if( !node.children || node.children.length < 1 ) {
+  const transformer = ( tree, _file ) => {
+    visit( tree, 'text', ( node, _index, parent ) => {
+      if( [ 'code', 'fencedCode' ].includes( parent.type ) ) {
         return;
       }
 
-      const processChildren = node.children.some(child => {
-        if( !child.type || child.type !== 'text' || !child.value ) {
-          return;
-        }
+      if( !node.value ) {
+        return;
+      }
 
-        return /—/.test( child.value );
-      });
-
-      if( !processChildren ) {
+      if( !/—/.test( node.value ) ) {
         return;
       }
 
       const newChildren = [];
-      node.children.forEach(child => {
-        if( child.position ) {
-          delete child.position;
-        }
-
-        if( !child.type === 'text' || !/—/.test( child.value ) ) {
+      parent.children.forEach(child => {
+        if (child !== node || !child.value ) {
+          if( child.position ) {
+            delete child.position;
+          }
           newChildren.push( child );
           return;
         }
 
-        [ ...child.value.matchAll(/([^—]*)([—]?)/g) ].forEach(([_full, text, entity]) => {
-          if( text ) {
-            newChildren.push( {
-              type: 'text',
-              value: text
-            } );
-          }
-
-          if( entity ) {
+        child.value.split( /(—)/g ).forEach(part => {
+          if( part === '—' ) {
             newChildren.push( {
               type: 'html',
               value: '&mdash;'
             } );
           }
+          else {
+            newChildren.push( {
+              type: 'text',
+              value: part
+            } );
+          }
         });
       });
 
-      node.children = newChildren;
+      parent.children = newChildren;
     } );
   }
 
