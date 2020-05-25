@@ -134,7 +134,7 @@ export const ParseMD = ( markdown, file, props ) => {
 
 			if( Array.isArray( plugins ) && plugins.length > 0 ) {
 				plugins.forEach( plugin => {
-					// First check if it is a local plugin
+					// First check the path
 					let pluginPath = Path.normalize( `${ process.cwd() }/${ plugin }` );
 
 					if( !Fs.existsSync( pluginPath ) ) {
@@ -142,20 +142,26 @@ export const ParseMD = ( markdown, file, props ) => {
 						pluginPath = null;
 					}
 
+					// Only continue if there is a plugin file found, fail silently
 					if( pluginPath ) {
 						try {
+							// Require the plugin so that we can inspect it
 							const pluginRequire = require(pluginPath);
-
 							if( pluginRequire ) {
 								if( typeof pluginRequire === 'function' ) {
+									// Looks like a custom plugin, provide props to it
+									// If it's a simple NPM plugin, passing props shouldn't hurt
 									md.use(pluginRequire, props);
 								}
 								else if( Array.isArray(pluginRequire) && pluginRequire[0] && typeof pluginRequire[0] === 'function' ) {
+									// It's an array, and so is an NPM plugin with options provided
+									// Add the plugin using the handy `use(array)`` feature of Remark
 									md.use([pluginRequire]);
 								}
 							}
 						}
 						catch( error ) {
+							// Fail loudly if the plugin won't load properly
 							Log.error(`Using the plugin for markdown caused an error at ${ Style.yellow( pluginPath ) }`);
 							Log.error( error );
 
