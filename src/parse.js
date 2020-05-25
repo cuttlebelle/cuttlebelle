@@ -144,7 +144,16 @@ export const ParseMD = ( markdown, file, props ) => {
 
 					if( pluginPath ) {
 						try {
-							md.use( require( pluginPath ), props );
+							const pluginRequire = require(pluginPath);
+
+							if( pluginRequire ) {
+								if( typeof pluginRequire === 'function' ) {
+									md.use(pluginRequire, props);
+								}
+								else if( Array.isArray(pluginRequire) && pluginRequire[0] && typeof pluginRequire[0] === 'function' ) {
+									md.use([pluginRequire]);
+								}
+							}
 						}
 						catch( error ) {
 							Log.error(`Using the plugin for markdown caused an error at ${ Style.yellow( pluginPath ) }`);
