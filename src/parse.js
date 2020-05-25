@@ -140,18 +140,6 @@ export const ParseMD = ( markdown, file, props ) => {
 					if( !Fs.existsSync( pluginPath ) ) {
 						// Null the path as it was not found
 						pluginPath = null;
-
-						// It could be an NPM module plugin name instead
-						let pluginResolved = null;
-						try {
-							pluginResolved = require.resolve( plugin );
-						}
-						catch( error ) {
-							// Do nothing
-						}
-						if ( pluginResolved ) {
-							pluginPath = plugin;
-						}
 					}
 
 					if( pluginPath ) {
