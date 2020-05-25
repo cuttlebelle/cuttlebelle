@@ -96,7 +96,7 @@ test('ParseMD() - Markdown takes the custom plugins', () => {
 
 test('ParseMD() - Markdown takes an npm plugin', () => {
 	SETTINGS.defaults.site.markdown.plugins = [
-		'remark-dropcap' // This is included in devDependencies in package.json only for this test
+		'node_modules/remark-dropcap' // This is included in devDependencies in package.json only for this test
 	];
 	const content2 = `
 # Hello World
@@ -114,7 +114,7 @@ Things go wild.
 
 
 test('ParseMD() - Markdown takes a single npm plugin as a string', () => {
-	SETTINGS.defaults.site.markdown.plugins = 'remark-dropcap'; // This is included in devDependencies in package.json only for this test
+	SETTINGS.defaults.site.markdown.plugins = 'node_modules/remark-dropcap'; // This is included in devDependencies in package.json only for this test
 	const content2 = `
 # Hello World
 
@@ -133,7 +133,7 @@ Things go wild.
 test('ParseMD() - Markdown ignores plugins which do not exist', () => {
 	SETTINGS.defaults.site.markdown.plugins = [
 		'tests/__unit__/mocks/markdownPluginNonExistent.js',
-		'remark-non-existent'
+		'node_modules/remark-non-existent'
 	];
 	const content2 = `
 # Hello World

@@ -98,10 +98,10 @@ export const ParseMD = ( markdown, file, props ) => {
 							return;
 						}
 
-						let text = '';
+						let text = [];
 						node.children.forEach( child => {
 							if( is( child, 'text' ) ) {
-								text += child.value;
+								text.push( child.value );
 							}
 						} );
 
@@ -118,7 +118,7 @@ export const ParseMD = ( markdown, file, props ) => {
 							return;
 						}
 
-						id = Slug( text );
+						id = Slug( text.join(' ') );
 						data.id = id;
 						hProperties.id = id;
 					} );
