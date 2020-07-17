@@ -39,7 +39,7 @@
 		"test:watch": "jest --watch --coverage",
 		"test:end-to-end": "node tests/tester.js",
 		"test:flow": "flow check",
-		"man": "node man/build.js",
+		"man": "# node man/build.js",
 		"build": "yarn build:js",
 		"build:js": "babel src --out-dir dist",
 		"build:watch": "yarn build:js && yarn test:detail",
