@@ -15,6 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.70 - Updated dependencies](#v100-alpha70)
 * [v1.0.0-alpha.69 - Disabled Windows support, Deprecated node 8, Updated dependencies](#v100-alpha69)
 * [v1.0.0-alpha.68 - Updated dependencies](#v100-alpha68)
 * [v1.0.0-alpha.67 - Updated dependencies](#v100-alpha67)
@@ -35,12 +36,53 @@ Cuttlebelle changelog
 
 ## Release History
 
+### v1.0.0-alpha.70
+
+- Disabled `mangle` email links by default (https://marked.js.org/#/USING_ADVANCED.md#options)
+- Updated dependencies, fixed [lodash](https://github.com/advisories/GHSA-p6mc-m468-83gw) security bug.
+	Major changes:
+```diff
+- "fs-extra": "^8.1.0",
++ "fs-extra": "^9.0.1",
+- "marked": "^0.8.0",
++ "marked": "^1.1.1",
+- "node-notifier": "^6.0.0",
++ "node-notifier": "^7.0.1",
+```
+	Minor changes:
+```diff
+- "@babel/core": "^7.8.7",
++ "@babel/core": "^7.10.5",
+- "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
++ "@babel/plugin-proposal-object-rest-spread": "^7.10.4",
+- "@babel/plugin-transform-runtime": "^7.8.3",
++ "@babel/plugin-transform-runtime": "^7.10.5",
+- "@babel/preset-env": "^7.8.7",
++ "@babel/preset-env": "^7.10.4",
+- "@babel/preset-react": "^7.8.3",
++ "@babel/preset-react": "^7.10.4",
+- "@babel/register": "^7.8.6",
++ "@babel/register": "^7.10.5",
+- "@babel/runtime": "^7.8.7",
++ "@babel/runtime": "^7.10.5",
+- "browser-sync": "^2.26.7",
++ "browser-sync": "^2.26.9",
+- "js-yaml": "^3.13.1",
++ "js-yaml": "^3.14.0",
+- "react": "^16.13.0",
++ "react": "^16.13.1",
+- "react-dom": "^16.13.0",
++ "react-dom": "^16.13.1",
+- "slugify": "^1.4.0",
++ "slugify": "^1.4.4",
+```
+
 ### v1.0.0-alpha.69
 
 - Disabled Windows support as it's too hard to maintain
 - Deprecated support for node 8
 - Updated dependencies, fixed [acorn](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-7598) security bug.
-	Major changes:
+	Minor changes:
 ```diff
 - "@babel/core": "^7.7.7",
 + "@babel/core": "^7.8.7",
