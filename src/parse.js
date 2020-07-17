@@ -88,7 +88,7 @@ export const ParseMD = ( markdown, file, props ) => {
 
 			try {
 				const customRenderer = require( filePath );
-				renderer = customRenderer({ Marked: new Marked.Renderer(), ...props });
+				renderer = customRenderer({ Marked: new Marked.Renderer(), ...props, mangle: false });
 			}
 			catch( error ) {
 				Log.error(`Using the custom renderer for markdown caused an error at ${ Style.yellow( filePath ) }`);
@@ -105,7 +105,7 @@ export const ParseMD = ( markdown, file, props ) => {
 				markdown = renderer.preparse( markdown );
 			}
 
-			return Marked( markdown, { renderer: renderer } );
+			return Marked( markdown, { renderer: renderer, mangle: false } );
 		}
 		catch( error ) {
 			Log.error(`Rendering markdown caused an error in ${ Style.yellow( file ) }`);
