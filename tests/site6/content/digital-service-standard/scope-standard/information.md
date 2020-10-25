@@ -6,8 +6,8 @@ An information service helps users to better understand and interact with govern
 
 Examples of information services:
 
-*	agency website
-*	smart answers / virtual assistants
-*	e-learning
-*	publications
-*	multimedia
+* agency website
+* smart answers / virtual assistants
+* e-learning
+* publications
+* multimedia

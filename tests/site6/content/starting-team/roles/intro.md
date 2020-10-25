@@ -11,6 +11,6 @@ You may need to include other roles, skills or capability depending on the size 
 
 
 If you are responsible for recruiting for a team you should understand:
--  what each role does
--  the concept of a [multidisciplinary team and T-shaped skills](../multidisciplinary-team/)
--  how to build team culture
+- what each role does
+- the concept of a [multidisciplinary team and T-shaped skills](../multidisciplinary-team/)
+- how to build team culture
