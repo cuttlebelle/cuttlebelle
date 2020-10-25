@@ -6,9 +6,9 @@ Transactional services are defined as any service where the transaction results 
 
 Examples of transactional services:
 
-*	submitting a claim
-*	registering for a business
-*	updating contact details
-*	lodging a tax return
+* submitting a claim
+* registering for a business
+* updating contact details
+* lodging a tax return
 
 **High volume transactional services** are defined as processing (or likely to process) more than 50,000 transactions every year.

@@ -1,11 +1,11 @@
 ---
 layout: structure/footer
 links:
-  -  title: homepage  
-  -  title: privacy-statement
-  -  title: Disclaimer
-     url: https://www.dta.gov.au/disclaimer/
-  -  title: sitemap
+  - title: homepage
+  - title: privacy-statement
+  - title: Disclaimer
+    url: https://www.dta.gov.au/disclaimer/
+  - title: sitemap
 ---
 
 With the exception of the [Commonwealth Coat of Arms](https://www.dpmc.gov.au/government/commonwealth-coat-arms) and where otherwise noted, this work is

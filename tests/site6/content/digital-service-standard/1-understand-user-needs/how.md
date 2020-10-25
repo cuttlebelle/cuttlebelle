@@ -62,5 +62,5 @@ What the significant design challenges are, for example through key insights, ho
 Make sure that research has fed into the [metrics you have developed](../11-measure-performance/) to know that you continue to meet your user needs.
 
 By the time you are ready to [go live](/service-design-delivery-process/live-stage/) you should be able to show greater depth of knowledge for all the points above. You should also:
--  show how you are using data from real users to understand which parts of the task users are finding difficult, and how you are designing experiments to reduce friction and increase success for users
--  know how you will [measure and monitor your service](../11-measure-performance/) to ensure it is serving its users well
+- show how you are using data from real users to understand which parts of the task users are finding difficult, and how you are designing experiments to reduce friction and increase success for users
+- know how you will [measure and monitor your service](../11-measure-performance/) to ensure it is serving its users well

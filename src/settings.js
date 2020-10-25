@@ -143,7 +143,7 @@ export const SETTINGS = {
 	 *
 	 * @return {object} - The settings object
 	 */
-	get: ()/*: Settings */ => {
+	get: () /*: Settings */ => {
 		return SETTINGS.defaults;
 	},
 
