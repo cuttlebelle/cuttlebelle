@@ -15,6 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.71 - Updated dependencies](#v100-alpha71)
 * [v1.0.0-alpha.70 - Updated dependencies](#v100-alpha70)
 * [v1.0.0-alpha.69 - Disabled Windows support, Deprecated node 8, Updated dependencies](#v100-alpha69)
 * [v1.0.0-alpha.68 - Updated dependencies](#v100-alpha68)
@@ -35,6 +36,47 @@ Cuttlebelle changelog
 
 
 ## Release History
+
+### v1.0.0-alpha.71
+
+- Disabled flow test
+- Updated dependencies, fixed [object-path](https://github.com/advisories/GHSA-cwx2-736x-mf6w) security bug.
+	Major changes:
+```diff
+- "del": "^5.1.0",
++ "del": "^6.0.0",
+- "node-notifier": "^7.0.1",
++ "node-notifier": "^8.0.0",
+- "react": "^16.13.1",
++ "react": "^17.0.1",
+- "react-dom": "^16.13.1",
++ "react-dom": "^17.0.1",
+```
+	Minor changes:
+```diff
+- "@babel/core": "^7.10.5",
++ "@babel/core": "^7.12.3",
+- "@babel/plugin-proposal-object-rest-spread": "^7.10.4",
++ "@babel/plugin-proposal-object-rest-spread": "^7.12.1",
+- "@babel/plugin-transform-runtime": "^7.10.5",
++ "@babel/plugin-transform-runtime": "^7.12.1",
+- "@babel/preset-env": "^7.10.4",
++ "@babel/preset-env": "^7.12.1",
+- "@babel/preset-react": "^7.10.4",
++ "@babel/preset-react": "^7.12.1",
+- "@babel/register": "^7.10.5",
++ "@babel/register": "^7.12.1",
+- "@babel/runtime": "^7.10.5",
++ "@babel/runtime": "^7.12.1",
+- "browser-sync": "^2.26.9",
++ "browser-sync": "^2.26.13",
+- "marked": "^1.1.1",
++ "marked": "^1.2.2",
+- "react-docgen": "^5.3.0",
++ "react-docgen": "^5.3.1",
+- "slugify": "^1.4.4",
++ "slugify": "^1.4.5",
+```
 
 ### v1.0.0-alpha.70
 
