@@ -169,7 +169,7 @@ test('RenderReact() - Render cuttlebelle react from file components correctly 2'
 	return RenderReact( file2, props2 ).then( result => { expect( result ).toBe( HTML2 ) });
 });
 
-test('RenderReact() - Render react components with static async getInitialProps method', () => {
+test('RenderReact() - Render react class components with static async getInitialProps method', () => {
 	const file = Path.normalize(`${ __dirname }/mocks/doesnotexist`);
 	const props = {};
 	const jsx = `
@@ -196,7 +196,7 @@ test('RenderReact() - Render react components with static async getInitialProps 
 	return RenderReact( file, props, jsx ).then( result => { expect( result ).toBe( HTML ) });
 });
 
-test('RenderReact() - Render react components with static sync getInitialProps method', () => {
+test('RenderReact() - Render react class components with static sync getInitialProps method', () => {
 	console.log = jest.fn();
 	console.info = jest.fn();
 	const file = Path.normalize(`${ __dirname }/mocks/doesnotexist`);
@@ -219,6 +219,55 @@ test('RenderReact() - Render react components with static sync getInitialProps m
 		}
 
 		export default GetData;`;
+	const HTML = '<div>My Data: set</div>';
+	return RenderReact( file, props, jsx ).then( result => {
+		expect( result ).toBe( HTML );
+		expect( console.info.mock.calls[0][0] ).toContain('getInitialProps');
+	});
+});
+
+test('RenderReact() - Render react functional components with async getInitialProps method', () => {
+	const file = Path.normalize(`${ __dirname }/mocks/doesnotexist`);
+	const props = {};
+	const jsx = `
+		import React from 'react';
+
+		export default function GetData( props ) {
+			return (
+				<div>
+					My Data: { props.data }
+				</div>
+			);
+		}
+
+		GetData.getInitialProps = async function( props ) {
+			const Sleep = wait => new Promise( resolve => setTimeout( resolve, wait ) );
+			await Sleep( 1000 );
+			return { data: 'set' };
+		}`;
+	const HTML = '<div>My Data: set</div>';
+	return RenderReact( file, props, jsx ).then( result => { expect( result ).toBe( HTML ) });
+});
+
+test('RenderReact() - Render react functional components with sync getInitialProps method', () => {
+	console.log = jest.fn();
+	console.info = jest.fn();
+	const file = Path.normalize(`${ __dirname }/mocks/doesnotexist`);
+	const props = {};
+	const jsx = `
+		import React from 'react';
+
+		export default function GetData( props ) {
+			return (
+				<div>
+					My Data: { props.data }
+				</div>
+			);
+		}
+
+		GetData.getInitialProps = function( props ) {
+			return { data: 'set' };
+		}`;
 	const HTML = '<div>My Data: set</div>';
 	return RenderReact( file, props, jsx ).then( result => {
 		expect( result ).toBe( HTML );
