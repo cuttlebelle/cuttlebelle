@@ -15,6 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.72 - Updated dependencies](#v100-alpha72)
 * [v1.0.0-alpha.71 - Updated dependencies](#v100-alpha71)
 * [v1.0.0-alpha.70 - Updated dependencies](#v100-alpha70)
 * [v1.0.0-alpha.69 - Disabled Windows support, Deprecated node 8, Updated dependencies](#v100-alpha69)
@@ -36,6 +37,15 @@ Cuttlebelle changelog
 
 
 ## Release History
+
+### v1.0.0-alpha.72
+
+- Updated dependencies, fixed [ node-notifier](https://github.com/advisories/GHSA-5fw9-fq32-wv5p) security bug.
+	Major changes:
+```diff
+- "node-notifier": "^8.0.0",
++ "node-notifier": "^9.0.0",
+```
 
 ### v1.0.0-alpha.71
 
