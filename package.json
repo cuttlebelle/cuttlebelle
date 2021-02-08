@@ -61,7 +61,7 @@
 		"del": "^6.0.0",
 		"fs-extra": "^9.0.1",
 		"js-yaml": "^3.14.1",
-		"marked": "^1.2.7",
+		"marked": "^2.0.0",
 		"node-notifier": "^9.0.0",
 		"prettify-html": "^0.0.2",
 		"prop-types": "^15.7.2",
