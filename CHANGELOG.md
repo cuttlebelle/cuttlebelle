@@ -15,6 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.73 - Updated dependencies](#v100-alpha73)
 * [v1.0.0-alpha.72 - Updated dependencies](#v100-alpha72)
 * [v1.0.0-alpha.71 - Updated dependencies](#v100-alpha71)
 * [v1.0.0-alpha.70 - Updated dependencies](#v100-alpha70)
@@ -38,9 +39,21 @@ Cuttlebelle changelog
 
 ## Release History
 
+### v1.0.0-alpha.73
+
+- Updated dependencies, fixed [marked](https://github.com/advisories/GHSA-4r62-v4vq-hr96), [socket.io](https://github.com/advisories/GHSA-fxwf-4rqh-v8g3)
+	and [axios](https://github.com/advisories/GHSA-4w2v-q235-vp99) security bugs.
+	Major changes:
+```diff
+- "js-yaml": "^3.14.1",
++ "marked": "^1.2.7",
+- "js-yaml": "^4.0.0",
++ "marked": "^2.0.0",
+```
+
 ### v1.0.0-alpha.72
 
-- Updated dependencies, fixed [ node-notifier](https://github.com/advisories/GHSA-5fw9-fq32-wv5p) security bug.
+- Updated dependencies, fixed [node-notifier](https://github.com/advisories/GHSA-5fw9-fq32-wv5p) security bug.
 	Major changes:
 ```diff
 - "node-notifier": "^8.0.0",

@@ -133,7 +133,7 @@ export const ParseMD = ( markdown, file, props ) => {
 export const ParseYaml = ( yaml, file ) => {
 	if( typeof yaml === 'string' ) {
 		try {
-			return YAML.safeLoad( yaml, warning => Log.error( warning ) ) || {};
+			return YAML.load( yaml, warning => Log.error( warning ) ) || {};
 		}
 		catch( error ) {
 			Log.error(`Rendering yaml caused an error in ${ Style.yellow( file ) }`);
