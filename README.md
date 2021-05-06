@@ -43,7 +43,7 @@ javascript. **No more templating languages** that only do half of what you need.
 ## Requirements
 
 
-To use Cuttlebelle you need at least node `>= 10`.
+To use Cuttlebelle you need at least node `>= 12`.
 
 
 **[⬆ back to top](#contents)**
