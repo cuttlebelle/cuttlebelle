@@ -15,6 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.74 - Dropped support for node v10, updated dependencies](#v100-alpha74)
 * [v1.0.0-alpha.73 - Updated dependencies](#v100-alpha73)
 * [v1.0.0-alpha.72 - Updated dependencies](#v100-alpha72)
 * [v1.0.0-alpha.71 - Updated dependencies](#v100-alpha71)
@@ -38,6 +39,16 @@ Cuttlebelle changelog
 
 
 ## Release History
+
+### v1.0.0-alpha.74
+
+- Dropped support for node v10
+- Updated dependencies, fixed [xmlhttprequest-ssl](https://github.com/advisories/GHSA-h4j5-c7cj-74xg) security bugs.
+	Major changes:
+```diff
+- "fs-extra": "^9.1.0",
++ "fs-extra": "^10.0.0",
+```
 
 ### v1.0.0-alpha.73
 
