@@ -118,19 +118,19 @@ Each folder with an `index.yml` file will become an `index.html` in cuttlebelles
 ```shell
 .
 ├── index
-│   ├── index.yml
-│   ├── partial1.md
-│   └── partial2.md
+│   ├── index.yml
+│   ├── partial1.md
+│   └── partial2.md
 ├── page1
-│   ├── index.yml
-│   └── subpage1
-│       ├── index.yml
-│       ├── partial1.md
-│       └── partial2.md
+│   ├── index.yml
+│   └── subpage1
+│       ├── index.yml
+│       ├── partial1.md
+│       └── partial2.md
 ├── page2
-│   ├── index.yml
-│   ├── partial1.md
-│   └── partial2.md
+│   ├── index.yml
+│   ├── partial1.md
+│   └── partial2.md
 └── shared
     ├── component1.md
     └── component2.md
@@ -144,9 +144,9 @@ Each folder with an `index.yml` file will become an `index.html` in cuttlebelles
 .
 ├── index.html
 ├── page1
-│   ├── index.html
-│   └── subpage1
-│       └── index.html
+│   ├── index.html
+│   └── subpage1
+│       └── index.html
 └── page2
     └── index.html
 ```
@@ -448,14 +448,14 @@ The default folder structure divides content into the `content/` folder and the 
 ```shell
 .
 ├── content/           # The content folder
-│   ├── page1/         # Each folder represents a page and will be converted to `page1/index.html`
+│   ├── page1/         # Each folder represents a page and will be converted to `page1/index.html`
 │   │                  # 💡 As long as it contains an `index.yml` file.
 │   │
-│   ├── index/         # The index folder is treated as the homepage and converted to `/index.html`
+│   ├── index/         # The index folder is treated as the homepage and converted to `/index.html`
 │   │
-│   └── page2/         # You can nest pages by nesting them in the folder structure
+│   └── page2/         # You can nest pages by nesting them in the folder structure
 │       │
-│       └── subpage1/  # As long as this folder has an `index.yml` file
+│       └── subpage1/  # As long as this folder has an `index.yml` file
 │                      # it will be converted to `page2/subpage1/index.html`
 │
 ├── assets/            # The assets folder, every file you add here will be moved to your output.
@@ -469,15 +469,15 @@ Now let’s look into one folder:
 ```shell
 .
 └── content
-    ├── page1
-    │   ├── index.yml      # This folder includes an `index.yml` file so it will be converted into
+    ├── page1
+    │   ├── index.yml      # This folder includes an `index.yml` file so it will be converted into
     │   │                  # a page in the output of cuttlebelle.
-    │   ├── partial1.md    # The partials are all in markdown format and can have any name.
-    │   └── partial2.md    # You can reference partials from your index.yml or another partial.
+    │   ├── partial1.md    # The partials are all in markdown format and can have any name.
+    │   └── partial2.md    # You can reference partials from your index.yml or another partial.
     │
-    └── shared             # A folder won’t be generated if it doesn’t have an `index.yml` file
-        ├── component1.md  # You can use such folders to share partials between pages
-        └── component2.md  # This is just a suggestion. Partials can live anywhere.
+    └── shared             # A folder won’t be generated if it doesn’t have an `index.yml` file
+        ├── component1.md  # You can use such folders to share partials between pages
+        └── component2.md  # This is just a suggestion. Partials can live anywhere.
 ```
 
 

@@ -15,6 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.75 - Updated dependencies](#v100-alpha75)
 * [v1.0.0-alpha.74 - Dropped support for node v10, updated dependencies](#v100-alpha74)
 * [v1.0.0-alpha.73 - Updated dependencies](#v100-alpha73)
 * [v1.0.0-alpha.72 - Updated dependencies](#v100-alpha72)
@@ -39,6 +40,15 @@ Cuttlebelle changelog
 
 
 ## Release History
+
+### v1.0.0-alpha.75
+
+- Updated dependencies, fixed [ws](https://github.com/advisories/GHSA-6fc8-4gx4-v693) security bugs.
+	Major changes:
+```diff
+- "node-notifier": "^9.0.1",
++ "node-notifier": "^10.0.0",
+```
 
 ### v1.0.0-alpha.74
 
