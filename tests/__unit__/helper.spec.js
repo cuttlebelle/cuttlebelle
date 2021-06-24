@@ -30,10 +30,10 @@ test('Slug() - Non strings stay whatever they are', () => {
 
 
 test('Slug() - Special characters are removed', () => {
-	expect( Slug(`string with "special 🔥  .chars $%^&*()\'\\ √¨üß" end`) ).toBe('string-with-special-chars-dollarpercentand-uss-end');
+	expect( Slug(`string with "special 🔥  .chars $%^&*()\'\\ √¨üß" end`) ).toBe('string-with-special--chars-dollarpercentand------uss-end');
 	expect( Slug(`'"'"`) ).toBe('');
 	expect( Slug(`µ√ç≈Ωåß∂πøˆ¨¥†®´∑œ¡™…£¢∞§¶•ªº–©≠≠‘’';/.,µ√µ≤≥÷˜uö¨süß~!@#$%%^^&*()_+`) )
-		.toBe('cwassdpoyen-r-sumoetm-poundcentinfinity-ao-c-uosuss-dollarpercentpercentand-_-');
+		.toBe('cwassdpoyen--r-sumoetm-poundcentinfinity-ao--c-----uosuss---dollarpercentpercentand---_-');
 });
 
 
