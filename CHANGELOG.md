@@ -15,6 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.76 - Updated dependencies](#v100-alpha76)
 * [v1.0.0-alpha.75 - Updated dependencies](#v100-alpha75)
 * [v1.0.0-alpha.74 - Dropped support for node v10, updated dependencies](#v100-alpha74)
 * [v1.0.0-alpha.73 - Updated dependencies](#v100-alpha73)
@@ -40,6 +41,15 @@ Cuttlebelle changelog
 
 
 ## Release History
+
+### v1.0.0-alpha.76
+
+- Updated dependencies, fixed [set-value](https://github.com/advisories/GHSA-4jqc-8m5r-9rpr) security bugs.
+	Major changes:
+```diff
+- "marked": "^2.1.2",
++ "marked": "^3.0.4",
+```
 
 ### v1.0.0-alpha.75
 
