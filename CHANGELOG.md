@@ -15,6 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.77 - Updated dependencies](#v100-alpha77)
 * [v1.0.0-alpha.76 - Updated dependencies](#v100-alpha76)
 * [v1.0.0-alpha.75 - Updated dependencies](#v100-alpha75)
 * [v1.0.0-alpha.74 - Dropped support for node v10, updated dependencies](#v100-alpha74)
@@ -41,6 +42,15 @@ Cuttlebelle changelog
 
 
 ## Release History
+
+### v1.0.0-alpha.77
+
+- Updated dependencies
+	Major changes:
+```diff
+- "marked": "^3.0.4",
++ "marked": "^4.0.4",
+```
 
 ### v1.0.0-alpha.76
 
