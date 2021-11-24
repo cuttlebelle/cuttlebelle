@@ -15,7 +15,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import Marked from 'marked';
+import { marked } from 'marked';
 import YAML from 'js-yaml';
 import React from 'react';
 
@@ -81,14 +81,14 @@ export const ParseContent = ( content, file = 'partial.md', props = {} ) => {
 export const ParseMD = ( markdown, file, props ) => {
 	if( typeof markdown === 'string' ) {
 
-		let renderer = new Marked.Renderer();
+		let renderer = new marked.Renderer();
 
 		if( SETTINGS.get().site.markdownRenderer ) {
 			const filePath = Path.normalize(`${ process.cwd() }/${ SETTINGS.get().site.markdownRenderer }`);
 
 			try {
 				const customRenderer = require( filePath );
-				renderer = customRenderer({ Marked: new Marked.Renderer(), ...props, mangle: false });
+				renderer = customRenderer({ Marked: new marked.Renderer(), ...props, mangle: false });
 			}
 			catch( error ) {
 				Log.error(`Using the custom renderer for markdown caused an error at ${ Style.yellow( filePath ) }`);
@@ -105,7 +105,7 @@ export const ParseMD = ( markdown, file, props ) => {
 				markdown = renderer.preparse( markdown );
 			}
 
-			return Marked( markdown, { renderer: renderer, mangle: false } );
+			return marked( markdown, { renderer: renderer, mangle: false } );
 		}
 		catch( error ) {
 			Log.error(`Rendering markdown caused an error in ${ Style.yellow( file ) }`);
