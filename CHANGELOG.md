@@ -15,6 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.78 - Added react v18](#v100-alpha78)
 * [v1.0.0-alpha.77 - Updated dependencies](#v100-alpha77)
 * [v1.0.0-alpha.76 - Updated dependencies](#v100-alpha76)
 * [v1.0.0-alpha.75 - Updated dependencies](#v100-alpha75)
@@ -42,6 +43,18 @@ Cuttlebelle changelog
 
 
 ## Release History
+
+### v1.0.0-alpha.78
+
+- Added support for react 18
+- Updated dependencies
+	Major changes:
+```diff
+- "react": "^17",
++ "react": "^18",
+- "react-dom": "^17",
++ "react-dom": "^18",
+```
 
 ### v1.0.0-alpha.77
 
