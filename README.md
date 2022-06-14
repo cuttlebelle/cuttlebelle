@@ -1010,8 +1010,7 @@ the checksum of the generated files match the fixtures. In addition to that I cr
 
 ## Release History
 
-See [CHANGELOG](https://raw.githubusercontent.com/cuttlebelle/cuttlebelle/master/CHANGELOG.md).
-
+See [CHANGELOG](https://github.com/cuttlebelle/cuttlebelle/blob/master/CHANGELOG.md).
 
 **[⬆ back to top](#contents)**
 
