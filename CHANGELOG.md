@@ -15,6 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.79 - Updated dependencies](#v100-alpha79)
 * [v1.0.0-alpha.78 - Added react v18](#v100-alpha78)
 * [v1.0.0-alpha.77 - Updated dependencies](#v100-alpha77)
 * [v1.0.0-alpha.76 - Updated dependencies](#v100-alpha76)
@@ -43,6 +44,11 @@ Cuttlebelle changelog
 
 
 ## Release History
+
+### v1.0.0-alpha.79
+
+- Added `@babel/plugin-transform-arrow-functions` as dependency for babel
+- Updated dependencies
 
 ### v1.0.0-alpha.78
 

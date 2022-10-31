@@ -18,10 +18,10 @@ const Replace = require('replace-in-file');
 const Copydir = require('copy-dir');
 const Dirsum = require('dirsum');
 const Chalk = require('chalk');
-const Util = require(`util`);
+const Util = require('util');
 const Diff = require('diff');
 const Del = require('del');
-const Fs = require(`fs`);
+const Fs = require('fs');
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
