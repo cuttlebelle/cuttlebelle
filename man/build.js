@@ -15,7 +15,7 @@
 const { spawnSync } = require( 'child_process' );
 const PGK = require('../package.json');
 const Chalk = require('chalk');
-const Path = require('upath');
+const Path = require('path');
 const Fs = require('fs');
 
 

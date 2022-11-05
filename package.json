@@ -39,7 +39,7 @@
 		"test:watch": "jest --watch --coverage",
 		"test:end-to-end": "node tests/tester.js",
 		"test:flow": "flow check",
-		"man": "# node man/build.js",
+		"man": "node man/build.js",
 		"build": "yarn build:js",
 		"build:js": "babel src --out-dir dist",
 		"build:watch": "yarn build:js && yarn test:detail",
@@ -82,7 +82,7 @@
 		"dirsum": "^0.1.1",
 		"flow-bin": "^0.191.0",
 		"jest-cli": "^29",
-		"marked-man": "^0.7.0",
+		"marked-man": "^1",
 		"onchange": "^7",
 		"replace-in-file": "^6"
 	},
