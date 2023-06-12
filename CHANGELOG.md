@@ -15,6 +15,7 @@ Cuttlebelle changelog
 
 ## Versions
 
+* [v1.0.0-alpha.80 - Updated dependencies](#v100-alpha80)
 * [v1.0.0-alpha.79 - Updated dependencies](#v100-alpha79)
 * [v1.0.0-alpha.78 - Added react v18](#v100-alpha78)
 * [v1.0.0-alpha.77 - Updated dependencies](#v100-alpha77)
@@ -44,6 +45,15 @@ Cuttlebelle changelog
 
 
 ## Release History
+
+### v1.0.0-alpha.80
+
+- Updated dependencies
+	Major changes:
+```diff
+- "fs-extra": "^10",
++ "fs-extra": "^11",
+```
 
 ### v1.0.0-alpha.79
 
